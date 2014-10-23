@@ -6,7 +6,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Chain Responsive Bootstrap3 Admin</title>
+        <title>Project Management Dashboard - Login</title>
 
         <link href="<?= base_url();?>public/css/style.default.css" rel="stylesheet">
 
@@ -27,29 +27,29 @@
                     <div class="logo text-center">
                         <img src="<?= base_url();?>public/images/logo-primary.png" alt="Chain Logo" >
                     </div>
-                    <br />
-                    <h4 class="text-center mb5">Project Management Dashboard</h4>
-                    <p class="text-center">Masuk ke Akun anda</p>
+                    <h4 class="text-center mb5">Project Management Dashboard v1.0</h4>
+                    <p class="text-center">Masuk ke akun anda</p>
                     
                     <div class="mb30"></div>
                     
-                    <form action="signin.html" method="post">
+                    <form action="<?= base_url();?>authentication/go" method="post">
                         <div class="input-group mb15">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input type="text" class="form-control" placeholder="Username">
+                            <input type="text" class="form-control" placeholder="Username" name="username">
                         </div><!-- input-group -->
                         <div class="input-group mb15">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                            <input type="password" class="form-control" placeholder="Password">
+                            <input type="password" class="form-control" placeholder="Password" name="password">
                         </div><!-- input-group -->
                         
                         <div class="clearfix">
                             <div class="pull-left">
-                                <div class="ckbox ckbox-primary mt10">
-                                    <input type="checkbox" id="rememberMe" value="1">
-                                    <label for="rememberMe">Remember Me</label>
+                                <div class="mt10">
+                                    <!-- <input type="checkbox" id="rememberMe" value="1"> -->
+                                    <label for="rememberMe"><a href="">Lupa Password?</a></label>
                                 </div>
-                            </div>
+<!--                                 <p></p>
+ -->                            </div>
                             <div class="pull-right">
                                 <button type="submit" class="btn btn-success">Sign In <i class="fa fa-angle-right ml5"></i></button>
                             </div>

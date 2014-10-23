@@ -4,8 +4,8 @@
                             <img class="img-circle" src="<?= base_url();?>public/images/photos/profile.png" alt="">
                         </a>
                         <div class="media-body">
-                            <h4 class="media-heading">Elen Adarna</h4>
-                            <small class="text-muted">Beach Lover</small>
+                            <h4 class="media-heading"><?= @$this->session->userdata('name');?></h4>
+                            <small class="text-muted"><?= @$this->session->userdata('affiliation');?></small>
                         </div>
                     </div><!-- media -->
                     
