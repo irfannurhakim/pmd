@@ -6,11 +6,11 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Chain Responsive Bootstrap3 Admin</title>
+        <title>Project Management Dashboard</title>
 
-        <link href="/pmd/public/css/style.default.css" rel="stylesheet">
-        <link href="/pmd/public/css/morris.css" rel="stylesheet">
-        <link href="/pmd/public/css/select2.css" rel="stylesheet" />
+        <link href="<?= base_url();?>public/css/style.default.css" rel="stylesheet">
+        <link href="<?= base_url();?>public/css/morris.css" rel="stylesheet">
+        <link href="<?= base_url();?>public/css/select2.css" rel="stylesheet" />
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -23,9 +23,10 @@
         <header>
             <div class="headerwrapper">
                 <div class="header-left">
-                    <a href="index-2.html" class="logo">
-                        <img src="images/logo.png" alt="" /> 
-                    </a>
+                    <div class="heading-title" style="color:#FFF;font-size:22px;">PM Dashboard</div>
+<!--                     <a href="index-2.html" class="logo">
+                        <img src="<?= base_url();?>public/images/logo.png" alt="" /> 
+                    </a> -->
                     <div class="pull-right">
                         <a href="#" class="menu-collapse">
                             <i class="fa fa-bars"></i>
@@ -34,7 +35,7 @@
                 </div><!-- header-left -->
                 
                 <div class="header-right">
-                    
+                    <div class="pull-left"></div>
                     <div class="pull-right">
                         
                         <form class="form form-search" action="http://themepixels.com/demo/webpage/chain/search-results.html">
@@ -51,35 +52,35 @@
                                 <h5>Notification</h5>
                                 <ul class="media-list dropdown-list">
                                     <li class="media">
-                                        <img class="img-circle pull-left noti-thumb" src="images/photos/user1.png" alt="">
+                                        <img class="img-circle pull-left noti-thumb" src="<?= base_url();?>public/images/photos/user1.png" alt="">
                                         <div class="media-body">
                                           <strong>Nusja Nawancali</strong> likes a photo of you
                                           <small class="date"><i class="fa fa-thumbs-up"></i> 15 minutes ago</small>
                                         </div>
                                     </li>
                                     <li class="media">
-                                        <img class="img-circle pull-left noti-thumb" src="images/photos/user2.png" alt="">
+                                        <img class="img-circle pull-left noti-thumb" src="<?= base_url();?>public/images/photos/user2.png" alt="">
                                         <div class="media-body">
                                           <strong>Weno Carasbong</strong> shared a photo of you in your <strong>Mobile Uploads</strong> album.
                                           <small class="date"><i class="fa fa-calendar"></i> July 04, 2014</small>
                                         </div>
                                     </li>
                                     <li class="media">
-                                        <img class="img-circle pull-left noti-thumb" src="images/photos/user3.png" alt="">
+                                        <img class="img-circle pull-left noti-thumb" src="<?= base_url();?>public/images/photos/user3.png" alt="">
                                         <div class="media-body">
                                           <strong>Venro Leonga</strong> likes a photo of you
                                           <small class="date"><i class="fa fa-thumbs-up"></i> July 03, 2014</small>
                                         </div>
                                     </li>
                                     <li class="media">
-                                        <img class="img-circle pull-left noti-thumb" src="images/photos/user4.png" alt="">
+                                        <img class="img-circle pull-left noti-thumb" src="<?= base_url();?>public/images/photos/user4.png" alt="">
                                         <div class="media-body">
                                           <strong>Nanterey Reslaba</strong> shared a photo of you in your <strong>Mobile Uploads</strong> album.
                                           <small class="date"><i class="fa fa-calendar"></i> July 03, 2014</small>
                                         </div>
                                     </li>
                                     <li class="media">
-                                        <img class="img-circle pull-left noti-thumb" src="images/photos/user1.png" alt="">
+                                        <img class="img-circle pull-left noti-thumb" src="<?= base_url();?>public/images/photos/user1.png" alt="">
                                         <div class="media-body">
                                           <strong>Nusja Nawancali</strong> shared a photo of you in your <strong>Mobile Uploads</strong> album.
                                           <small class="date"><i class="fa fa-calendar"></i> July 02, 2014</small>
@@ -103,7 +104,7 @@
                                 <ul class="media-list dropdown-list">
                                     <li class="media">
                                         <span class="badge badge-success">New</span>
-                                        <img class="img-circle pull-left noti-thumb" src="images/photos/user1.png" alt="">
+                                        <img class="img-circle pull-left noti-thumb" src="<?= base_url();?>public/images/photos/user1.png" alt="">
                                         <div class="media-body">
                                           <strong>Nusja Nawancali</strong>
                                           <p>Hi! How are you?...</p>
@@ -112,7 +113,7 @@
                                     </li>
                                     <li class="media">
                                         <span class="badge badge-success">New</span>
-                                        <img class="img-circle pull-left noti-thumb" src="images/photos/user2.png" alt="">
+                                        <img class="img-circle pull-left noti-thumb" src="<?= base_url();?>public/images/photos/user2.png" alt="">
                                         <div class="media-body">
                                           <strong>Weno Carasbong</strong>
                                           <p>Lorem ipsum dolor sit amet...</p>
@@ -120,7 +121,7 @@
                                         </div>
                                     </li>
                                     <li class="media">
-                                        <img class="img-circle pull-left noti-thumb" src="images/photos/user3.png" alt="">
+                                        <img class="img-circle pull-left noti-thumb" src="<?= base_url();?>public/images/photos/user3.png" alt="">
                                         <div class="media-body">
                                           <strong>Venro Leonga</strong>
                                           <p>Do you have the time to listen to me...</p>
@@ -128,7 +129,7 @@
                                         </div>
                                     </li>
                                     <li class="media">
-                                        <img class="img-circle pull-left noti-thumb" src="images/photos/user4.png" alt="">
+                                        <img class="img-circle pull-left noti-thumb" src="<?= base_url();?>public/images/photos/user4.png" alt="">
                                         <div class="media-body">
                                           <strong>Nanterey Reslaba</strong>
                                           <p>It might seem crazy what I'm about to say...</p>
@@ -136,7 +137,7 @@
                                         </div>
                                     </li>
                                     <li class="media">
-                                        <img class="img-circle pull-left noti-thumb" src="images/photos/user1.png" alt="">
+                                        <img class="img-circle pull-left noti-thumb" src="<?= base_url();?>public/images/photos/user1.png" alt="">
                                         <div class="media-body">
                                           <strong>Nusja Nawancali</strong>
                                           <p>Hey I just met you and this is crazy...</p>
