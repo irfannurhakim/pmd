@@ -30,7 +30,8 @@ class Authentication extends CI_Controller {
 				'username' => 'aegisdev',
 				'name' => 'Aegis Dev',
 				'affiliation' => 'Developer',
-				'status' => 1
+				'status' => 1,
+        'email' => 'irfan@aegis.co.id'
 			);
 
 			$this->session->set_userdata($user);
@@ -38,7 +39,7 @@ class Authentication extends CI_Controller {
 			exit();
 		}
 
-		$user = $this->users->find_by_username_password($username, $password);
+		$user = $this->builtbyprime->get('TBL_USER', array('username' => $username, 'password' => md5($password)), TRUE);
 
 		if($user){
 			$user['isLoggedIn'] = TRUE;
@@ -54,6 +55,6 @@ class Authentication extends CI_Controller {
 	public function logout(){
 		//$this->db->insert('tbl_global_logs', array('id_event'=> 11, 'id_user'=>$this->session->userdata['id'], 'description'=> 'logout', 'severity'=>'normal'));
 		$this->session->sess_destroy();	
-		redirect(base_url() . 'authentication/go');
+		redirect(base_url() . 'authentication');
 	}
 }

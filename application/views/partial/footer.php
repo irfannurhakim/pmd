@@ -17,6 +17,9 @@
         <script src="<?= base_url();?>public/js/raphael-2.1.0.min.js"></script>
         <script src="<?= base_url();?>public/js/bootstrap-wizard.min.js"></script>
         <script src="<?= base_url();?>public/js/select2.min.js"></script>
+        <script src="<?= base_url();?>public/js/moment.min.js"></script>
+        <script src="<?= base_url();?>public/js/locale/id.js"></script>
+
 
         <script src="<?= base_url();?>public/js/custom.js"></script>
         <!-- <script src="<?= base_url();?>public/js/dashboard.js"></script> -->
@@ -42,6 +45,10 @@
 
             router.init('/home');
           });
+
+          //moment
+          moment().locale('id');
+          $('.leftpanel-title').text(moment().format('dddd, Do MMMM YYYY'));
 
 
           function home(){

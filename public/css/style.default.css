@@ -457,9 +457,9 @@ a:focus {
 }
 
 .leftpanel .leftpanel-title {
-    text-transform: uppercase;
-    color: #ccc;
-    font-size: 11px;
+    text-transform: capitalize;
+    color: #aaa;
+    font-size: 12px;
     font-weight: normal;
     margin: 15px 15px;
 }
