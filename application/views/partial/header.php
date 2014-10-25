@@ -161,7 +161,7 @@
                               <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Account Settings</a></li>
                               <li><a href="#"><i class="glyphicon glyphicon-question-sign"></i> Help</a></li>
                               <li class="divider"></li>
-                              <li><a href="<?= base_url();?>authentication/logout"><i class="glyphicon glyphicon-log-out"></i>Sign Out</a></li>
+                              <li><a href="<?= base_url();?>logout"><i class="glyphicon glyphicon-log-out"></i>Sign Out</a></li>
                             </ul>
                         </div><!-- btn-group -->
                         

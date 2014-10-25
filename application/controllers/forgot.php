@@ -4,6 +4,9 @@ class Forgot extends CI_Controller {
 
 	public function __construct(){
 		parent::__construct();
+    if($this->session->userdata('isLoggedIn')){
+      redirect('/', 'refresh');
+    } 
 	}
 
 	public function index()
@@ -58,11 +61,15 @@ class Forgot extends CI_Controller {
 	}
 
 	public function process(){
-		$email = $this->input->get('email', TRUE);
-		$resetCode = $this->input->get('token', TRUE);
+		$email = $this->input->get('email');
+		$token = $this->input->get('token');
 
 		//TODO reset password kemudian kirim ke email
+    $data = $this->builtbyprime->get('TBL_FORGOT_PASSWORD', array('TOKEN' => $token, 'EMAIL' => $email), TRUE);
 
+    if(!$data){
+      show_404();
+    }
 
 		$this->load->view('authentication');
 	} 

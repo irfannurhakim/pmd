@@ -23,5 +23,6 @@
     <div class="page-content" id="task-detail"></div>
     <div class="page-content" id="user-list"></div>
     <div class="page-content" id="profile-detail"></div>
+    <div class="page-content" id="error-404"></div>
   </div><!-- contentpanel -->
 </div>

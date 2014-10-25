@@ -11,9 +11,9 @@
     
     <h5 class="leftpanel-title"></h5>
     <ul class="nav nav-pills nav-stacked">
-        <li><a href="#/home"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
-        <li><a href="#/projects"><i class="fa fa-suitcase"></i> <span>Proyek</span></a></li>
-        <li><a href="#/settings"><i class="fa fa-gear"></i> <span>Pengaturan</span></a></li>                        
+        <li id="menu-home" class="activable"><a href="#/home"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
+        <li id="menu-projects" class="activable"><a href="#/projects"><i class="fa fa-suitcase"></i> <span>Proyek</span></a></li>
+        <li id="menu-settings" class="activable"><a href="#/settings"><i class="fa fa-gear"></i> <span>Pengaturan</span></a></li>                        
     </ul>
 </div><!-- leftpanel -->
 

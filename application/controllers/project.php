@@ -4,7 +4,7 @@ class Project extends CI_Controller {
 
 	public function index()
 	{
-			
+		$this->load->view('project/index');
 	}
 
 	public function add(){
@@ -12,7 +12,7 @@ class Project extends CI_Controller {
 	}
 
 	public function view(){
-
+    $this->load->view('project/detail');
 	}
 
 	public function remove(){

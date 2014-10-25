@@ -30,18 +30,24 @@
 
         <script type="text/javascript">
 
+          var APP_TITLE = "Project Management Dashboard";
+
           $(document).ready(function(){
 
+
+
             var routes = {
-              '/home' : home
-              // '/projects' : projects,
-              // '/project/view/:id' : projectDetail,
+              '/home' : home,
+              '/projects' : projects,
+              '/project/view/:id' : projectDetail,
               // '/task/view/:id' : taskDetail,
               // '/users' : users,
               // '/my-profile' : myProfile,
             }
             
-            var router = Router(routes);
+            var router = Router(routes).configure({
+              'notfound' : notfound
+            });
 
             router.init('/home');
           });
@@ -50,18 +56,76 @@
           moment().locale('id');
           $('.leftpanel-title').text(moment().format('dddd, Do MMMM YYYY'));
 
+          function activateMenu(idElement){
+            $('.activable').removeClass('active');
+            $('#menu-' + idElement).addClass('active');
+          }
+
+          function initView(idToShow, docTitle){
+            $('.page-content').hide();
+            $('.page-content').empty();
+            $(idToShow).show();
+            document.title = docTitle;
+          }
 
           function home(){
+            var idElement = '#home-index';
+
             $.ajax({
-              url: '<?php echo base_url();?>home'
+              url: '<?php echo base_url();?>home',
+              beforeSend: function(){
+                activateMenu('home');
+              }
             })
             .done(function(response, textStatus, jqhr){
-              //initView('user-management-list-user','Enterprise Asset Management | User List');
-              $('#home-index').html(response);
+              initView(idElement,APP_TITLE + ' - Dashboard');
+              $(idElement).html(response);
             }) 
             .fail(function(e){
 
             });
+          }
+
+          function projects(){
+            var idElement = '#project-list';
+
+            $.ajax({
+              url: '<?php echo base_url();?>project',
+              beforeSend: function(){
+                activateMenu('projects');
+              }
+            })
+            .done(function(response, textStatus, jqhr){
+              initView(idElement,APP_TITLE + ' - Daftar Proyek');
+              $(idElement).html(response);
+            }) 
+            .fail(function(e){
+
+            });
+          }
+
+          function projectDetail(id){
+            var idElement = '#project-detail';
+
+            $.ajax({
+              url: '<?php echo base_url();?>project/view/' + id,
+              beforeSend: function(){
+                activateMenu('projects');
+              }
+            })
+            .done(function(response, textStatus, jqhr){
+              initView(idElement,APP_TITLE + ' - Detail Proyek');
+              $(idElement).html(response);
+            }) 
+            .fail(function(e){
+
+            });
+          }
+
+          function notfound(){
+            var idElement = '#error-404';
+            initView(idElement,APP_TITLE + ' - 404');
+            $(idElement).html("<center><h3>404 Halaman tidak ditemukan!</h3></center>");
           }
     
         </script>

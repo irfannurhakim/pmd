@@ -5,12 +5,12 @@ class Authentication extends CI_Controller {
 
 	public function __construct(){
 		parent::__construct();
-
-
+    if($this->session->userdata('isLoggedIn')){
+      redirect('/', 'refresh');
+    } 
 	}
 
-	public function index()
-	{
+	public function index(){
 		$this->load->view('authentication/login');
 	}
 
@@ -50,11 +50,5 @@ class Authentication extends CI_Controller {
 			$this->session->set_flashdata('message', 'Incorrect username and password!');
 			redirect(base_url() . 'authentication');
 		}
-	}
-
-	public function logout(){
-		//$this->db->insert('tbl_global_logs', array('id_event'=> 11, 'id_user'=>$this->session->userdata['id'], 'description'=> 'logout', 'severity'=>'normal'));
-		$this->session->sess_destroy();	
-		redirect(base_url() . 'authentication');
 	}
 }
