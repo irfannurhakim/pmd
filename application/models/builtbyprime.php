@@ -6,7 +6,7 @@ class Builtbyprime extends CI_Model {
  
   public function update($a,$b=array(),$c){$this->db->update($a,$c,$b);return $this->db->affected_rows();}
  
-  public function insert($a,$b){$this->db->insert($a,$b);return $this->db->insert_id();}
+  public function insert($a,$b){$this->db->insert($a,$b);return $b;}
  
   public function delete($a,$b=array()){$this->db->delete($a,$b);return $this->db->affected_rows();}
  

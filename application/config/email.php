@@ -1,10 +1,9 @@
 <?php
 
 $config['protocol'] = 'smtp';
-$config['smtp_host'] = 'smtp.gmail.com';
-$config['smtp_user'] = 'irfan@aegis.co.id';
-$config['smtp_pass'] = 'aegis102';
+$config['smtp_host'] = 'ssl://smtp.googlemail.com';
+$config['smtp_port'] = 465;
+$config['smtp_user'] = 'myfunareaa@gmail.com';
+$config['smtp_pass'] = 'irfan29JUNI88';
 $config['charset'] = 'iso-8859-1';
-$config['wordwrap'] = TRUE;
 
-$this->email->initialize($config);
