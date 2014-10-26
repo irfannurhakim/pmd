@@ -22,8 +22,8 @@
         <script src="<?= base_url();?>public/js/jquery.validate.min.js"></script>
         <script src="<?= base_url();?>public/js/jquery.form.min.js"></script>
         <script src="<?= base_url();?>public/js/jquery.dataTables.min.js"></script>
-        <script src="http://cdn.datatables.net/plug-ins/725b2a2115b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
-        <script src="http://cdn.datatables.net/responsive/1.0.1/js/dataTables.responsive.js"></script>
+        <script src="<?= base_url();?>public/js/dataTables.bootstrap.js"></script>
+        <script src="<?= base_url();?>public/js/dataTables.responsive.js"></script>
         <script src="<?= base_url();?>public/js/jquery.dataTables.reload.ajax.min.js"></script>
 
 
