@@ -2,24 +2,66 @@
 
 class User extends CI_Controller {
 
-	public function index()
-	{
-			
+	public function index(){
+    $data['user_type'] = $this->builtbyprime->get('TBL_USER_TYPE');
+    $data['users'] = $this->builtbyprime->get('TBL_USER');
+
+		$this->load->view('parameter/user/index', $data);
 	}
 
 	public function add(){
+    $data = array(
+      'username' => $this->input->post('username'),
+      'name' => $this->input->post('name'),
+      'password' => md5($this->input->post('password')),
+      'email' => $this->input->post('email'),
+      'affiliation' => $this->input->post('affiliation'),
+      'id_user_type' => $this->input->post('id-user-type')
+    );
 
+
+    //cek username
+    $usernameIsExist = $this->builtbyprime->get('TBL_USER', array('username' => $this->input->post('username')), TRUE);
+    if($usernameIsExist){
+      echo json_encode(array('message'=>'Username sudah dipakai'));
+      exit();
+    }
+
+    //cek email
+    $emailIsExist = $this->builtbyprime->get('TBL_USER', array('email' => $this->input->post('email')), TRUE);
+    if($emailIsExist){
+      echo json_encode(array('message'=>'Email sudah dipakai'));
+      exit();
+    }
+
+    $res = $this->builtbyprime->insert('TBL_USER', $data);
+
+    echo json_encode($res);
 	}
 
 	public function view(){
 
 	}
 
-	public function remove(){
+	public function remove($id){
+    $data = $this->builtbyprime->delete('TBL_USER', array('id'=>$id));
 
+    if($data){
+      echo json_encode(array('status'=>0, 'rows_affected' => $data));
+    } else {
+      echo json_encode(array('status'=>1));
+    }
 	}
 
 	public function edit(){
 		
 	}
+
+  public function dt_get_all_user(){
+    $this->datatables->select('id, username, name, affiliation, email')
+      ->from('TBL_USER')
+      ->add_column('action', '<a data-toggle="tooltip" title="Edit" class="tooltips" object="$1"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;<a data-toggle="tooltip" title="Hapus" class="tooltips" object="$1"><i class="fa fa-trash-o"></i></a>', 'id');
+
+    echo $this->datatables->generate();
+  }
 }

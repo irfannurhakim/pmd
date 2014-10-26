@@ -11,6 +11,14 @@
         <link href="<?= base_url();?>public/css/style.default.css" rel="stylesheet">
         <link href="<?= base_url();?>public/css/morris.css" rel="stylesheet">
         <link href="<?= base_url();?>public/css/select2.css" rel="stylesheet" />
+        <link href="<?= base_url();?>public/css/style.datatables.css" rel="stylesheet">
+        <link href="<?= base_url();?>public/css/dataTables.responsive.css" rel="stylesheet">
+
+        <style type="text/css">
+          .dt-cols-center{
+            text-align: center;
+          }
+        </style>
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>

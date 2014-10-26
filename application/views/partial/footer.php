@@ -19,6 +19,12 @@
         <script src="<?= base_url();?>public/js/select2.min.js"></script>
         <script src="<?= base_url();?>public/js/moment.min.js"></script>
         <script src="<?= base_url();?>public/js/locale/id.js"></script>
+        <script src="<?= base_url();?>public/js/jquery.validate.min.js"></script>
+        <script src="<?= base_url();?>public/js/jquery.form.min.js"></script>
+        <script src="<?= base_url();?>public/js/jquery.dataTables.min.js"></script>
+        <script src="http://cdn.datatables.net/plug-ins/725b2a2115b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+        <script src="http://cdn.datatables.net/responsive/1.0.1/js/dataTables.responsive.js"></script>
+        <script src="<?= base_url();?>public/js/jquery.dataTables.reload.ajax.min.js"></script>
 
 
         <script src="<?= base_url();?>public/js/custom.js"></script>
@@ -34,14 +40,12 @@
 
           $(document).ready(function(){
 
-
-
             var routes = {
               '/home' : home,
               '/projects' : projects,
               '/project/view/:id' : projectDetail,
               // '/task/view/:id' : taskDetail,
-              // '/users' : users,
+              '/users' : users,
               // '/my-profile' : myProfile,
             }
             
@@ -49,12 +53,22 @@
               'notfound' : notfound
             });
 
-            router.init('/home');
+            router.init('<?php echo $initRoute;?>');
           });
 
           //moment
           moment().locale('id');
           $('.leftpanel-title').text(moment().format('dddd, Do MMMM YYYY'));
+
+          function invertObject(obj) {
+            var new_obj = {};
+            for (var prop in obj) {
+              if(obj.hasOwnProperty(prop)) {
+                new_obj[obj[prop]] = prop;
+              }
+            }
+            return new_obj;
+          };
 
           function activateMenu(idElement){
             $('.activable').removeClass('active');
@@ -70,7 +84,6 @@
 
           function home(){
             var idElement = '#home-index';
-
             $.ajax({
               url: '<?php echo base_url();?>home',
               beforeSend: function(){
@@ -88,7 +101,6 @@
 
           function projects(){
             var idElement = '#project-list';
-
             $.ajax({
               url: '<?php echo base_url();?>project',
               beforeSend: function(){
@@ -106,7 +118,6 @@
 
           function projectDetail(id){
             var idElement = '#project-detail';
-
             $.ajax({
               url: '<?php echo base_url();?>project/view/' + id,
               beforeSend: function(){
@@ -122,11 +133,32 @@
             });
           }
 
+          function users(){
+            var idElement = '#user-list';
+            $.ajax({
+              url: '<?php echo base_url();?>user',
+              beforeSend: function(){
+                activateMenu('settings');
+              }
+            })
+            .done(function(response, textStatus, jqhr){
+              initView(idElement,APP_TITLE + ' - Daftar Pengguna');
+              $(idElement).html(response);
+            }) 
+            .fail(function(e){
+
+            });
+          }
+
           function notfound(){
             var idElement = '#error-404';
             initView(idElement,APP_TITLE + ' - 404');
             $(idElement).html("<center><h3>404 Halaman tidak ditemukan!</h3></center>");
           }
+
+          $('body').tooltip({
+            selector: '[data-toggle=tooltip]'
+          });
     
         </script>
     </body>

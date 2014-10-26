@@ -1,5 +1,5 @@
 
-@import url('../../../../../cdn.datatables.net/plug-ins/725b2a2115b/integration/bootstrap/3/dataTables.bootstrap.css');
+@import url('./dataTables.bootstrap.css');
 
 .dataTables_length, .dataTables_filter {
     margin-top: 8px;

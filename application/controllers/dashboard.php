@@ -11,9 +11,24 @@ class Dashboard extends CI_Controller {
 
 	public function index()
 	{
+    if($this->session->userdata('ID_USER_TYPE') == 1){
+      $data['router'] = array('/home'=>'home', 'project/'=>'projects','/project/view/:id'=>'projectDetail');
+      //$data['router'] = array('test'=>'test');
+      $data['initRoute'] = '/home';
+    } else if($this->session->userdata('ID_USER_TYPE') == 2){
+      $data['initRoute'] = '/home';
+    } else if($this->session->userdata('ID_USER_TYPE') == 3 || $this->session->userdata('ID_USER_TYPE') == 4){
+      $data['initRoute'] = '/projects';
+    }
+
+
 		$this->load->view('partial/header');
 		$this->load->view('partial/sidebar');
-		$this->load->view('partial/main');
+		$this->load->view('partial/main', $data);
 		$this->load->view('partial/footer');		
 	}
+
+  public function _getInitRoute(){
+
+  }
 }

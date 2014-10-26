@@ -2,7 +2,6 @@
 
 class Authentication extends CI_Controller {
 
-
 	public function __construct(){
 		parent::__construct();
     if($this->session->userdata('isLoggedIn')){
@@ -26,12 +25,13 @@ class Authentication extends CI_Controller {
 		if($username == 'aegisdev' && $password == 'aegisdev'){
 			$user = array(
 				'isLoggedIn' => TRUE,
-				'id' => 99,
-				'username' => 'aegisdev',
-				'name' => 'Aegis Dev',
-				'affiliation' => 'Developer',
-				'status' => 1,
-        'email' => 'irfan@aegis.co.id'
+				'ID' => 99,
+				'USERNAME' => 'aegisdev',
+				'NAME' => 'Aegis Dev',
+				'AFFILIATION' => 'Developer',
+				'STATUS' => 1,
+        'EMAIL' => 'irfan@aegis.co.id',
+        'ID_USER_TYPE' => 1
 			);
 
 			$this->session->set_userdata($user);
