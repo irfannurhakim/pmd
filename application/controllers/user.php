@@ -19,6 +19,22 @@ class User extends CI_Controller {
       'id_user_type' => $this->input->post('id-user-type')
     );
 
+    //update
+    if($this->input->post('is-edit') == 1 && $this->input->post('id') != -1){
+      if(strlen($this->input->post('password')) < 1) {
+        unset($data['password']);
+      }
+
+      $update = $this->builtbyprime->update('TBL_USER', array('id' => $this->input->post('id')), $data);
+
+      if($update){
+        echo json_encode(array('status'=>0, 'data' => $data));
+      } else {
+        echo json_encode(array('status'=>1));
+      }
+
+      exit();
+    }
 
     //cek username
     $usernameIsExist = $this->builtbyprime->get('TBL_USER', array('username' => $this->input->post('username')), TRUE);
@@ -39,15 +55,21 @@ class User extends CI_Controller {
     echo json_encode($res);
 	}
 
-	public function view(){
+	public function view($id){
+    $data = $this->builtbyprime->get('TBL_USER', array('id'=>$id), TRUE);
 
+    if($data){
+      echo json_encode(array('status'=>0, 'data' => $data));
+    } else {
+      echo json_encode(array('status'=>1));
+    }
 	}
 
 	public function remove($id){
     $data = $this->builtbyprime->delete('TBL_USER', array('id'=>$id));
 
     if($data){
-      echo json_encode(array('status'=>0, 'rows_affected' => $data));
+      echo json_encode(array('status'=>0, 'data' => $data));
     } else {
       echo json_encode(array('status'=>1));
     }

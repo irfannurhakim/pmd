@@ -1,5 +1,5 @@
 <div>
-  <button class="btn btn-default" data-toggle="modal" data-target=".bs-example-modal">Tambah Pengguna</button>
+  <button class="btn btn-primary add-data" data-toggle="modal" data-target=".bs-example-modal"><i class="fa fa-plus"></i> Tambah Pengguna</button>
 </div>
 
 <table id="table-list-users" class="table table-striped table-bordered responsive">
@@ -43,6 +43,13 @@
           <div class="col-md-12">
             <form class="form-horizontal" id="form-add-user" method="POST" action="<?= base_url();?>user/add">
               <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-btns">
+                        <a href="#" class="panel-minimize tooltips" data-toggle="tooltip" title="Minimize Panel"><i class="fa fa-minus"></i></a>
+                        <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
+                    </div><!-- panel-btns -->
+                    <p>( <span class="asterisk">*</span> ) Menandakan wajib diisi. <span class="info-exception" style="display:none;">Silahkan isi kolom password apabila <strong>INGIN</strong> mengubah password.</span></p>
+                </div>
                 <div class="panel-body">
                   <div class="errorForm"></div>
                   <div class="form-group">
@@ -91,6 +98,9 @@
                           </select>
                       </div>
                   </div><!-- form-group -->
+                  <!-- Hidden Field -->
+                  <input type="hidden" name="id" value="-1" />
+                  <input type="hidden" name="is-edit" value="0" />
                 </div><!-- panel-body -->
                 <div class="panel-footer">
                     <button class="btn btn-primary mr5" type="submit">Submit</button>
@@ -125,17 +135,65 @@
       minimumResultsForSearch: -1
     });
 
+    $('.add-data').click(function(){
+      $('#modal-add-user').find('.modal-title').text('Tambah Pengguna');
+      $('#form-add-user')[0].reset();
+
+      //add required
+      $("input[name='password']").attr('required', true);
+
+      //info
+      $('.info-exception').hide();
+    });
+
     // Validation
     jQuery("#form-add-user").validate({
       errorLabelContainer: jQuery("#form-add-user div.errorForm")
     });
 
+    // Submit add user
     $('#form-add-user').ajaxForm({
       success: function(a,b,c,d){
         $('#modal-add-user').modal('hide');
-        $(".modal-backdrop").hide();
+        $('.modal-backdrop').hide();
         users();
       }
+    });
+
+    // Function when button edit triggered
+    $('.edit-row').click(function(){
+      var id = $(this).attr('object');
+      $.ajax({
+        url: '<?=base_url();?>user/view/' + id,
+        dataType: 'json'
+      })
+      .done(function(a){
+        if(a.status == 0){
+          var user = a.data;
+
+          //edit form
+          $('#modal-add-user').find('.modal-title').text('Edit Pengguna');
+          $('#form-add-user')[0].reset();
+          $("input[name='password']").removeAttr('required');
+          //info
+          $('.info-exception').show();
+
+          //fill form
+          $("input[name='id']").val(user.ID);
+          $("input[name='name']").val(user.NAME);
+          $("input[name='username']").val(user.USERNAME);
+          $("input[name='affiliation']").val(user.AFFILIATION);
+          $("input[name='email']").val(user.EMAIL);
+          $("#select-id-user-type").select2("val", user.ID_USER_TYPE);
+          $("input[name='is-edit']").val(1);
+
+          //show modal
+          $('#modal-add-user').modal('show');
+        }
+      })
+      .fail(function(){
+
+      });
     });
 
     // Delete row in a table
@@ -144,7 +202,8 @@
       var c = confirm("Apakah anda yakin untuk menghapus data ini?");
       if(c){
         $.ajax({
-          url: '<?=base_url();?>user/remove/' + id
+          url: '<?=base_url();?>user/remove/' + id,
+          dataType: 'json'
         })
         .done(function(a){
           if(a.status == 0){
@@ -158,7 +217,6 @@
       }
       return false;
     });
-
   });
 
 </script>
