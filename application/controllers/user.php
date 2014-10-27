@@ -4,7 +4,7 @@ class User extends CI_Controller {
 
 	public function index(){
     $data['user_type'] = $this->builtbyprime->get('TBL_USER_TYPE');
-    $data['users'] = $this->builtbyprime->get('TBL_USER');
+    $data['users'] = $this->builtbyprime->explicit('SELECT a.ID, a.USERNAME, a.NAME, a.AFFILIATION, a.EMAIL, a.PASSWORD, b.NAME as TIPE FROM TBL_USER a, TBL_USER_TYPE b WHERE b.ID = a.ID_USER_TYPE');
 
 		$this->load->view('parameter/user/index', $data);
 	}

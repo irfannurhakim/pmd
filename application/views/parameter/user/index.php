@@ -7,8 +7,9 @@
     <tr>
       <th width="50px">Id</th>
       <th>Username</th>
-      <th>Name</th>
-      <th>Affiliation</th>
+      <th>Tipe Pengguna</th>
+      <th>Nama</th>
+      <th>Afiliasi</th>
       <th>Email</th>
       <th></th>
     </tr>
@@ -19,6 +20,7 @@
     <tr>
         <td><?php echo $row['ID'];?></td>
         <td><?php echo $row['USERNAME'];?></td>
+        <td><?php echo $row['TIPE'];?></td>
         <td><?php echo $row['NAME'];?></td>
         <td><?php echo $row['AFFILIATION'];?></td>
         <td><?php echo $row['EMAIL'];?></td>
