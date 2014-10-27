@@ -2,9 +2,14 @@
 
 class Project extends CI_Controller {
 
-	public function index()
-	{
-		$this->load->view('project/index');
+  public function __construct(){
+    parent::__construct();
+  }
+
+	public function index(){
+    $data['user'] = $this->builtbyprime->get('TBL_USER');
+
+		$this->load->view('project/index', $data);
 	}
 
 	public function add(){

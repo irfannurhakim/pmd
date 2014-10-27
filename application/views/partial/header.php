@@ -13,6 +13,7 @@
         <link href="<?= base_url();?>public/css/select2.css" rel="stylesheet" />
         <link href="<?= base_url();?>public/css/style.datatables.css" rel="stylesheet">
         <link href="<?= base_url();?>public/css/dataTables.responsive.css" rel="stylesheet">
+        <link href="<?= base_url();?>public/css/bootstrap-timepicker.min.css" rel="stylesheet" />
 
         <style type="text/css">
           .dt-cols-center{

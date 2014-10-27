@@ -5,7 +5,6 @@
 <table id="table-list-users" class="table table-striped table-bordered responsive">
   <thead class="">
     <tr>
-      <th width="50px">Id</th>
       <th>Username</th>
       <th>Tipe Pengguna</th>
       <th>Nama</th>
@@ -18,13 +17,12 @@
   <tbody>
     <?php foreach ($users as $row) { ?>
     <tr>
-        <td><?php echo $row['ID'];?></td>
         <td><?php echo $row['USERNAME'];?></td>
         <td><?php echo $row['TIPE'];?></td>
         <td><?php echo $row['NAME'];?></td>
         <td><?php echo $row['AFFILIATION'];?></td>
         <td><?php echo $row['EMAIL'];?></td>
-        <td class="dt-cols-center table-action-hide">
+        <td class="dt-cols-center">
           <a data-toggle="tooltip" title="Edit" class="tooltips edit-row" object="<?php echo $row['ID'];?> "><i class="fa fa-pencil"></i></a>
           <a data-toggle="tooltip" title="Hapus" class="tooltips delete-row" object="<?php echo $row['ID'];?>"><i class="fa fa-trash-o"></i></a>
         </td>
