@@ -12,7 +12,7 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-md-12">
-            <form class="form-horizontal" id="form-add-user" method="POST" action="<?= base_url();?>user/add">
+            <form class="form-horizontal" id="form-add-project" method="POST" action="<?= base_url();?>project/add">
               <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="panel-btns">
@@ -43,7 +43,7 @@
                           <select id="select-id-contractor" data-placeholder="Pilih kontraktor" class="width300" name="id-contractor">
                             <?php foreach ($user as $row) { ?>
                             <?php if($row['ID_USER_TYPE'] == 4){ ?>
-                                <option value="<?php echo $row['ID'];?>"><?php echo $row['NAME'];?></option>
+                                <option value="<?php echo $row['ID'];?>"><?php echo $row['AFFILIATION'] . " - " . $row['NAME'];?></option>
                             <?php }; 
                             }; ?>                                          
                           </select>
@@ -53,7 +53,7 @@
                   <div class="form-group">
                       <label class="col-sm-4 control-label">Pengawas<span class="asterisk">*</span></label>
                       <div class="col-sm-8">
-                          <select id="select-id-supervisor" data-placeholder="Pilih pengawas" multiple class="width300" name="id-supervisor">
+                          <select id="select-id-supervisor" data-placeholder="Pilih pengawas" multiple class="width300" name="id-supervisor[]">
                             <?php foreach ($user as $row) { ?>
                             <?php if($row['ID_USER_TYPE'] == 3){ ?>
                                 <option value="<?php echo $row['ID'];?>"><?php echo $row['NAME'];?></option>
@@ -66,17 +66,30 @@
                   <div class="form-group">
                       <label class="col-sm-4 control-label">Tanggal Mulai<span class="asterisk">*</span></label>
                       <div class="col-sm-3">
-                          <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="start-date" name="start-date" value="<?= date('m/d/Y');?>"/>
+                          <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="start-date" name="start-date" value="<?= date('d/m/Y');?>"/>
+                      </div>
+                      <label class="col-sm-2 control-label" >Tgl Selesai</label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="end-date" name="end-date" value="<?= date('d/m/Y');?>"/>
                       </div>
                   </div><!-- form-group -->
 
-                  <div class="form-group">
+<!--                   <div class="form-group">
                       <label class="col-sm-4 control-label">Durasi<span class="asterisk">*</span></label>
-                      <div class="col-sm-3">
+                      <div class="col-sm-2">
                           <input type="text" name="duration" class="form-control" required title="Kolom Durasi wajib diisi!" value="0" />
                       </div>
-                      <label class="col-sm-5 control-label" style="text-align:left;">Hari</div>
+                      <label class="col-sm-5 control-label" style="text-align:left;">Minggu</label>
+                  </div> --><!-- form-group -->
+
+
+                  <div class="form-group">
+                      <label class="col-sm-4 control-label">Nilai Proyek<span class="asterisk">*</span></label>
+                      <div class="col-sm-5">
+                          <input type="text" name="project-budget" class="form-control" required title="Kolom Nilai Proyek wajib diisi!" value="0" />
+                      </div>
                   </div><!-- form-group -->
+
 
                  
                   <!-- Hidden Field -->
@@ -99,13 +112,19 @@
 <script type="text/javascript">
   $(document).ready(function(){
 
-
-    jQuery('#select-id-contractor, #select-id-supervisor').select2({
-      minimumResultsForSearch: -1
-    });
+    jQuery('#select-id-contractor, #select-id-supervisor').select2();
     
-    jQuery('#start-date').datepicker();
+    jQuery('#start-date').datepicker({dateFormat : "dd/mm/yy"});
+    jQuery('#end-date').datepicker({dateFormat : "dd/mm/yy"});
 
+    // Submit add project
+    $('#form-add-project').ajaxForm({
+      success: function(a,b,c,d){
+        $('#modal-add-project').modal('hide');
+        $('.modal-backdrop').hide();
+        projects();
+      }
+    });
 
 
   });
