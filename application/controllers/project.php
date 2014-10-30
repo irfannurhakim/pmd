@@ -7,6 +7,10 @@ class Project extends CI_Controller {
   }
 
 	public function index(){
+    $now = date('Y/m/d');
+    $sql = "SELECT P.ID, P.NAME, U.AFFILIATION VENDOR_NAME, (P.FINISH_DATE - TO_DATE('".$now."', 'yyyy/mm/dd')) DUE, 0 AS PROGRESS, 0 AS DEVIATION FROM TBL_PROJECT P, TBL_USER U WHERE P.ID_VENDOR = U.ID";
+
+    $data['projects'] = $this->builtbyprime->explicit($sql);
     $data['user'] = $this->builtbyprime->get('TBL_USER');
 
 		$this->load->view('project/index', $data);
@@ -19,7 +23,7 @@ class Project extends CI_Controller {
       'a' => $this->input->post('name'),
       'b' => $this->input->post('start-date'),
       'c' => $this->input->post('end-date'),
-      'd' => $this->input->post('project-budget'),
+      'd' => str_replace(".", "", $this->input->post('project-budget')),
       'e' => $this->input->post('id-contractor'),
       'f' => $this->session->userdata('USERNAME'),
       'h' => $idProject[0]['MAX']
