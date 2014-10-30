@@ -102,9 +102,11 @@ EOT;
 	    $this->email->to($data['EMAIL']);
 	    $this->email->subject('New Password');
 
+	    $url  = ''.base_url().'forgot/change_pass/?email='.$data['EMAIL'].'';
 	    $mailContent = <<< EOT
    			<br /><br />
-   			Password Baru Anda : $password
+   			Password Baru Anda : $password <br /><br />
+   			Anda dapat langsung merubah password anda diatas, silahkan klik link berikut : $url
 EOT;
  
    		$this->email->message($mailContent);
@@ -128,5 +130,27 @@ EOT;
 
 	    if(!$data){ show_404();}
 		$this->load->view('forgot/change_password',$data);
+	} 
+
+	public function change_pass_init(){
+		$email    	  = $this->input->post('email');
+		$password 	  = md5($this->input->post('password'));
+		$new_password = md5($this->input->post('new_password'));
+
+		//cek email 
+		$user = $this->builtbyprime->get('TBL_USER',array('EMAIL'=> $email),TRUE);
+	    if(!$user){ echo "Email yang anda masukkan tidak terdaftar !";exit(); }
+	    if($user['PASSWORD'] != $password){ echo "Password yang anda masukkan salah !";exit(); }
+
+	    $update = $this->builtbyprime->update('TBL_USER',array('EMAIL'=>$user['EMAIL']),array('PASSWORD'=>$new_password));
+
+	    if($update)
+	    {
+	    	echo "Password anda berhasil di ubah.";exit();
+	    }
+	    else
+	    {
+	    	echo "Proses perubahan password gagal.";exit();
+	    }
 	} 
 }
