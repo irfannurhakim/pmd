@@ -30,6 +30,8 @@
         <script src="<?= base_url();?>public/js/dataTables.responsive.js"></script>
         <script src="<?= base_url();?>public/js/jquery.dataTables.reload.ajax.min.js"></script>
         <script src="<?= base_url();?>public/js/bootstrap-timepicker.min.js"></script>
+        <script src="<?= base_url();?>public/js/jquery.priceFormat.min.js"></script>
+
 
 <!--
         <script src="<?= base_url();?>public/js/jquery.autogrow-textarea.js"></script>
@@ -171,7 +173,7 @@
             .fail(function(e){
 
             });
-          }
+          } 
 
           function notfound(){
             var idElement = '#error-404';

@@ -2,7 +2,7 @@
   <button class="btn btn-primary add-data" data-toggle="modal" data-target=".bs-example-modal"><i class="fa fa-plus"></i> Tambah Pengguna</button>
 </div>
 
-<table id="table-list-users" class="table table-striped table-bordered responsive">
+<table id="table-list-users" class="table table-hover table-bordered responsive">
   <thead class="">
     <tr>
       <th>Username</th>
