@@ -26,10 +26,11 @@ class Project extends CI_Controller {
       'd' => str_replace(".", "", $this->input->post('project-budget')),
       'e' => $this->input->post('id-contractor'),
       'f' => $this->session->userdata('USERNAME'),
-      'h' => $idProject[0]['MAX']
+      'h' => $idProject[0]['MAX'],
+      'i' => $this->input->post('contract-no')
     );
 
-    $res = $this->builtbyprime->explicit("INSERT INTO TBL_PROJECT (id, name, start_date, finish_date, budget, id_vendor, created_date, modified_date, created_by, modified_by) VALUES ('".$data['h']."','".$data['a']."',TO_DATE('".$data['b']."','dd/mm/yyyy'),TO_DATE('".$data['c']."','dd/mm/yyyy'),'".$data['d']."','".$data['e']."',SYSDATE, SYSDATE, '".$data['f']."','".$data['f']."')");
+    $res = $this->builtbyprime->explicit("INSERT INTO TBL_PROJECT (id, name, start_date, finish_date, budget, id_vendor, contract_no, created_date, modified_date, created_by, modified_by) VALUES ('".$data['h']."','".$data['a']."',TO_DATE('".$data['b']."','dd/mm/yyyy'),TO_DATE('".$data['c']."','dd/mm/yyyy'),'".$data['d']."','".$data['e']."','".$data['i']."',SYSDATE, SYSDATE, '".$data['f']."','".$data['f']."')");
 
     foreach ($this->input->post('id-supervisor') as $value) {
       $this->builtbyprime->insert('TBL_SUPERVISOR_PROJECT', array('id_user'=> $value, 'id_project' => $data['h']));
@@ -38,8 +39,12 @@ class Project extends CI_Controller {
     echo json_encode($res);
 	}
 
-	public function view(){
-    $this->load->view('project/detail');
+	public function view($id){
+    $data['project'] = $this->builtbyprime->get('TBL_PROJECT', array('id' => $id), TRUE);
+    $data['document'] = $this->builtbyprime->get('TBL_PROJECT_DOCUMENT', array('id_project' => $id));
+    $data['supervisor'] = $this->builtbyprime->get('TBL_SUPERVISOR_PROJECT', array('id' => $id));
+
+    $this->load->view('project/detail', $data);
 	}
 
 	public function remove(){

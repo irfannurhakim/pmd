@@ -9,16 +9,6 @@
         <script src="<?= base_url();?>public/js/pace.min.js"></script>
         <script src="<?= base_url();?>public/js/retina.min.js"></script>
         <script src="<?= base_url();?>public/js/jquery.cookies.js"></script>
-        
-        <!--- 
-        <script src="<?= base_url();?>public/js/flot/jquery.flot.min.js"></script>
-        <script src="<?= base_url();?>public/js/flot/jquery.flot.resize.min.js"></script>
-        <script src="<?= base_url();?>public/js/flot/jquery.flot.spline.min.js"></script>
-        <script src="<?= base_url();?>public/js/jquery.sparkline.min.js"></script> 
-        <script src="<?= base_url();?>public/js/morris.min.js"></script>
-        <script src="<?= base_url();?>public/js/raphael-2.1.0.min.js"></script>
-        <script src="<?= base_url();?>public/js/bootstrap-wizard.min.js"></script>
-        -->
 
         <script src="<?= base_url();?>public/js/select2.min.js"></script>
         <script src="<?= base_url();?>public/js/moment.min.js"></script>
@@ -32,6 +22,7 @@
         <script src="<?= base_url();?>public/js/bootstrap-timepicker.min.js"></script>
         <script src="<?= base_url();?>public/js/jquery.priceFormat.min.js"></script>
 
+        <script src="<?= base_url();?>public/js/jquery.gritter.min.js"></script>
 
 <!--
         <script src="<?= base_url();?>public/js/jquery.autogrow-textarea.js"></script>

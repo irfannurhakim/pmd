@@ -14,7 +14,9 @@
         <link href="<?= base_url();?>public/css/style.datatables.css" rel="stylesheet">
         <link href="<?= base_url();?>public/css/dataTables.responsive.css" rel="stylesheet">
         <link href="<?= base_url();?>public/css/bootstrap-timepicker.min.css" rel="stylesheet" />
+        <link href="<?= base_url();?>public/css/jquery.gritter.css" rel="stylesheet">
 
+        <!-- CUSTOM CSS HERE -->
         <style type="text/css">
           .dt-cols-center{
             text-align: center;
@@ -25,6 +27,16 @@
           .selectable{
             cursor: pointer;
           }
+          .folder-list li a {
+            white-space: nowrap;
+            overflow: hidden;              /* "overflow" value must be different from "visible" */ 
+            text-overflow: ellipsis;
+          }
+
+          .container-dt{
+            margin-top: -10px;
+          }
+
         </style>
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->

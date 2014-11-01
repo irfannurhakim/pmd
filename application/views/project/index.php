@@ -1,37 +1,47 @@
-<div>
-  <button class="btn btn-primary add-data" data-toggle="modal" data-target=".bs-example-modal"><i class="fa fa-plus"></i> Buat Proyek</button>
+<div class="media-options">
+  <div class="pull-right">
+    <div class="btn-toolbar">
+      <div class="btn-group">
+        <button class="btn btn-default add-data btn-sm" data-toggle="modal" data-target=".bs-example-modal"><i class="fa fa-plus rm5"></i> Buat Proyek</button>
+      </div>
+    </div>
+  </div>
 </div>
-
+<hr/>
 <!---
 //list of projects -->
-<table id="table-list-projects" class="table table-bordered responsive table-hover">
-  <thead class="">
-    <tr>
-      <th>Nama Proyek</th>
-      <th>Kontraktor</th>
-      <th width="60px" class="dt-cols-center">Sisa Waktu</th>
-      <th width="60px" class="dt-cols-center">Selesai (%)</th>
-      <th width="60px" class="dt-cols-center">Deviasi (%)</th>
-      <!-- <th></th> -->
-    </tr>
-  </thead>
+<div class="container-dt">
+  <table id="table-list-projects" class="table table-bordered responsive table-hover">
+    <thead class="">
+      <tr>
+        <th>Nama Proyek</th>
+        <th>Kontraktor</th>
+        <th width="60px" class="dt-cols-center">Sisa Waktu</th>
+        <th width="60px" class="dt-cols-center">Selesai (%)</th>
+        <th width="60px" class="dt-cols-center">Deviasi (%)</th>
+        <!-- <th></th> -->
+      </tr>
+    </thead>
 
-  <tbody class="selectable">
-    <?php foreach ($projects as $row) { ?>
-    <tr object="<?php echo $row['ID'];?>">
-        <td><?php echo $row['NAME'];?></td>
-        <td><?php echo $row['VENDOR_NAME'];?></td>
-        <td class="dt-cols-right"><?php echo ($row['DUE'] > 0) ? ceil($row['DUE']/7) : floor($row['DUE']/7);?> Minggu</td>
-        <td class="dt-cols-right"><?php echo $row['PROGRESS'];?> %</td>
-        <td class="dt-cols-right"><?php echo $row['DEVIATION'];?> %</td>
-<!--         <td class="dt-cols-center">
-          <a data-toggle="tooltip" title="Edit" class="tooltips edit-row" object="<?php echo $row['ID'];?> "><i class="fa fa-pencil"></i></a>
-          <a data-toggle="tooltip" title="Hapus" class="tooltips delete-row" object="<?php echo $row['ID'];?>"><i class="fa fa-trash-o"></i></a>
-        </td> -->
-    </tr>
-    <?php } ?>
-  </tbody>
-</table>
+    <tbody class="selectable">
+      <?php foreach ($projects as $row) { 
+        $sisaWaktu = ($row['DUE'] > 0) ? ceil($row['DUE']/7) : floor($row['DUE']/7);
+        $sisaWaktuSpan = ($sisaWaktu >= 0) ? '<span class="label label-default">'.$sisaWaktu.' Minggu</span>' : '<span class="label label-danger">'.$sisaWaktu.' Minggu</span>';
+
+        $deviation = ($row['DEVIATION'] < 20) ? '<span class="badge">'.$row['DEVIATION'] .' %</span>' : '<span class="badge badge-danger">'.$row['DEVIATION'] .' %</span>';
+
+      ?>
+      <tr object="<?php echo $row['ID'];?>">
+          <td><?php echo $row['NAME'];?></td>
+          <td><?php echo $row['VENDOR_NAME'];?></td>
+          <td class="dt-cols-right"><?php echo $sisaWaktuSpan;?></td>
+          <td class="dt-cols-right"><span class="badge"><?php echo $row['PROGRESS'];?> %</span></td>
+          <td class="dt-cols-right"><?php echo $deviation;?></td>
+      </tr>
+      <?php } ?>
+    </tbody>
+  </table>
+</div>
 
 <div class="modal fade bs-example-modal" tabindex="-1" role="dialog" id="modal-add-project" >
   <div class="modal-dialog">
@@ -55,11 +65,19 @@
                 <div class="panel-body">
                   <div class="errorForm"></div>
                   <div class="form-group">
-                      <label class="col-sm-4 control-label">Judul Proyek<span class="asterisk">*</span></label>
+                      <label class="col-sm-4 control-label">Nama Proyek<span class="asterisk">*</span></label>
                       <div class="col-sm-8">
                           <input type="text" name="name" class="form-control" required title="Kolom Judul Proyek wajib diisi!" />
                       </div>
                   </div><!-- form-group -->
+
+                  <div class="form-group">
+                      <label class="col-sm-4 control-label">Nomor Kontrak<span class="asterisk">*</span></label>
+                      <div class="col-sm-8">
+                          <input type="text" name="contract-no" class="form-control" required title="Kolom Nomor Kontrak wajib diisi!" />
+                      </div>
+                  </div><!-- form-group -->
+              
               
                  <!--  <div class="form-group">
                       <label class="col-sm-4 control-label">Deskripsi<span class="asterisk">*</span></label>
@@ -69,7 +87,7 @@
                   </div> --><!-- form-group -->
 
                   <div class="form-group">
-                      <label class="col-sm-4 control-label">Kontraktor<span class="asterisk">*</span></label>
+                      <label class="col-sm-4 control-label">Kontraktor/Pelaksana<span class="asterisk">*</span></label>
                       <div class="col-sm-8">
                           <select id="select-id-contractor" data-placeholder="Pilih kontraktor" class="width300" name="id-contractor">
                             <?php foreach ($user as $row) { ?>
@@ -115,7 +133,7 @@
 
 
                   <div class="form-group">
-                      <label class="col-sm-4 control-label">Nilai Proyek<span class="asterisk">*</span></label>
+                      <label class="col-sm-4 control-label">Nilai Kontrak<span class="asterisk">*</span></label>
                       <div class="col-sm-5">
                           <input type="text" name="project-budget" class="form-control" required title="Kolom Nilai Proyek wajib diisi!" value="0" />
                       </div>
@@ -172,7 +190,7 @@
       thousandsSeparator: '.',
       centsSeparator: ',',
       centsLimit: 0
-    })
+    });
 
   });
 

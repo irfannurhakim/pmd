@@ -1,35 +1,44 @@
-<div>
-  <button class="btn btn-primary add-data" data-toggle="modal" data-target=".bs-example-modal"><i class="fa fa-plus"></i> Tambah Pengguna</button>
+<div class="media-options">
+  <div class="pull-right">
+    <div class="btn-toolbar">
+      <div class="btn-group">
+        <button class="btn btn-default add-data btn-sm" data-toggle="modal" data-target=".bs-example-modal"><i class="fa fa-plus rm5"></i> Tambah Pengguna</button>
+      </div>
+    </div>
+  </div>
 </div>
+<hr/>
 
-<table id="table-list-users" class="table table-hover table-bordered responsive">
-  <thead class="">
-    <tr>
-      <th>Username</th>
-      <th>Tipe Pengguna</th>
-      <th>Nama</th>
-      <th>Afiliasi</th>
-      <th>Email</th>
-      <th></th>
-    </tr>
-  </thead>
+<div class="container-dt">
+  <table id="table-list-users" class="table table-hover table-bordered responsive">
+    <thead class="">
+      <tr>
+        <th>Username</th>
+        <th>Tipe Pengguna</th>
+        <th>Nama</th>
+        <th>Afiliasi</th>
+        <th>Email</th>
+        <th></th>
+      </tr>
+    </thead>
 
-  <tbody>
-    <?php foreach ($users as $row) { ?>
-    <tr>
-        <td><?php echo $row['USERNAME'];?></td>
-        <td><?php echo $row['TIPE'];?></td>
-        <td><?php echo $row['NAME'];?></td>
-        <td><?php echo $row['AFFILIATION'];?></td>
-        <td><?php echo $row['EMAIL'];?></td>
-        <td class="dt-cols-center">
-          <a data-toggle="tooltip" title="Edit" class="tooltips edit-row" object="<?php echo $row['ID'];?> "><i class="fa fa-pencil"></i></a>
-          <a data-toggle="tooltip" title="Hapus" class="tooltips delete-row" object="<?php echo $row['ID'];?>"><i class="fa fa-trash-o"></i></a>
-        </td>
-    </tr>
-    <?php } ?>
-  </tbody>
-</table>
+    <tbody>
+      <?php foreach ($users as $row) { ?>
+      <tr>
+          <td><?php echo $row['USERNAME'];?></td>
+          <td><?php echo $row['TIPE'];?></td>
+          <td><?php echo $row['NAME'];?></td>
+          <td><?php echo $row['AFFILIATION'];?></td>
+          <td><?php echo $row['EMAIL'];?></td>
+          <td class="dt-cols-center">
+            <a data-toggle="tooltip" title="Edit" class="tooltips edit-row" object="<?php echo $row['ID'];?> "><i class="fa fa-pencil"></i></a>
+            <a data-toggle="tooltip" title="Hapus" class="tooltips delete-row" object="<?php echo $row['ID'];?>"><i class="fa fa-trash-o"></i></a>
+          </td>
+      </tr>
+      <?php } ?>
+    </tbody>
+  </table>
+</div>
 
 <div class="modal fade bs-example-modal" tabindex="-1" role="dialog" id="modal-add-user" >
   <div class="modal-dialog">
