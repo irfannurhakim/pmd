@@ -122,16 +122,14 @@
                           <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="end-date" name="end-date" value="<?= date('d/m/Y');?>"/>
                       </div>
                   </div><!-- form-group -->
-
-<!--                   <div class="form-group">
+                  <!--                   
+                  <div class="form-group">
                       <label class="col-sm-4 control-label">Durasi<span class="asterisk">*</span></label>
                       <div class="col-sm-2">
                           <input type="text" name="duration" class="form-control" required title="Kolom Durasi wajib diisi!" value="0" />
                       </div>
                       <label class="col-sm-5 control-label" style="text-align:left;">Minggu</label>
                   </div> --><!-- form-group -->
-
-
                   <div class="form-group">
                       <label class="col-sm-4 control-label">Nilai Kontrak<span class="asterisk">*</span></label>
                       <div class="col-sm-5">

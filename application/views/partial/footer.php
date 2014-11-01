@@ -51,8 +51,9 @@
             var routes = {
               '/home' : home,
               '/projects' : projects,
+              '/items' : items,
               '/project/view/:id' : projectDetail,
-              // '/task/view/:id' : taskDetail,
+             // '/items/view/:id' : itemDetail,
               '/users' : users,
               // '/my-profile' : myProfile,
             }
@@ -107,6 +108,23 @@
             })
             .done(function(response, textStatus, jqhr){
               initView(idElement,APP_TITLE + ' - Daftar Proyek');
+              $(idElement).html(response);
+            }) 
+            .fail(function(e){
+
+            });
+          }
+
+           function items(){
+            var idElement = '#item-list';
+            $.ajax({
+              url: '<?php echo base_url();?>item_task',
+              beforeSend: function(){
+                activateMenu('items');
+              }
+            })
+            .done(function(response, textStatus, jqhr){
+              initView(idElement,APP_TITLE + ' - Daftar Item Project');
               $(idElement).html(response);
             }) 
             .fail(function(e){

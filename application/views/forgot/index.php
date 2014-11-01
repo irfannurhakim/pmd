@@ -40,7 +40,6 @@
                 </div><!-- panel-footer -->
             </div><!-- panel -->
         </section>
-
         <script src="<?= base_url();?>public/js/jquery-1.11.1.min.js"></script>
         <script src="<?= base_url();?>public/js/jquery-migrate-1.2.1.min.js"></script>
         <script src="<?= base_url();?>public/js/bootstrap.min.js"></script>
@@ -50,7 +49,6 @@
         <script src="<?= base_url();?>public/js/jquery.cookies.js"></script>
         <script src="<?= base_url();?>public/js/custom.js"></script>
         <script src="<?= base_url();?>public/js/jquery.form.min.js"></script>
-
         <script type="text/javascript">
             $(document).ready(function(){
                 $('#form-reset-password').ajaxForm({
@@ -72,6 +70,5 @@
                 });
             });
         </script>
-
     </body>
 </html>

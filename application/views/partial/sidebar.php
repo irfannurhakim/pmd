@@ -19,7 +19,8 @@
       <?php 
         if($this->session->userdata('ID_USER_TYPE') == 1){ ?>        
         <li id="menu-settings" class="activable"><a href="#/settings"><i class="fa fa-gear"></i> <span>Pengaturan</span></a></li>    
-      <?php } ?>                    
+      <?php } ?>  
+      <li id="menu-item" class="activable"><a href="#/items"><i class="fa fa-suitcase"></i> <span>Item</span></a></li>                  
     </ul>
 </div><!-- leftpanel -->
 
