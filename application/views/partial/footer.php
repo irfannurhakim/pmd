@@ -70,7 +70,7 @@
           $('.leftpanel-title').text(moment().format('dddd, Do MMMM YYYY'));
 
           function activateMenu(idElement){
-            $('.activable').removeClass('active');
+            $('.activable').removeClass('active parent-focus');
             $('#menu-' + idElement).addClass('active');
           }
 
@@ -154,7 +154,7 @@
             $.ajax({
               url: '<?php echo base_url();?>user',
               beforeSend: function(){
-                activateMenu('settings');
+                activateMenu('settings, #menu-users');
               }
             })
             .done(function(response, textStatus, jqhr){

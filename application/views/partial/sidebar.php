@@ -18,9 +18,13 @@
         <li id="menu-projects" class="activable"><a href="#/projects"><i class="fa fa-suitcase"></i> <span>Proyek</span></a></li>
       <?php 
         if($this->session->userdata('ID_USER_TYPE') == 1){ ?>        
-        <li id="menu-settings" class="activable"><a href="#/settings"><i class="fa fa-gear"></i> <span>Pengaturan</span></a></li>    
+        <li id="menu-settings" class="parent activable"><a href="#"><i class="fa fa-gear"></i> <span>Pengaturan</span></a>
+          <ul class="children">
+            <li class="activable" id="menu-users"><a href="<?=base_url();?>#/users"> Pengguna</a></li>
+            <li class="activable" id="menu-apps"><a href="<?=base_url();?>#/apps"> Aplikasi</a></li>
+          </ul>
+        </li>    
       <?php } ?>  
-      <li id="menu-item" class="activable"><a href="#/items"><i class="fa fa-suitcase"></i> <span>Item</span></a></li>                  
     </ul>
 </div><!-- leftpanel -->
 
