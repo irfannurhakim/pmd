@@ -6,7 +6,7 @@
     <div class="btn-toolbar">
       <div class="btn-group">
         <button class="btn btn-default btn-sm" type="button" onclick="javascript:history.go(-1);return false;"><i class="fa fa-arrow-left mr5"></i> Daftar Proyek</button>     
-        <button class="btn btn-default btn-sm" type="button"><i class="fa fa-list-ul mr5"></i> Item Pekerjaan</button>
+        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/item/project/<?=$project['ID'];?>'; return false;"><i class="fa fa-list-ul mr5"></i> Item Pekerjaan</button>
       </div>  
       <div class="btn-group">
           <button class="btn btn-default btn-sm" type="button"><i class="fa fa-trash-o mr5"></i> Hapus</button>
@@ -41,7 +41,7 @@
           <div class="form-group">
             <label class="col-sm-4 control-label">Kontraktor / Pelaksana</label>
             <div class="col-sm-8">
-              <select id="select-id-contractor" data-placeholder="Pilih kontraktor" class="width300" name="id-contractor">
+              <select id="select-id-contractor" data-placeholder="Pilih kontraktor" class="col-sm-12" name="id-contractor">
                 <?php foreach ($user as $row) { ?>
                 <?php if($row['ID_USER_TYPE'] == 4){ ?>
                     <option value="<?php echo $row['ID'];?>"><?php echo $row['AFFILIATION'] . " - " . $row['NAME'];?></option>
@@ -53,7 +53,7 @@
           <div class="form-group">
             <label class="col-sm-4 control-label">Pengawas</label>
             <div class="col-sm-8">
-              <select id="select-id-supervisor" data-placeholder="Pilih pengawas" multiple class="width300" name="id-supervisor[]">
+              <select id="select-id-supervisor" data-placeholder="Pilih pengawas" multiple class="col-sm-12" name="id-supervisor[]">
                 <?php foreach ($user as $row) { ?>
                 <?php if($row['ID_USER_TYPE'] == 3){ ?>
                     <option value="<?php echo $row['ID'];?>"><?php echo $row['NAME'];?></option>

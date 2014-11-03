@@ -38,10 +38,8 @@
         <script src="<?= base_url();?>public/js/custom.js"></script>
         <!-- <script src="<?= base_url();?>public/js/dashboard.js"></script> -->
 
-
         <!-- custom script -->
         <script src="<?= base_url();?>public/js/director.js"></script>
-
         <script type="text/javascript">
 
           var APP_TITLE = "Project Management Dashboard";
@@ -53,6 +51,7 @@
               '/projects' : projects,
               '/items' : items,
               '/project/view/:id' : projectDetail,
+              '/item/project/:id' : itemProject,
              // '/items/view/:id' : itemDetail,
               '/users' : users,
               // '/my-profile' : myProfile,
@@ -165,6 +164,23 @@
 
             });
           } 
+
+          function itemProject(id){
+            var idElement = '#item-list';
+            $.ajax({
+              url: '<?php echo base_url();?>item_task/project/' + id,
+              beforeSend: function(){
+                activateMenu('projects');
+              }
+            })
+            .done(function(response, textStatus, jqhr){
+              initView(idElement,APP_TITLE + ' - Daftar Item Pekerjaan');
+              $(idElement).html(response);
+            }) 
+            .fail(function(e){
+
+            });
+          }
 
           function notfound(){
             var idElement = '#error-404';

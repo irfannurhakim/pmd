@@ -31,12 +31,12 @@
         $deviation = ($row['DEVIATION'] < 20) ? '<span class="badge">'.$row['DEVIATION'] .' %</span>' : '<span class="badge badge-danger">'.$row['DEVIATION'] .' %</span>';
 
       ?>
-      <tr object="<?php echo $row['ID'];?>">
-          <td><?php echo $row['NAME'];?></td>
-          <td><?php echo $row['VENDOR_NAME'];?></td>
-          <td class="dt-cols-right"><?php echo $sisaWaktuSpan;?></td>
-          <td class="dt-cols-right"><span class="badge"><?php echo $row['PROGRESS'];?> %</span></td>
-          <td class="dt-cols-right"><?php echo $deviation;?></td>
+      <tr object="<?=$row['ID'];?>">
+          <td><?=$row['NAME'];?></td>
+          <td><?=$row['VENDOR_NAME'];?></td>
+          <td class="dt-cols-right"><?=$sisaWaktuSpan;?></td>
+          <td class="dt-cols-right"><span class="badge"><?=$row['PROGRESS'];?> %</span></td>
+          <td class="dt-cols-right"><?=$deviation;?></td>
       </tr>
       <?php } ?>
     </tbody>
@@ -92,7 +92,7 @@
                           <select id="select-id-contractor" data-placeholder="Pilih kontraktor" class="width300" name="id-contractor">
                             <?php foreach ($user as $row) { ?>
                             <?php if($row['ID_USER_TYPE'] == 4){ ?>
-                                <option value="<?php echo $row['ID'];?>"><?php echo $row['AFFILIATION'] . " - " . $row['NAME'];?></option>
+                                <option value="<?= $row['ID'];?>"><?= $row['AFFILIATION'] . " - " . $row['NAME'];?></option>
                             <?php }; 
                             }; ?>                                          
                           </select>
@@ -105,7 +105,7 @@
                           <select id="select-id-supervisor" data-placeholder="Pilih pengawas" multiple class="width300" name="id-supervisor[]">
                             <?php foreach ($user as $row) { ?>
                             <?php if($row['ID_USER_TYPE'] == 3){ ?>
-                                <option value="<?php echo $row['ID'];?>"><?php echo $row['NAME'];?></option>
+                                <option value="<?= $row['ID'];?>"><?= $row['NAME'];?></option>
                             <?php }; 
                             }; ?>                                          
                           </select>
