@@ -54,7 +54,7 @@
                       <label class="col-sm-4 control-label">Project<span class="asterisk">*</span></label>
                       <div class="col-sm-8">
                           <select id="select-id-project" data-placeholder="Pilih Project" class="width300" name="id-project" title="Project wajib dipilih" required>
-                             <option></option>
+                             <option value="0"></option>
                              <?php foreach ($project as $row) { ?>
                                 <option value="<?php echo $row['ID'];?>"><?php echo $row['NAME'];?></option>
                             <?php }; ?>                                          
@@ -65,7 +65,7 @@
                       <label class="col-sm-4 control-label">Parent Item</label>
                       <div class="col-sm-8">
                           <select id="select-id-parent" data-placeholder="Pilih Parent Item" class="width300" name="id-parent">
-                             <option></option>
+                             <option value="0"></option>
                              <?php foreach ($item as $row) { ?>
                                 <option value="<?php echo $row['ID'];?>"><?php echo $row['NAME'];?></option>
                             <?php }; ?>                                          
