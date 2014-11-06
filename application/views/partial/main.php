@@ -1,5 +1,5 @@
 <div class="mainpanel">
-  <div class="pageheader">
+<!--   <div class="pageheader">
     <div class="media">
       <div class="pageicon pull-left">
         <i class="fa fa-home"></i>
@@ -12,8 +12,8 @@
         </ul>
         <h4>Blank Page</h4>
       </div>
-    </div><!-- media -->
-  </div><!-- pageheader -->
+    </div>
+  </div> -->
   
   <div class="contentpanel">
     <!-- CONTENT GOES HERE -->

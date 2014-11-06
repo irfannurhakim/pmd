@@ -16,8 +16,53 @@
 </div>
 <hr/>
 <div class="row">
-  <div class="col-md-6">
+ 
+  <div class="col-md-3">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="text-center">
+          <p>Saat ini,</p>
+          <h4>Minggu ke-23</h4>
+          <p>Tgl 12/11/2014 s/d 18/11/2014</p>
+        </div>
+      </div><!-- panel-body -->
+    </div>
+  
+    <div class="panel panel-default">
+<!--     <div class="panel-heading">
+      <h3 class="panel-title">Statistik Proyek</h3>
+    </div> -->
+      <div class="panel-body">
+        <h5>Rencana (50%)</h5>
+        <div class="progress">
+          <div style="width: 50%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="50" role="progressbar" class="progress-bar progress-bar-success">
+              <span class="sr-only">50% Complete (success)</span>
+          </div>
+        </div>
+        <h5>Pekerjaan Selesai (40%)</h5>
+        <div class="progress">
+          <div style="width: 40%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-success">
+              <span class="sr-only">40% Complete (success)</span>
+          </div>
+        </div>
+        <h5>Sisa Waktu (60%)</h5>
+        <div class="progress">
+          <div style="width: 60%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="60" role="progressbar" class="progress-bar progress-bar-success">
+              <span class="sr-only">40% Complete (success)</span>
+          </div>
+        </div>
+        <h5>Deviasi (-10%)</h5>
+        <div class="progress">
+          <div style="width: 10%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="10" role="progressbar" class="progress-bar progress-bar-warning">
+              <span class="sr-only">40% Complete (success)</span>
+          </div>
+        </div>         
+      </div>     
+    </div>
 
+  </div>
+
+  <div class="col-md-6">
     <form class="form-horizontal form-bordered" id="form-edit-project" method="POST" action="<?= base_url();?>project/add">
       <div class="panel panel-default">
         <div class="panel-body nopadding">  
@@ -41,7 +86,7 @@
           <div class="form-group">
             <label class="col-sm-4 control-label">Kontraktor / Pelaksana</label>
             <div class="col-sm-8">
-              <select id="select-id-contractor" data-placeholder="Pilih kontraktor" class="col-sm-12" name="id-contractor">
+              <select id="select-id-contractor" data-placeholder="Pilih kontraktor" class="width300" name="id-contractor">
                 <?php foreach ($user as $row) { ?>
                 <?php if($row['ID_USER_TYPE'] == 4){ ?>
                     <option value="<?php echo $row['ID'];?>"><?php echo $row['AFFILIATION'] . " - " . $row['NAME'];?></option>
@@ -53,7 +98,7 @@
           <div class="form-group">
             <label class="col-sm-4 control-label">Pengawas</label>
             <div class="col-sm-8">
-              <select id="select-id-supervisor" data-placeholder="Pilih pengawas" multiple class="col-sm-12" name="id-supervisor[]">
+              <select id="select-id-supervisor" data-placeholder="Pilih pengawas" multiple class="width300" name="id-supervisor[]">
                 <?php foreach ($user as $row) { ?>
                 <?php if($row['ID_USER_TYPE'] == 3){ ?>
                     <option value="<?php echo $row['ID'];?>"><?php echo $row['NAME'];?></option>
@@ -87,64 +132,47 @@
   </div>
   
   <div class="col-md-3">
-    <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Statistik Proyek</h3>
-    </div>
-    <div class="panel-body">
-        <h5>Rencana (50%)</h5>
-        <div class="progress">
-          <div style="width: 50%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="50" role="progressbar" class="progress-bar progress-bar-success">
-              <span class="sr-only">50% Complete (success)</span>
-          </div>
+      <div class="panel panel-default">
+        <div class="panel-body">
+        <button class="btn btn-primary btn-block" id="btn-trigger-upload">Unggah Dokumen</button>
+        <form id="form-upload-document" method="POST" action="<?=base_url();?>document/add">
+          <input type="file" style="display:none;" name="input-upload-document" id="input-upload-document" />
+          <input type="hidden" name="input-id-project" value="<?=$project['ID'];?>" />
+        </form>
+        <div class="mb30"></div>
+        <h5 class="lg-title">Dokumen Kontrak</a></h5>
+        <ul class="folder-list">
+        <?php 
+        if($document){
+          foreach ($document as $row) { ?>
+          <li>
+            <a href="<?=base_url();?>document/view/<?=$row['HASH_CODE_URL'];?>" target="_blank">
+              <i class="fa fa-file-o"></i><span class="pull-right btn-delete-document" data-toggle="tooltip" title="Hapus" object="<?=$row['ID'];?>">&times;</span><?=$row['ORIGINAL_FILE_NAME'];?>
+            </a>
+          </li>
+          <?php } 
+          } else { ?>
+          <li><a href="#" id="no-document-li"> Belum Ada Dokumen</a></li>
+          <?php }?>
+        </ul>
         </div>
-        <h5>Pekerjaan Selesai (40%)</h5>
-        <div class="progress">
-          <div style="width: 40%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-success">
-              <span class="sr-only">40% Complete (success)</span>
-          </div>
-        </div>
-        <h5>Sisa Waktu (60%)</h5>
-        <div class="progress">
-          <div style="width: 60%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="60" role="progressbar" class="progress-bar progress-bar-success">
-              <span class="sr-only">40% Complete (success)</span>
-          </div>
-        </div>
-        <h5>Deviasi (-10%)</h5>
-        <div class="progress">
-          <div style="width: 10%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="10" role="progressbar" class="progress-bar progress-bar-warning">
-              <span class="sr-only">40% Complete (success)</span>
-          </div>
-        </div>         
-    </div>     
-    </div>
+      </div>
   </div>
-  
-  <div class="col-md-3">
-<!--     <div class="media-manager-sidebar"> 
- -->      <button class="btn btn-primary btn-block" id="btn-trigger-upload">Unggah Dokumen</button>
-      <form id="form-upload-document" method="POST" action="<?=base_url();?>document/add">
-        <input type="file" style="display:none;" name="input-upload-document" id="input-upload-document" />
-        <input type="hidden" name="input-id-project" value="<?=$project['ID'];?>" />
-      </form>
-      <div class="mb30"></div>
-      <h5 class="lg-title">Dokumen Kontrak</a></h5>
-      <ul class="folder-list">
-      <?php 
-      if($document){
-        foreach ($document as $row) { ?>
-        <li>
-          <a href="<?=base_url();?>document/view/<?=$row['HASH_CODE_URL'];?>" target="_blank">
-            <i class="fa fa-file-o"></i><span class="pull-right btn-delete-document" data-toggle="tooltip" title="Hapus" object="<?=$row['ID'];?>">&times;</span><?=$row['ORIGINAL_FILE_NAME'];?>
-          </a>
-        </li>
-        <?php } 
-        } else { ?>
-        <li><a href="#" id="no-document-li"> Belum Ada Dokumen</a></li>
-        <?php }?>
-      </ul>
-<!--     </div>
- -->  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-9">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4>Aktifitas Terakhir</h4>
+      </div>
+      <div class="panel-body">
+        
+      </div>
+    </div>
+    
+  </div>
+  <div class="col-md-9"></div>
 </div>
 
 
