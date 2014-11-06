@@ -53,6 +53,17 @@ class Project extends CI_Controller {
     $data['user'] = $this->builtbyprime->get('TBL_USER');
 
 
+    $Carbon = new Carbon\Carbon;
+
+
+    $a = $Carbon::createFromFormat('d-M-y', $data['project']['START_DATE']);
+    $b = $Carbon::now();
+
+    
+    $data['weekNumber'] = ceil(($b->diffInDays($a) + 1)/7);
+    $data['startWeek'] = $a->copy()->addWeeks($data['weekNumber'] - 1)->format('d/m/Y');
+    $data['endWeek'] = $a->copy()->addWeeks($data['weekNumber'])->subDay()->format('d/m/Y');
+
     $this->load->view('project/detail', $data);
 	}
 
