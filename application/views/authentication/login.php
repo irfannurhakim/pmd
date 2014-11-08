@@ -59,7 +59,7 @@
                 </div><!-- panel-body -->
                 <div class="panel-footer">
                   <?php if($this->session->flashdata('message')){ ?>
-                    <a href="signup-2.html" class="btn btn-warning btn-block">Username atau Password salah.</a>
+                    <a href="#" class="btn btn-warning btn-block">Username atau Password salah.</a>
                   <?php } ?>
                 </div><!-- panel-footer -->
             </div><!-- panel -->

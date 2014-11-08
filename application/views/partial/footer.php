@@ -55,6 +55,7 @@
              // '/items/view/:id' : itemDetail,
               '/users' : users,
               // '/my-profile' : myProfile,
+              '/quick_access' : quickAccess
             }
             
             var router = Router(routes).configure({
@@ -180,6 +181,23 @@
             .fail(function(e){
 
             });
+          }
+
+          function quickAccess(){
+            var idElement = '#quick-access';
+            $.ajax({
+              url: '<?php echo base_url();?>/quick_access',
+              beforeSend: function(){
+                activateMenu('quick-access');
+              }
+            })
+            .done(function(response, textStatus, jqhr){
+              initView(idElement,APP_TITLE + ' - Akses Cepat');
+              $(idElement).html(response);
+            }) 
+            .fail(function(e){
+
+            });            
           }
 
           function notfound(){

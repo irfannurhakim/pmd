@@ -15,6 +15,7 @@
         if($this->session->userdata('ID_USER_TYPE') == 1 || $this->session->userdata('ID_USER_TYPE') == 2){ ?>
         <li id="menu-home" class="activable"><a href="#/home"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
       <?php } ?>
+        <li id="menu-quick-access" class="activable"><a href="#/quick_access"><i class="fa fa-magic"></i> <span>Akses Cepat</span></a></li>
         <li id="menu-projects" class="activable"><a href="#/projects"><i class="fa fa-suitcase"></i> <span>Proyek</span></a></li>
       <?php 
         if($this->session->userdata('ID_USER_TYPE') == 1){ ?>        
