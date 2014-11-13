@@ -32,9 +32,11 @@
             overflow: hidden;              /* "overflow" value must be different from "visible" */ 
             text-overflow: ellipsis;
           }
-
           .container-dt{
             margin-top: -10px;
+          }
+          .table-item-list{
+            font-size: 8pt;
           }
 
         </style>

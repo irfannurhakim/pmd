@@ -22,10 +22,11 @@ class Item_task extends CI_Controller {
       'a' => $this->input->post('id-project'),
       'b' => $this->input->post('id-parent'),
       'c' => $this->input->post('name'),
-      'd' => $this->input->post('value'),
+      'd' => $this->input->post('specification'),
       'e' => $this->input->post('volume'),
-      'f' => $this->input->post('satuan'),
-      'h' => $this->session->userdata('USERNAME')
+      'f' => $this->input->post('unit'),
+      'g' => $this->input->post('unit_price'),
+      'h' => $this->session->userdata('USERNAME'),
       );
 
     if($is_edit == 1){ //edit
@@ -34,11 +35,12 @@ class Item_task extends CI_Controller {
           'id_parent'=>$data['b'],
           'id_project'=>$data['a'],
           'name'=>$data['c'],
-          'value'=>$data['d'],
+          'specification'=>$data['d'],
           'volume'=>$data['e'],
           'unit'=>$data['f'],
+          'unit_price'=>$data['g'],
            //'modified_date'=>date('d/m/Y H:i:s'),
-          'modified_by'=>$data['h'],
+          'modified_by'=>$data['h']
           )
         );
     }
@@ -46,9 +48,21 @@ class Item_task extends CI_Controller {
     {
       $idItem = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_ITEM_TASK");
       $res    = $this->builtbyprime->explicit("INSERT INTO TBL_ITEM_TASK
-        (id, id_parent, id_project, name, value, volume, unit, created_date, modified_date, created_by, modified_by) 
+        (id, id_parent, id_project, name, specification, volume, unit, created_date, modified_date, created_by, modified_by, unit_price) 
         VALUES 
-        ('".$idItem[0]['MAX']."','".$data['b']."','".$data['a']."','".$data['c']."','".$data['d']."','".$data['e']."','".$data['f']."',SYSDATE, SYSDATE, '".$data['h']."','".$data['h']."')");
+        ('".$idItem[0]['MAX']."',
+         '".$data['b']."',
+         '".$data['a']."',
+         '".$data['c']."',
+         '".$data['d']."',
+         '".$data['e']."',
+         '".$data['f']."',
+         SYSDATE, 
+         SYSDATE, 
+         '".$data['h']."',
+         '".$data['h']."',
+         '".$data['g']."')
+      ");
     }
     
     echo json_encode($res);
@@ -79,18 +93,20 @@ class Item_task extends CI_Controller {
 
   }
 
-  public function project($id){
-    $data['list_item']    = $this->builtbyprime->get('TBL_ITEM_TASK',array('ID_PROJECT' => $id));
-    
+  public function project($id){ 
     $lvl2                 = $this->builtbyprime->get('TBL_ITEM_TASK', array('id_parent' => 0));
+   
+    /*
     $ar                   = array();
     foreach ($lvl2 as $v):
       $ar[] = $v['ID'];
     endforeach;
+    $data['ar_id']        = $ar;
+    */
 
-    $data['ar_id'] = $ar;
+    $data['item_list']    = $this->builtbyprime->explicit('SELECT LEVEL,TBL_ITEM_TASK.* FROM TBL_ITEM_TASK WHERE ID_PROJECT = '.$id.' START WITH ID_PARENT = 0 CONNECT BY PRIOR ID = ID_PARENT ORDER SIBLINGS BY NAME');
+    $data['max_level']    = $this->builtbyprime->explicit('SELECT MAX(LEVEL) AS MAX FROM TBL_ITEM_TASK WHERE ID_PROJECT = 1 START WITH ID_PARENT = 0 CONNECT BY PRIOR ID = ID_PARENT ORDER SIBLINGS BY NAME');
 
-    $data['item_list']    = $this->builtbyprime->explicit('SELECT TBL_ITEM_TASK.* FROM TBL_ITEM_TASK WHERE ID_PROJECT = '.$id.' START WITH ID_PARENT = 0 CONNECT BY PRIOR ID = ID_PARENT ORDER SIBLINGS BY NAME');
     $data['project']      = $this->builtbyprime->get('TBL_PROJECT', array('id' => $id), TRUE);
     $data['id']           = $id;
     $this->load->view('item_task/project', $data);

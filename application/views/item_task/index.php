@@ -5,7 +5,7 @@
   <thead class="">
     <tr>
       <th>Nama Item</th>
-      <th>Parent Item</th>
+      <th>Spesifikasi</th>
       <th>Value</th>
       <th>Volume</th>
       <th>Satuan</th>
@@ -17,7 +17,7 @@
     <?php foreach($item_list as $val): ?>
       <tr>
         <td><?=$val['NAME'];?></td>
-        <td><?=$val['PARENT'];?></td>
+        <td><?=$val['SPESIFIKASI'];?></td>
         <td><?=$val['VALUE'];?></td>
         <td><?=$val['VOLUME'];?></td>
         <td><?=$val['SATUAN'];?></td>
@@ -81,9 +81,9 @@
                       </div>
                   </div>
                   <div class="form-group">
-                      <label class="col-sm-4 control-label">Value<span class="asterisk">*</span></label>
+                      <label class="col-sm-4 control-label">Harga Satuan<span class="asterisk">*</span></label>
                       <div class="col-sm-5">
-                          <input type="text" name="value" id="value" class="form-control" required title="Kolom Value wajib diisi!" value="0" />
+                          <input type="text" name="value" id="value" class="form-control" required title="Kolom Harga Satuan wajib diisi!" value="0" />
                       </div>
                   </div>
                    <div class="form-group">
@@ -92,10 +92,16 @@
                           <input type="text" name="volume" id="volume" class="form-control" required title="Kolom Volume wajib diisi!" value="0" />
                       </div>
                   </div>
-                   <div class="form-group">
+                  <div class="form-group">
                       <label class="col-sm-4 control-label">Satuan<span class="asterisk">*</span></label>
                       <div class="col-sm-5">
                           <input type="text" name="satuan" id="satuan" class="form-control" required title="Kolom Satuan wajib diisi!"  />
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label class="col-sm-4 control-label">Spesifikasi<span class="asterisk">*</span></label>
+                      <div class="col-sm-5">
+                          <textarea name="spesifikasi" id="spesifikasi" class="form-control" required title="Kolom Spesifikasi wajib diisi!" /></textarea>
                       </div>
                   </div>
 
@@ -157,6 +163,7 @@
           $("#value").val(response.data.VALUE);
           $("#volume").val(response.data.VOLUME);
           $("#satuan").val(response.data.SATUAN);
+          $("#spesifikasi").val(response.data.SPESIFIKASI);
           $("#id").val(response.data.ID);
           $("#is-edit").val('1');
         }

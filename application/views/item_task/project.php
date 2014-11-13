@@ -1,9 +1,3 @@
-<!--
-<div>
-  <button class="btn btn-primary add-data" data-toggle="modal" data-target=".modal-add-item"><i class="fa fa-plus"></i> Buat Item</button>
-</div>
--->
-
 <div class="media-options">
   <div class="pull-left">
    <h5><?=$project['NAME'];?></h5>  
@@ -18,54 +12,86 @@
   </div>
 </div>
 <hr/>
-<table class="table table-bordered responsive table-hover" id="table-list-item">
+<table class="table table-bordered responsive table-hover table-item-list" id="table-list-item">
   <thead class="">
     <tr>
       <th class="text-center">No.</th>
       <th>Uraian Pekerjaan</th>
-      <th>Value</th>
-      <th>Volume</th>
-      <th>Satuan</th>
-      <th class="text-center">Price</th>
-      <th class="text-center">Y</th>
-      <th class="text-center">N</th>
+      <th>Spesifikasi</th>
+      <th class="text-center">Volume</th>
+      <th class="text-center">Satuan</th>
+      <th class="text-center">Harga Satuan (Rp)</th>
+      <th class="text-center">Bobot (%)</th>
+      <th class="text-center">Jumlah</th>
       <th width="60px"></th>
     </tr>
   </thead>
 
   <tbody class="selectable">
     <?php 
-      $no_num = 1;
-      $no_alp = 'a';
+
+      for($i=1;$i<=$max_level[0]['MAX'];$i++)
+      {
+        $$i = 1;
+        echo $$i;
+      }
+
+      $budget          = $project['BUDGET'];
+      $no_num          = 1;
+      $no_alp          = 'a';
+      $ar_total_jumlah = array();
+      $ar_total_persen = array();
+      $lvl             = 3; //start level
+
       foreach($item_list as $val): 
 
-        $nomor  = (($val['ID_PARENT'] == 0)? '' :  (in_array($val['ID_PARENT'],$ar_id)? $no_alp++ : $no_num++));
-        $align  = (in_array($val['ID_PARENT'],$ar_id))? 'left' : 'right';
-        $bg     = (in_array($val['ID_PARENT'],$ar_id))? '#eee' : '#fff';
-        $name   = ($val['ID_PARENT'] != 0)? $val['NAME'] : '<strong>'.$val['NAME'].'</strong>';
+        $align  = ($val['LEVEL'] == 2)? 'left' : 'right';
+        $bg     = ($val['LEVEL'] == 2)? '#eee' : '#fff';
+        $name   = ($val['LEVEL'] == 1)? '<strong>'.$val['NAME'].'</strong>' : $val['NAME'];
+
+        $ar_total_jumlah[]  = ($val['LEVEL'] == 1 || $val['LEVEL'] == 2)? 0 : $val['UNIT_PRICE']*$val['VOLUME'];
+        $ar_total_persen[]  = ($val['LEVEL'] == 1 || $val['LEVEL'] == 2)? 0 : (($val['UNIT_PRICE']*$val['VOLUME'])/$budget)*100;
         
-        if($id != $val['ID'] && $val['ID_PARENT'] == 0){ echo '<tr><td colspan="9">&nbsp;</td></tr>';$no_alp = 'a';}
+        if($val['LEVEL'] == 1 && $no_alp != 'a'){ echo '<tr><td colspan="9">&nbsp;</td></tr>';$no_alp = 'a';}
+
+        if($val['LEVEL'] == 1){
+          $nomor = '';
+        }elseif($val['LEVEL'] == 2){
+           $nomor = $no_alp++;
+        }else{
+          $nomor  = ($lvl != $val['LEVEL'])? $nomor.'.'.$$val['LEVEL']++ : $$val['LEVEL']++;
+          $lvl    = $val['LEVEL'];
+        }
 
     ?>
       <tr style="background:<?=$bg;?>;">
-        <td style="text-align:<?=$align;?>;"><?=ucwords($nomor);?>.</td>
-        <td><?=$name;?></td>
-        <td><?=$val['VALUE'];?></td>
-        <td><?=$val['VOLUME'];?></td>
-        <td><?=$val['UNIT'];?></td>
-        <td class="text-center"><input type="text" style="width:150px;" /></td>
-        <td class="text-center"><input type="checkbox" /></td>
-        <td class="text-center"><input type="checkbox" /></td>
+        <td style="text-align:<?=$align;?>;"><?=ucwords($nomor);?></td>
+        <td><?=$val['LEVEL'];?> <?=$name;?></td>
+        <td><?=ucfirst($val['SPECIFICATION']);?></td>
+        <td class="text-center"><?=$val['VOLUME'];?></td>
+        <td class="text-center"><?=$val['UNIT'];?></td>
+        <td class="text-right"><?=number_format($val['UNIT_PRICE']);?></td>
+        <td class="text-center"><?=(($val['UNIT_PRICE']*$val['VOLUME'])/$budget)*100;?></td>
+        <td class="text-right"><?=number_format($val['UNIT_PRICE']*$val['VOLUME']);?></td>
         <td class="dt-cols-center">
           <a data-toggle="tooltip" title="Edit" class="tooltips edit-row" object="<?php echo $val['ID'];?> "><i class="fa fa-pencil"></i></a> &nbsp;&nbsp;
           <a data-toggle="tooltip" title="Hapus" class="tooltips delete-row" object="<?php echo $val['ID'];?>"><i class="fa fa-trash-o"></i></a>
         </td>
       </tr>
     <?php 
-        $id     = $val['ID'];
-        $no_num = (in_array($val['ID_PARENT'],$ar_id))? 1 : $no_num; 
+
       endforeach; 
+
+      $color_persen = (array_sum($ar_total_persen) < 100)? 'style="color:red;"' : '';
+      $color_total  = (array_sum($ar_total_jumlah) < $budget)? 'style="color:red;"' : '';
     ?>
+    <tr><td colspan="9">&nbsp;</td></tr>
+    <tr>
+      <td colspan="6" class="text-center"><strong>Total</strong></td>
+      <td class="text-center"><strong <?=$color_persen;?>><?=array_sum($ar_total_persen);?></strong></td>
+      <td class="text-right"><strong <?=$color_total;?>><?=number_format(array_sum($ar_total_jumlah));?></strong></td>
+      <td>&nbsp;</td>
+    </tr>
   </tbody>
 </table>
 <div class="modal fade modal-add-item" tabindex="-1" role="dialog" id="modal-add-item" >
@@ -95,7 +121,7 @@
                       <div class="col-sm-8">
                           <select id="select-id-parent" data-placeholder="Pilih Parent Item" class="width300" name="id-parent">
                              <option></option>
-                             <?php foreach ($list_item as $row) { ?>
+                             <?php foreach ($item_list as $row) { ?>
                                 <option value="<?php echo $row['ID'];?>"><?php echo $row['NAME'];?></option>
                             <?php }; ?>                                          
                           </select>
@@ -110,21 +136,27 @@
                       </div>
                   </div>
                   <div class="form-group">
-                      <label class="col-sm-4 control-label">Value<span class="asterisk">*</span></label>
+                      <label class="col-sm-4 control-label">Spesifikasi<span class="asterisk">*</span></label>
                       <div class="col-sm-5">
-                          <input type="text" name="value" id="value" class="form-control" required title="Kolom Value wajib diisi!" value="0" />
+                          <textarea name="specification" id="specification" class="form-control" required title="Kolom Spesifikasi wajib diisi!" style="width:320px;"></textarea>
                       </div>
                   </div>
-                   <div class="form-group">
+                  <div class="form-group">
                       <label class="col-sm-4 control-label">Volume<span class="asterisk">*</span></label>
                       <div class="col-sm-5">
                           <input type="text" name="volume" id="volume" class="form-control" required title="Kolom Volume wajib diisi!" value="0" />
                       </div>
                   </div>
-                   <div class="form-group">
+                  <div class="form-group">
                       <label class="col-sm-4 control-label">Satuan<span class="asterisk">*</span></label>
                       <div class="col-sm-5">
-                          <input type="text" name="satuan" id="satuan" class="form-control" required title="Kolom Satuan wajib diisi!"  />
+                          <input type="text" name="unit" id="unit" class="form-control" required title="Kolom Satuan wajib diisi!"  />
+                      </div>
+                  </div>
+                   <div class="form-group">
+                      <label class="col-sm-4 control-label">Harga Satuan<span class="asterisk">*</span></label>
+                      <div class="col-sm-5">
+                          <input type="text" name="unit_price" id="unit_price" class="form-control" required title="Kolom Value wajib diisi!" value="0" />
                       </div>
                   </div>
 
@@ -172,10 +204,12 @@
       success: function(a,b,c,d){
         $('#modal-add-item').modal('hide');
         $('.modal-backdrop').hide();
-        itemProject(<?=$id;?>);
 
         //reset status
         $("#is-edit").val('0');
+
+        location.reload();
+        //itemProject(<?=$id;?>);
       }
     });
 
@@ -191,9 +225,10 @@
         if(response.status == "ok"){
           $('#select-id-parent').val(response.data.ID_PARENT).trigger('change');
           $("#name").val(response.data.NAME);
-          $("#value").val(response.data.VALUE);
+          $("#specification").val(response.data.SPECIFICATION);
           $("#volume").val(response.data.VOLUME);
-          $("#satuan").val(response.data.SATUAN);
+          $("#unit").val(response.data.UNIT);
+          $("#unit_price").val(response.data.UNIT_PRICE);
           $("#id").val(response.data.ID);
           $("#is-edit").val('1');
         }
