@@ -31,4 +31,27 @@ class Dashboard extends CI_Controller {
   public function _getInitRoute(){
 
   }
+
+  public function GenerateNavArray($arr, $parent = 0)
+  {
+    $pages = Array();
+    foreach($arr as $page)
+    {
+        if($page['ID_PARENT'] == $parent)
+        {
+            $page['sub'] = isset($page['sub']) ? $page['sub'] : $this->GenerateNavArray($arr, $page['ID']);
+            $pages[] = $page;
+        }
+    }
+    return $pages;
+  }
+
+  public function test(){
+    $arr = $this->builtbyprime->explicit("SELECT TBL_ITEM_TASK.*, LEVEL, SYS_CONNECT_BY_PATH(ID, '.') AS PA FROM TBL_ITEM_TASK WHERE ID_PROJECT = 1 START WITH ID_PARENT = 0 CONNECT BY PRIOR ID = ID_PARENT ORDER SIBLINGS BY NAME");
+
+    $n = $this->GenerateNavArray($arr);
+    print_r($n);
+  }
+
+
 }
