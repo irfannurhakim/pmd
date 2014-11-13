@@ -67,9 +67,9 @@
                     <div class="pull-left"></div>
                     <div class="pull-right">
                         
-                        <form class="form form-search" action="http://themepixels.com/demo/webpage/chain/search-results.html">
+                        <!-- <form class="form form-search" action="http://themepixels.com/demo/webpage/chain/search-results.html">
                             <input type="search" class="form-control" placeholder="Search" />
-                        </form>
+                        </form> -->
                         
                         <div class="btn-group btn-group-list btn-group-notification">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
