@@ -1,18 +1,20 @@
 <div class="row">
     <div class="col-md-12">
         <div class="panel-group" id="accordion2">
+          <?php foreach ($project as $row) { ?>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapseOne2">
-                            Project Satu
+                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapse-<?=$row['ID'];?>">
+                            <?=$row['NAME'];?>
                         </a>
                         <span class="pull-right">
                           Item Selesai Minggu ini : 2 / 5
                         </span>
                     </h4>
                 </div>
-                <div id="collapseOne2" class="panel-collapse collapse in">
+
+                <div id="collapse-<?=$row['ID'];?>" class="panel-collapse collapse">
                     <div class="panel-body">
                       <!-- <div class="row row-stat">
                           <div class="col-md-4">
@@ -99,13 +101,13 @@
                       </div> 
 
                       <div class="mb20"></div> -->
-
                       <div class="pull-right">
                       Pilih Minggu  
-                        <select id="select-week" >
+                        <select class="select-week" >
                           <option>Minggu ke-1</option>
                         </select>
                       </div>
+
                       <div class="mb10" style="clear:both;"></div>
                       <table class="table table-bordered">
                         <thead>
@@ -130,14 +132,13 @@
                     </div>
                 </div>
             </div><!-- panel -->
+          <?php } ?>
         </div><!-- panel-group -->
     </div>
 </div>
 
 <script type="text/javascript">
   $(document).ready(function(){
-
-    jQuery('#select-week').select2();
-
+    jQuery('.select-week').select2();
   });
 </script>
