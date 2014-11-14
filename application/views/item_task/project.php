@@ -15,85 +15,31 @@
 <table class="table table-bordered responsive table-hover table-item-list" id="table-list-item">
   <thead class="">
     <tr>
-      <th class="text-center">No.</th>
-      <th>Uraian Pekerjaan</th>
+      <th class="text-center" width="30px">No.</th>
+      <th width="200px">Uraian Pekerjaan</th>
       <th>Spesifikasi</th>
-      <th class="text-center">Volume</th>
-      <th class="text-center">Satuan</th>
-      <th class="text-center">Harga Satuan (Rp)</th>
-      <th class="text-center">Bobot (%)</th>
-      <th class="text-center">Jumlah</th>
+      <th class="text-center" width="30px">Volume</th>
+      <th class="text-center" width="30px">Satuan</th>
+      <th class="text-center" width="100px">Harga Satuan (Rp)</th>
+      <th class="text-center" width="30px">Bobot (%)</th>
+      <th class="text-center" width="150px">Jumlah</th>
       <th width="60px"></th>
     </tr>
   </thead>
 
-  <tbody class="selectable">
-    <?php 
-
-      for($i=1;$i<=$max_level[0]['MAX'];$i++)
-      {
-        $$i = 1;
-        echo $$i;
-      }
-
-      $budget          = $project['BUDGET'];
-      $no_num          = 1;
-      $no_alp          = 'a';
-      $ar_total_jumlah = array();
-      $ar_total_persen = array();
-      $lvl             = 3; //start level
-
-      foreach($item_list as $val): 
-
-        $align  = ($val['LEVEL'] == 2)? 'left' : 'right';
-        $bg     = ($val['LEVEL'] == 2)? '#eee' : '#fff';
-        $name   = ($val['LEVEL'] == 1)? '<strong>'.$val['NAME'].'</strong>' : $val['NAME'];
-
-        $ar_total_jumlah[]  = ($val['LEVEL'] == 1 || $val['LEVEL'] == 2)? 0 : $val['UNIT_PRICE']*$val['VOLUME'];
-        $ar_total_persen[]  = ($val['LEVEL'] == 1 || $val['LEVEL'] == 2)? 0 : (($val['UNIT_PRICE']*$val['VOLUME'])/$budget)*100;
-        
-        if($val['LEVEL'] == 1 && $no_alp != 'a'){ echo '<tr><td colspan="9">&nbsp;</td></tr>';$no_alp = 'a';}
-
-        if($val['LEVEL'] == 1){
-          $nomor = '';
-        }elseif($val['LEVEL'] == 2){
-           $nomor = $no_alp++;
-        }else{
-          $nomor  = ($lvl != $val['LEVEL'])? $nomor.'.'.$$val['LEVEL']++ : $$val['LEVEL']++;
-          $lvl    = $val['LEVEL'];
-        }
-
-    ?>
-      <tr style="background:<?=$bg;?>;">
-        <td style="text-align:<?=$align;?>;"><?=ucwords($nomor);?></td>
-        <td><?=$val['LEVEL'];?> <?=$name;?></td>
-        <td><?=ucfirst($val['SPECIFICATION']);?></td>
-        <td class="text-center"><?=$val['VOLUME'];?></td>
-        <td class="text-center"><?=$val['UNIT'];?></td>
-        <td class="text-right"><?=number_format($val['UNIT_PRICE']);?></td>
-        <td class="text-center"><?=(($val['UNIT_PRICE']*$val['VOLUME'])/$budget)*100;?></td>
-        <td class="text-right"><?=number_format($val['UNIT_PRICE']*$val['VOLUME']);?></td>
-        <td class="dt-cols-center">
-          <a data-toggle="tooltip" title="Edit" class="tooltips edit-row" object="<?php echo $val['ID'];?> "><i class="fa fa-pencil"></i></a> &nbsp;&nbsp;
-          <a data-toggle="tooltip" title="Hapus" class="tooltips delete-row" object="<?php echo $val['ID'];?>"><i class="fa fa-trash-o"></i></a>
-        </td>
-      </tr>
-    <?php 
-
-      endforeach; 
-
-      $color_persen = (array_sum($ar_total_persen) < 100)? 'style="color:red;"' : '';
-      $color_total  = (array_sum($ar_total_jumlah) < $budget)? 'style="color:red;"' : '';
-    ?>
+  <tbody>
+    <?= $rows;?>
     <tr><td colspan="9">&nbsp;</td></tr>
-    <tr>
+    <!-- <tr>
       <td colspan="6" class="text-center"><strong>Total</strong></td>
       <td class="text-center"><strong <?=$color_persen;?>><?=array_sum($ar_total_persen);?></strong></td>
       <td class="text-right"><strong <?=$color_total;?>><?=number_format(array_sum($ar_total_jumlah));?></strong></td>
       <td>&nbsp;</td>
-    </tr>
+    </tr> -->
   </tbody>
 </table>
+
+
 <div class="modal fade modal-add-item" tabindex="-1" role="dialog" id="modal-add-item" >
   <div class="modal-dialog">
     <div class="modal-content">
@@ -105,54 +51,53 @@
         <div class="row">
           <div class="col-md-12">
             <form class="form-horizontal" id="form-add-item" method="POST" action="<?= base_url();?>item_task/add">
-              <input type="hidden" name="id-project" id="id-project" value="<?=$project['ID'];?>" />
               <div class="panel panel-default">
                 <div class="panel-heading">
-                    <div class="panel-btns">
-                        <a href="#" class="panel-minimize tooltips" data-toggle="tooltip" title="Minimize Panel"><i class="fa fa-minus"></i></a>
-                        <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
-                    </div>
                     <p>( <span class="asterisk">*</span> ) Menandakan wajib diisi.</p>
                 </div>
                 <div class="panel-body">
                   <div class="errorForm"></div>
+
                   <div class="form-group">
                       <label class="col-sm-4 control-label">Parent Item</label>
                       <div class="col-sm-8">
-                          <select id="select-id-parent" data-placeholder="Pilih Parent Item" class="width300" name="id-parent">
-                             <option></option>
-                             <?php foreach ($item_list as $row) { ?>
+                          <select id="select-id-parent" data-placeholder="Pilih Item"  class="width300" name="id-parent">
+                            <option value="0">Level Pekerjaan Teratas</option>
+                            <?php foreach ($item_list as $row) { ?>
                                 <option value="<?php echo $row['ID'];?>"><?php echo $row['NAME'];?></option>
-                            <?php }; ?>                                          
+                            <?php }; ?>
                           </select>
                       </div>
                   </div>
-                <div class="panel-body">
-                  <div class="errorForm"></div>
+
                   <div class="form-group">
                       <label class="col-sm-4 control-label">Nama Item<span class="asterisk">*</span></label>
                       <div class="col-sm-8">
                           <input type="text" name="name" id="name" class="form-control" required title="Kolom Nama Item wajib diisi!" />
                       </div>
                   </div>
+
                   <div class="form-group">
                       <label class="col-sm-4 control-label">Spesifikasi<span class="asterisk">*</span></label>
-                      <div class="col-sm-5">
-                          <textarea name="specification" id="specification" class="form-control" required title="Kolom Spesifikasi wajib diisi!" style="width:320px;"></textarea>
+                      <div class="col-sm-8">
+                          <textarea name="specification" id="specification" rows="3" class="form-control" required title="Kolom Spesifikasi wajib diisi!" class="col-sm-8"></textarea>
                       </div>
                   </div>
+
                   <div class="form-group">
                       <label class="col-sm-4 control-label">Volume<span class="asterisk">*</span></label>
                       <div class="col-sm-5">
                           <input type="text" name="volume" id="volume" class="form-control" required title="Kolom Volume wajib diisi!" value="0" />
                       </div>
                   </div>
+
                   <div class="form-group">
                       <label class="col-sm-4 control-label">Satuan<span class="asterisk">*</span></label>
                       <div class="col-sm-5">
                           <input type="text" name="unit" id="unit" class="form-control" required title="Kolom Satuan wajib diisi!"  />
                       </div>
                   </div>
+
                    <div class="form-group">
                       <label class="col-sm-4 control-label">Harga Satuan<span class="asterisk">*</span></label>
                       <div class="col-sm-5">
@@ -163,6 +108,7 @@
                   <!-- Hidden Field -->
                   <input type="hidden" name="id" id="id" value="-1" />
                   <input type="hidden" name="is-edit" id="is-edit" value="0" />
+                  <input type="hidden" name="id-project" id="id-project" value="<?=$project['ID'];?>" />
                 </div><!-- panel-body -->
                 <div class="panel-footer">
                     <button class="btn btn-primary mr5" type="submit">Submit</button>
@@ -197,7 +143,7 @@
 
     $('.add-data').click(function(){
       $('#form-add-item').trigger('reset');
-      $('#select-id-parent').select2('data', null);
+      //$('#select-id-parent').select2('data', null);
     });
     // Submit add item
     $('#form-add-item').ajaxForm({
