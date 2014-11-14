@@ -16,9 +16,9 @@ class Quick_access extends CI_Controller {
       $userCondition = " = '" . $this->session->userdata('ID') . "'";  
     }
 
-
     //pilih semua projek yang diawasi oleh user, pilih item yang dikerjakan pada minggu ini, pilih perencanaan terakhir dan pilih item, volume untuk realisasi
-    $data['project'] = $this->builtbyprime->explicit("SELECT P.* FROM TBL_PROJECT P WHERE P.ID IN (SELECT ID_PROJECT FROM TBL_SUPERVISOR_PROJECT WHERE ID_USER ".$userCondition.")");
+    $data['projects'] = $this->builtbyprime->explicit("SELECT P.* FROM TBL_PROJECT P WHERE P.ID IN (SELECT ID_PROJECT FROM TBL_SUPERVISOR_PROJECT WHERE ID_USER ".$userCondition.")");
+    $data['items'] = $this->builtbyprime->explicit("SELECT IT.*, PPD.* FROM demon.TBL_ITEM_TASK IT, demon.TBL_PROJECT_PLANNING_DETAIL PPD WHERE IT.ID = PPD.ID_ITEM_TASK AND PPD.WEEK_NUMBER = 3");
 
     $this->load->view('quick_access/index', $data);
   }

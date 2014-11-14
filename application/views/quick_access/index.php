@@ -1,20 +1,19 @@
 <div class="row">
     <div class="col-md-12">
         <div class="panel-group" id="accordion2">
-          <?php foreach ($project as $row) { ?>
+          <?php foreach ($projects as $project) { ?>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapse-<?=$row['ID'];?>">
-                            <?=$row['NAME'];?>
+                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapse-<?=$project['ID'];?>">
+                            <?=$project['NAME'];?>
                         </a>
                         <span class="pull-right">
                           Item Selesai Minggu ini : 2 / 5
                         </span>
                     </h4>
                 </div>
-
-                <div id="collapse-<?=$row['ID'];?>" class="panel-collapse collapse">
+                <div id="collapse-<?=$project['ID'];?>" class="panel-collapse collapse">
                     <div class="panel-body">
                       <!-- <div class="row row-stat">
                           <div class="col-md-4">
@@ -112,21 +111,43 @@
                       <table class="table table-bordered">
                         <thead>
                           <tr>
-                            <th width="50px" rowspan="2">No</th>
+                            <th width="50px" rowspan="2" class="dt-cols-center">No</th>
                             <th width="250px" rowspan="2">Uraian Pekerjaan</th>
                             <th rowspan="2">Spesifikasi</th>
-                            <th colspan="2">Rencana</th>
-                            <th colspan="2">Realisasi</th>
+                            <th colspan="2" class="dt-cols-center">Volume</th>
+                            <th colspan="3" class="dt-cols-center">Bobot</th>
                           </tr>
                           <tr>
-                            <th width="20px">Volume</th>
-                            <th width="20px">Bobot</th>
-                            <th width="20px">Volume</th>
-                            <th width="20px">Bobot</th>
+                            <th width="20px">Rencana</th>
+                            <th width="20px">Realisasi</th>
+                            <th width="20px">Total</th>
+                            <th width="20px">Rencana</th>
+                            <th width="20px">Realisasi</th>                        
                           </tr>
                         </thead>
                         <tbody>
-                          
+                          <?php
+                            $i = 1;
+
+                            foreach ($items as $item) {
+                              if($item['ID_PROJECT'] == $project['ID']){
+                                $bobot = round((($item['UNIT_PRICE'] * $item['VOLUME']) / $project['BUDGET'] ) * 100, 4);
+                          ?>
+                          <tr>
+                            <td><?=$i;?></td>
+                            <td><?=$item['NAME'];?></td>
+                            <td><?=$item['SPECIFICATION'];?></td>
+                            <td class="dt-cols-right"><?=round($item['VOLUME'], 4);?></td>
+                            <td class="dt-cols-right"><?=round($item['SUPERVISOR_PROGRESS_VOLUME'], 4);?></td>
+                            <td class="dt-cols-right"><?=$bobot;?></td>
+                            <td class="dt-cols-right"><?=round($item['WEIGHT_PLANNING'], 4);?></td>
+                            <td class="dt-cols-right"><?=round((($item['SUPERVISOR_PROGRESS_VOLUME'] / $item['VOLUME']) * $bobot), 4);?></td>
+                          </tr>
+                          <?php
+                                $i++;
+                              }
+                            }
+                          ?>
                         </tbody>
                       </table>
                     </div>
