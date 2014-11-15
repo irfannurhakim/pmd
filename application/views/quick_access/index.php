@@ -206,7 +206,7 @@
                   <div class="mb30"></div>
                   <h5>Komentar</h5>
                   <hr style="margin-top:10px;" />
-                  <form id="form-add-comment">
+                  <form id="form-add-comment" action="<?=base_url();?>item_task/add_comment" method="POST">
                   <div class="row">
                     <div class="col-md-2">
                       <div class="text-center">
@@ -215,7 +215,8 @@
                       </div>
                     </div>
                     <div class="col-md-10">
-                      <textarea rows="3" class="form-control"></textarea>
+                      <textarea rows="3" class="form-control" name="comment"></textarea>
+                      <input type="hidden" name="id-item-task" value="-1" />
                     </div>
                   </div>
                   <div class="mb10"></div>
@@ -225,8 +226,8 @@
                     <div class="col-md-6">
                     </div>
                     <div class="col-md-4">
-                      <button class="btn btn-primary pull-right btn-xs" >Kirim</button>
-                      <button class="btn btn-default pull-right mr5 tooltips btn-xs" title="Sertakan Foto" data-toggle="tooltip"><i class="fa fa-camera"></i></button>
+                      <button class="btn btn-primary pull-right" type="submit">Kirim</button>
+                      <button class="btn btn-default pull-right mr5 tooltips" title="Sertakan Foto" data-toggle="tooltip" type="button"><i class="fa fa-camera"></i></button>
                     </div>
                   </div>
                   </form>
@@ -252,7 +253,7 @@
                                   <li><a href="<?=base_url();?>public/images/photos/media3.png" data-rel="prettyPhoto"><img src="<?=base_url();?>public/images/photos/media3.png" class="thumbnail img-responsive" alt="" /></a></li>
                               </ul>
                           </div>
-                      </div><!-- media -->
+                      </div>
                   </div><!-- activity-list -->
 
                 </div><!-- panel-body -->
@@ -271,6 +272,7 @@
     jQuery('.tbl-item-list tbody').on( 'click', 'tr', function () {
       var id = $(this).attr('object');
       $("input[name='id-item-task']").val(id);
+      loadComment(id);
       $('#modal-add-realisasi').modal('show');
     });
 
@@ -282,6 +284,55 @@
       }
     });
 
+    $('#form-add-comment').ajaxForm({
+      success: function(a,b,c,d){
+        console.log(a);
+        loadComment(65);
+      }
+    });
+
+    function loadComment(id){
+      //LOAD COMMENT
+      $.ajax({
+        url: '<?=base_url();?>item_task/get_comment/' + id,
+        dataType: 'json',
+        beforeSend: function(){
+          var html = '<div class="text-center mt20"><img alt="" src="<?=base_url();?>public/images/loaders/loader19.gif"></div>';
+          $('.activity-list').html(html);
+        }
+      })
+      .done(function(res){
+        if(res.status == 'ok'){
+          var html = '';
+          for (var i = 0; i < res.data.length; i++) {
+            html +=  '<div class="media">' +
+                          '<a class="pull-left" href="#">' + 
+                              '<img class="media-object img-circle" src="<?=base_url();?>public/images/photos/profile.png" alt="" />' + 
+                          '</a>' +
+                          '<div class="media-body">' +
+                              '<strong>' + res.data[i].NAME + '</strong><br />' +
+                              '<small class="text-muted">'+ res.data[i].CREATED /**moment(res.data[i].CREATED, 'DD/MM/YYYY HH:mm:ss').fromNow()**/ +'</small>' + 
+                              
+                              '<div class="media blog-media">' +
+                                '<div class="media-body">' +
+                                    '<p>'+ res.data[i].POST +'</p>' + 
+                                '</div>' +
+                              '</div>' + 
+                              
+                              // '<ul class="uploadphoto-list">' +
+                              //     '<li><a href="<?=base_url();?>public/images/photos/media1.jpg" data-rel="prettyPhoto"><img src="<?=base_url();?>public/images/photos/media1.jpg" class="thumbnail img-responsive" alt="" /></a></li>' +
+                              // '</ul>' +
+                          '</div>'+
+                      '</div>';
+          };
+
+          $('.activity-list').html(html);
+        }
+      })
+      .fail(function(e){
+
+      });
+    }
 
   });
 </script>
