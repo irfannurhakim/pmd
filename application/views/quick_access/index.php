@@ -134,7 +134,7 @@
                               if($item['ID_PROJECT'] == $project['ID']){
                                 $bobot = round((($item['UNIT_PRICE'] * $item['VOLUME']) / $project['BUDGET'] ) * 100, 4);
                           ?>
-                          <tr object="<?=$item['ID'];?>">
+                          <tr object="<?=$item['ID_ITEM_TASK'];?>">
                             <td><?=$i;?></td>
                             <td><?=$item['NAME'];?></td>
                             <td class="dt-cols-right"><?=$bobot;?></td>
@@ -179,30 +179,43 @@
                     <p>( <span class="asterisk">*</span> ) Menandakan wajib diisi.</p>
                 </div>
                 <div class="panel-body">
-                  <form class="form-inline" id="form-add-project" method="POST" action="<?= base_url();?>project/add">
-
+                  <form class="form-horizontal" id="form-add-realization" method="POST" action="<?= base_url();?>item_task/update_realization">
                     <div class="errorForm"></div>
                     <div class="form-group">
-                        <label class="sr-only">Volume<span class="asterisk">*</span></label>
-                        <input type="text" name="name" class="form-control" required title="Kolom Volume wajib diisi!" placeholder="Volume" />
+                        <label class="col-sm-3 control-label">Realisasi Volume<span class="asterisk">*</span></label>
+                        <?php if($this->session->userdata('ID_USER_TYPE') == 3 || $this->session->userdata('ID_USER_TYPE') == 1 || $this->session->userdata('ID_USER_TYPE') == 2 ){ ?>
+                        <div class="col-sm-3">
+                          <input type="text" name="supervisor-volume" class="form-control" required title="Kolom Volume wajib diisi!" placeholder="Diisi Pengawas" />
+                        </div>
+                        <?php } ?> 
+
+                        <?php if($this->session->userdata('ID_USER_TYPE') == 4 || $this->session->userdata('ID_USER_TYPE') == 1 || $this->session->userdata('ID_USER_TYPE') == 2 ){ ?> 
+                        <div class="col-sm-3">
+                          <input type="text" name="vendor-volume" class="form-control" required title="Kolom Volume wajib diisi!" placeholder="Diisi Kontraktor" />
+                        </div>
+                        <?php } ?>
+                        <div class="col-sm-3">
+                          <button class="btn btn-primary" type="submit">Simpan</button>
+                        </div>
                     </div><!-- form-group -->
 
                     <!-- Hidden Field -->
-                    <input type="hidden" name="id" value="-1" />
+                    <input type="hidden" name="id-item-task" value="-1" />
 
-                    <button class="btn btn-primary">Simpan</button>
                   </form>
-                  <hr/>
+                  <div class="mb30"></div>
                   <h5>Komentar</h5>
-                  <hr/>
+                  <hr style="margin-top:10px;" />
+                  <form id="form-add-comment">
                   <div class="row">
                     <div class="col-md-2">
-                      <div class="pull-left">
-                          <img class="img-circle img-online" src="<?=base_url();?>public/images/photos/profile.png" alt="...">
+                      <div class="text-center">
+                          <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/profile.png" alt="..." width="45px">
+                          <span><?=$this->session->userdata('NAME');?></span>
                       </div>
                     </div>
                     <div class="col-md-10">
-                      <textarea rows="4" class="form-control"></textarea>
+                      <textarea rows="3" class="form-control"></textarea>
                     </div>
                   </div>
                   <div class="mb10"></div>
@@ -212,11 +225,36 @@
                     <div class="col-md-6">
                     </div>
                     <div class="col-md-4">
-                      <button class="btn btn-primary pull-right" >Kirim</button>
-                      <button class="btn btn-default pull-right mr5 tooltips" title="Sertakan Foto" data-toggle="tooltip"><i class="fa fa-camera"></i></button>
-
+                      <button class="btn btn-primary pull-right btn-xs" >Kirim</button>
+                      <button class="btn btn-default pull-right mr5 tooltips btn-xs" title="Sertakan Foto" data-toggle="tooltip"><i class="fa fa-camera"></i></button>
                     </div>
                   </div>
+                  </form>
+                  <hr/>
+                  <div class="activity-list">  
+                      <div class="media">
+                          <a class="pull-left" href="#">
+                              <img class="media-object img-circle" src="<?=base_url();?>public/images/photos/profile.png" alt="" />
+                          </a>
+                          <div class="media-body">
+                              <strong>Elen Adarna</strong><br />
+                              <small class="text-muted">5 days ago at 12:30pm</small>
+                              
+                              <div class="media blog-media">
+                                <div class="media-body">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat... <a href="#">Read more</a></p>
+                                </div>
+                              </div><!-- media -->   
+                              
+                              <ul class="uploadphoto-list">
+                                  <li><a href="<?=base_url();?>public/images/photos/media1.jpg" data-rel="prettyPhoto"><img src="<?=base_url();?>public/images/photos/media1.jpg" class="thumbnail img-responsive" alt="" /></a></li>
+                                  <li><a href="<?=base_url();?>public/images/photos/media2.png" data-rel="prettyPhoto"><img src="<?=base_url();?>public/images/photos/media2.png" class="thumbnail img-responsive" alt="" /></a></li>
+                                  <li><a href="<?=base_url();?>public/images/photos/media3.png" data-rel="prettyPhoto"><img src="<?=base_url();?>public/images/photos/media3.png" class="thumbnail img-responsive" alt="" /></a></li>
+                              </ul>
+                          </div>
+                      </div><!-- media -->
+                  </div><!-- activity-list -->
+
                 </div><!-- panel-body -->
               </div><!-- panel-default -->
           </div>
@@ -231,8 +269,19 @@
     jQuery('.select-week').select2();
 
     jQuery('.tbl-item-list tbody').on( 'click', 'tr', function () {
+      var id = $(this).attr('object');
+      $("input[name='id-item-task']").val(id);
       $('#modal-add-realisasi').modal('show');
     });
+
+    jQuery("a[data-rel^='prettyPhoto']").prettyPhoto();
+
+    $('#form-add-realization').ajaxForm({
+      success: function(a,b,c,d){
+        console.log(a);
+      }
+    });
+
 
   });
 </script>

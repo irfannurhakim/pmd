@@ -10,11 +10,13 @@
 
         <link href="<?= base_url();?>public/css/style.default.css" rel="stylesheet">
         <link href="<?= base_url();?>public/css/morris.css" rel="stylesheet">
-        <link href="<?= base_url();?>public/css/select2.css" rel="stylesheet" />
+        <link href="<?= base_url();?>public/css/select2.css" rel="stylesheet">
         <link href="<?= base_url();?>public/css/style.datatables.css" rel="stylesheet">
         <link href="<?= base_url();?>public/css/dataTables.responsive.css" rel="stylesheet">
-        <link href="<?= base_url();?>public/css/bootstrap-timepicker.min.css" rel="stylesheet" />
+        <link href="<?= base_url();?>public/css/bootstrap-timepicker.min.css" rel="stylesheet">
         <link href="<?= base_url();?>public/css/jquery.gritter.css" rel="stylesheet">
+        <link href="<?= base_url();?>public/css/prettyPhoto.css" rel="stylesheet">
+
 
         <!-- CUSTOM CSS HERE -->
         <style type="text/css">

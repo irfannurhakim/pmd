@@ -9,7 +9,6 @@
         <script src="<?= base_url();?>public/js/pace.min.js"></script>
         <script src="<?= base_url();?>public/js/retina.min.js"></script>
         <script src="<?= base_url();?>public/js/jquery.cookies.js"></script>
-
         <script src="<?= base_url();?>public/js/select2.min.js"></script>
         <script src="<?= base_url();?>public/js/moment.min.js"></script>
         <script src="<?= base_url();?>public/js/locale/id.js"></script>
@@ -21,8 +20,9 @@
         <script src="<?= base_url();?>public/js/jquery.dataTables.reload.ajax.min.js"></script>
         <script src="<?= base_url();?>public/js/bootstrap-timepicker.min.js"></script>
         <script src="<?= base_url();?>public/js/jquery.priceFormat.min.js"></script>
-
         <script src="<?= base_url();?>public/js/jquery.gritter.min.js"></script>
+        <script src="<?= base_url();?>public/js/jquery.prettyPhoto.js"></script>
+        <script src="<?= base_url();?>public/js/holder.js"></script>
 
 <!--
         <script src="<?= base_url();?>public/js/jquery.autogrow-textarea.js"></script>

@@ -149,4 +149,45 @@ class Item_task extends CI_Controller {
 
     return $html;
   }
+
+  public function update_realization(){
+    $data = Array(
+      'a' => $this->input->post('supervisor-volume'),
+      'b' => $this->input->post('vendor-volume'),
+      'c' => $this->input->post('id-item-task'),
+      'd' => $this->session->userdata('USERNAME')
+    );
+
+    $return = false;
+
+    if($this->session->userdata('ID_USER_TYPE') == 3){
+      $return = $this->builtbyprime->explicit("UPDATE TBL_ITEM_TASK SET SUPERVISOR_PROGRESS_VOLUME = '" . $data['a'] . "', MODIFIED_BY = '".$data['d']."', MODIFIED_DATE = SYSDATE WHERE ID = " . $data['c']);
+    } else if($this->session->userdata('ID_USER_TYPE') == 4) {
+      $return = $this->builtbyprime->explicit("UPDATE TBL_ITEM_TASK SET VENDOR_PROGRESS_VOLUME = '" . $data['b'] . "', MODIFIED_BY = '".$data['d']."', MODIFIED_DATE = SYSDATE WHERE ID = " . $data['c']);
+    } else if($this->session->userdata('ID_USER_TYPE') == 1 || $this->session->userdata('ID_USER_TYPE') == 2){
+      $return = $this->builtbyprime->explicit("UPDATE TBL_ITEM_TASK SET SUPERVISOR_PROGRESS_VOLUME = '" . $data['a'] . "', VENDOR_PROGRESS_VOLUME = '" . $data['b'] . "', MODIFIED_BY = '".$data['d']."', MODIFIED_DATE = SYSDATE WHERE ID = " . $data['c']);
+    }
+
+    echo json_encode(Array('status' => 'ok', 'message' => $return));
+
+  }
+
+  public function add_comment(){
+    $data = Array(
+
+
+      );
+  }
+
+  public function get_comment(){
+
+  }
+
+  public function edit_comment(){
+
+  }
+
+  public function delete_comment(){
+
+  }
 }
