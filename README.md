@@ -10,5 +10,5 @@ Untuk mendeploy aplikasi ini, berikut langkah-langkahnya :
 3. Kemudian buat file database.php dari database.php.example di folder Application/config/ 
 4. Sesuaikan connection string dengan server database
 5. Silahkan jalankan aplikasi
-6. Login dengan username: aegisdev $ password: aegisdev
+6. Login dengan username: aegisdev & password: aegisdev
 
