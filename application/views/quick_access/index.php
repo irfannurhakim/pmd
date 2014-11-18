@@ -116,7 +116,7 @@
                             <th rowspan="2" width="20px">Bobot Total</th>
                             <th colspan="3" class="dt-cols-center">Volume</th>
                             <th colspan="2" class="dt-cols-center">Bobot Minggu ini</th>
-<!--                        <th rowspan="2" width="50px"></th> -->
+                            <th rowspan="2" class="dt-cols-center" width="80px">Ket.</th>
                           </tr>
                           <tr>
                             <th width="20px" class="dt-cols-center">Rencana</th>
@@ -147,6 +147,10 @@
                               <a data-toggle="tooltip" title="Input Realisasi" class="tooltips input-realisasi" object="<?php echo $item['ID'];?> "><i class="fa fa-pencil"></i></a>
                               <a data-toggle="tooltip" title="Detail" class="tooltips detail-realisasi                                                                                                                                           " object="<?php echo $item['ID'];?>"><i class="fa fa-external-link"></i></a>
                             </td> -->
+                            <td class="dt-cols-center">
+                                  <i class="fa fa-comments"></i>
+                                  <span class="badge"><?=$item['COMMENTS'];?></span>
+                            </td>
                           </tr>
                           <?php
                                 $i++;
@@ -185,13 +189,13 @@
                         <label class="col-sm-3 control-label">Realisasi Volume<span class="asterisk">*</span></label>
                         <?php if($this->session->userdata('ID_USER_TYPE') == 3 || $this->session->userdata('ID_USER_TYPE') == 1 || $this->session->userdata('ID_USER_TYPE') == 2 ){ ?>
                         <div class="col-sm-3">
-                          <input type="text" name="supervisor-volume" class="form-control" required title="Kolom Volume wajib diisi!" placeholder="Diisi Pengawas" />
+                          <input type="text" name="supervisor-volume" class="form-control" required title="Kolom Volume wajib diisi!" />
                         </div>
                         <?php } ?> 
 
                         <?php if($this->session->userdata('ID_USER_TYPE') == 4 || $this->session->userdata('ID_USER_TYPE') == 1 || $this->session->userdata('ID_USER_TYPE') == 2 ){ ?> 
                         <div class="col-sm-3">
-                          <input type="text" name="vendor-volume" class="form-control" required title="Kolom Volume wajib diisi!" placeholder="Diisi Kontraktor" />
+                          <input type="text" name="vendor-volume" class="form-control" required title="Kolom Volume wajib diisi!"  />
                         </div>
                         <?php } ?>
                         <div class="col-sm-3">
@@ -228,8 +232,7 @@
                     </div>
                     <div class="col-md-4">
                       <button class="btn btn-primary pull-right" type="submit">Kirim</button>
-                      <button class="btn btn-default pull-right mr5 tooltips" title="Sertakan Foto" data-toggle="tooltip" type="button"><i class="fa fa-camera"></i></button>
-                      <input type="file" style="display:none;" name="image-attachment" id="image-attachment" />
+                      <button class="btn btn-default pull-right mr5 tooltips" title="Sertakan Foto" data-toggle="tooltip" type="button" id="btn-attach-image"><i class="fa fa-camera"></i></button>
                     </div>
                   </div>
                   </form>
@@ -266,6 +269,10 @@
     </div>
   </div>
 </div>
+
+<form action="<?=base_url();?>item_task/add_attachment" method="POST" id="form-upload-attachment">
+  <input type="file" style="display:none;" name="image-attachment" id="image-attachment" />
+</form>
 
 <script type="text/javascript">
   $(document).ready(function(){
@@ -349,6 +356,50 @@
 
       });
     }
+
+    $('#btn-attach-image').click(function(){
+      $('#image-attachment').trigger('click');
+    });
+
+    $('#image-attachment').change(function(){
+      $('#form-upload-attachment').submit();
+    });
+
+    $('#form-upload-attachment').ajaxForm({
+      clearForm: true,
+      dataType: 'json',
+      success: function(a,b,c,d){
+        if(a.error){
+          jQuery.gritter.add({
+            title: 'Upss..',
+            text: a.error,
+            class_name: 'growl-danger',
+            image: false,
+            sticky: false,
+            time: ''
+          });
+        } else {
+
+        }
+
+        $('#btn-attach-image').html('<i class="fa fa-camera"></i>');
+      },
+      error: function(e){
+        jQuery.gritter.add({
+          title: 'Upss..',
+          text: e,
+          class_name: 'growl-danger',
+          image: false,
+          sticky: false,
+          time: ''
+        });
+
+        $('#btn-attach-image').html('<i class="fa fa-camera"></i>');
+      },
+      uploadProgress: function(e,position,total,percentComplete){
+        $('#btn-attach-image').html(percentComplete + " %");
+      }
+    });
 
   });
 </script>

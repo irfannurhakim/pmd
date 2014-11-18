@@ -8,7 +8,13 @@ class Project extends CI_Controller {
 
 	public function index(){
     $now = date('Y/m/d');
-    $sql = "SELECT P.ID, P.NAME, U.AFFILIATION VENDOR_NAME, (P.FINISH_DATE - TO_DATE('".$now."', 'yyyy/mm/dd')) DUE, 0 AS PROGRESS, 0 AS DEVIATION FROM TBL_PROJECT P, TBL_USER U WHERE P.ID_VENDOR = U.ID";
+    $userCondition = "IS NOT NULL";
+
+    if($this->session->userdata('ID_USER_TYPE') == 3){
+      $userCondition = " = '" . $this->session->userdata('ID') . "'";  
+    }
+
+    $sql = "SELECT P.ID, P.NAME, U.AFFILIATION VENDOR_NAME, (P.FINISH_DATE - TO_DATE('".$now."', 'yyyy/mm/dd')) DUE, 0 AS PROGRESS, 0 AS DEVIATION FROM TBL_PROJECT P, TBL_USER U WHERE P.ID_VENDOR = U.ID AND P.ID IN (SELECT ID_PROJECT FROM TBL_SUPERVISOR_PROJECT WHERE ID_USER ".$userCondition.")";
 
     $data['projects'] = $this->builtbyprime->explicit($sql);
     $data['user'] = $this->builtbyprime->get('TBL_USER');

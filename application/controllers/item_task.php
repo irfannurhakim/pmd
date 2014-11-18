@@ -203,4 +203,41 @@ class Item_task extends CI_Controller {
   public function delete_comment(){
 
   }
+
+  public function add_attachment(){
+
+    $config['upload_path'] = './uploads/';
+    $config['allowed_types'] = 'gif|jpg|png|jpeg';
+    $config['encrypt_name'] = true;
+
+    $this->load->library('upload', $config);
+
+    if (!$this->upload->do_upload('image-attachment')){
+      echo json_encode(array('error' => $this->upload->display_errors('<span>', '</span>')));
+      exit();
+    } else {
+      // upload success
+      $upload_data = $this->upload->data();
+
+      $factory   = new RandomLib\Factory;
+      $generator = $factory->getMediumStrengthGenerator();
+      //Generate Token
+      $token      = $generator->generateString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+    }
+
+    $id = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_DISCUSSION_ATTACHMENT");
+
+    $data = array(
+      'id' => $id[0]['MAX'],
+      'file_name' => $upload_data['file_name'],
+      'original_file_name' => $upload_data['orig_name'],
+      'file_url' => '/uploads/',
+      'created_by' => $this->session->userdata('USERNAME'),
+      'modified_by' => $this->session->userdata('USERNAME')
+    );
+
+    $res = $this->builtbyprime->insert('TBL_DISCUSSION_ATTACHMENT', $data);
+
+    echo json_encode($res);
+  }
 }
