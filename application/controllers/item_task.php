@@ -184,9 +184,9 @@ class Item_task extends CI_Controller {
     $ret = $this->builtbyprime->explicit("INSERT INTO TBL_DISCUSSION (id, id_item_task, post, id_user, created_by, modified_by) VALUES ('".$idItem[0]['MAX']."','".$data['c']."','".$data['b']."','".$data['a']."', '".$data['d']."', '".$data['d']."')");
 
     if($ret){
-      echo json_encode(Array('status' => 0, 'data' => $data));
+      echo json_encode(Array('status' => 'ok', 'data' => $data));
     } else {
-      echo json_encode(Array('stauts' => 1));
+      echo json_encode(Array());
     }
   }
 

@@ -24,7 +24,6 @@
         <script src="<?= base_url();?>public/js/jquery.prettyPhoto.js"></script>
         <script src="<?= base_url();?>public/js/holder.js"></script>
 
-<!--
         <script src="<?= base_url();?>public/js/jquery.autogrow-textarea.js"></script>
         <script src="<?= base_url();?>public/js/jquery.mousewheel.js"></script>
         <script src="<?= base_url();?>public/js/jquery.tagsinput.min.js"></script>
@@ -34,9 +33,9 @@
         <script src="<?= base_url();?>public/js/select2.min.js"></script>
         <script src="<?= base_url();?>public/js/colorpicker.js"></script>
         <script src="<?= base_url();?>public/js/dropzone.min.js"></script> 
--->
+
+
         <script src="<?= base_url();?>public/js/custom.js"></script>
-        <!-- <script src="<?= base_url();?>public/js/dashboard.js"></script> -->
 
         <!-- custom script -->
         <script src="<?= base_url();?>public/js/director.js"></script>

@@ -217,6 +217,7 @@
                     <div class="col-md-10">
                       <textarea rows="3" class="form-control" name="comment"></textarea>
                       <input type="hidden" name="id-item-task" value="-1" />
+                      <input type="hidden" name="id-image-attachment" value="-1" />
                     </div>
                   </div>
                   <div class="mb10"></div>
@@ -228,6 +229,7 @@
                     <div class="col-md-4">
                       <button class="btn btn-primary pull-right" type="submit">Kirim</button>
                       <button class="btn btn-default pull-right mr5 tooltips" title="Sertakan Foto" data-toggle="tooltip" type="button"><i class="fa fa-camera"></i></button>
+                      <input type="file" style="display:none;" name="image-attachment" id="image-attachment" />
                     </div>
                   </div>
                   </form>
@@ -279,15 +281,29 @@
     jQuery("a[data-rel^='prettyPhoto']").prettyPhoto();
 
     $('#form-add-realization').ajaxForm({
+      clearForm: true,
+      dataType: 'json',
       success: function(a,b,c,d){
-        console.log(a);
+        if(a.status == 'ok'){
+          jQuery.gritter.add({
+            title: 'Info',
+            text: 'Simpan perubahan berhasil.',
+            class_name: 'growl-info',
+            image: false,
+            sticky: false,
+            time: ''
+          });
+        }
       }
     });
 
     $('#form-add-comment').ajaxForm({
+      clearForm: true,
+      dataType: 'json',
       success: function(a,b,c,d){
-        console.log(a);
-        loadComment(65);
+        if(a.status == 'ok'){
+          loadComment(a.data.c);
+        } 
       }
     });
 
