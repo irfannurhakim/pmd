@@ -1,0 +1,4 @@
+FILE="C:\Users\Administrator\Desktop\cat.DMP"
+LOG="C:\Users\Administrator\Desktop\exp_cat.log"
+OWNER=('DEMON')
+FEEDBACK=1000
