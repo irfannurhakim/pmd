@@ -439,10 +439,6 @@
                             </div>
                         </div><!-- row -->
 
-
-
-
-
         <script src="<?= base_url();?>public/js/flot/jquery.flot.min.js"></script>
         <script src="<?= base_url();?>public/js/flot/jquery.flot.resize.min.js"></script>
         <script src="<?= base_url();?>public/js/flot/jquery.flot.spline.min.js"></script>
@@ -452,4 +448,4 @@
         <script src="<?= base_url();?>public/js/bootstrap-wizard.min.js"></script>
         <script src="<?= base_url();?>public/js/select2.min.js"></script>
 
-        <script src="<?= base_url();?>public/js/dashboard.js"></script>
+        <script src="<?= base_url();?>public/tjs/dashboard.js"></script>
