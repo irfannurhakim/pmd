@@ -229,6 +229,8 @@
                     <div class="col-md-2">    
                     </div>
                     <div class="col-md-6">
+                      <div id="thumbnail-image">
+                      </div>
                     </div>
                     <div class="col-md-4">
                       <button class="btn btn-primary pull-right" type="submit">Kirim</button>
@@ -379,7 +381,8 @@
             time: ''
           });
         } else {
-
+          $('#thumbnail-image').append('<img src="<?=base_url();?>uploads/'+a.file_name+'" style="width:32px;height:32px;border:1px #ddd solid;" class="mr5"/>');
+          
         }
 
         $('#btn-attach-image').html('<i class="fa fa-camera"></i>');
