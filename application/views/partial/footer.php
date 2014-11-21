@@ -6,10 +6,9 @@
         <script src="<?= base_url();?>public/js/jquery-ui-1.10.3.min.js"></script>
         <script src="<?= base_url();?>public/js/bootstrap.min.js"></script>
         <script src="<?= base_url();?>public/js/modernizr.min.js"></script>
-        <script src="<?= base_url();?>public/js/pace.min.js"></script>
+<!--        <script src="<?= base_url();?>public/js/pace.min.js"></script> -->
         <script src="<?= base_url();?>public/js/retina.min.js"></script>
         <script src="<?= base_url();?>public/js/jquery.cookies.js"></script>
-
         <script src="<?= base_url();?>public/js/select2.min.js"></script>
         <script src="<?= base_url();?>public/js/moment.min.js"></script>
         <script src="<?= base_url();?>public/js/locale/id.js"></script>
@@ -21,10 +20,10 @@
         <script src="<?= base_url();?>public/js/jquery.dataTables.reload.ajax.min.js"></script>
         <script src="<?= base_url();?>public/js/bootstrap-timepicker.min.js"></script>
         <script src="<?= base_url();?>public/js/jquery.priceFormat.min.js"></script>
-
         <script src="<?= base_url();?>public/js/jquery.gritter.min.js"></script>
+        <script src="<?= base_url();?>public/js/jquery.prettyPhoto.js"></script>
+        <script src="<?= base_url();?>public/js/holder.js"></script>
 
-<!--
         <script src="<?= base_url();?>public/js/jquery.autogrow-textarea.js"></script>
         <script src="<?= base_url();?>public/js/jquery.mousewheel.js"></script>
         <script src="<?= base_url();?>public/js/jquery.tagsinput.min.js"></script>
@@ -34,9 +33,9 @@
         <script src="<?= base_url();?>public/js/select2.min.js"></script>
         <script src="<?= base_url();?>public/js/colorpicker.js"></script>
         <script src="<?= base_url();?>public/js/dropzone.min.js"></script> 
--->
+
+
         <script src="<?= base_url();?>public/js/custom.js"></script>
-        <!-- <script src="<?= base_url();?>public/js/dashboard.js"></script> -->
 
         <!-- custom script -->
         <script src="<?= base_url();?>public/js/director.js"></script>

@@ -7,8 +7,15 @@
       <div class="btn-group">
         <button class="btn btn-default btn-sm" type="button" onclick="javascript:history.go(-1);return false;"><i class="fa fa-arrow-left mr5"></i> Induk Proyek</button>     
         <button class="btn btn-default btn-sm add-data" type="button" data-toggle="modal" data-target=".modal-add-item"><i class="fa fa-plus mr5"></i> Tambah Item</button>
-        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/item/periode/<?=$project['ID'];?>'; return false;"><i class="fa fa-list-ul mr5"></i> Periode Pekerjaan</button>
+        <button class="btn btn-default btn-sm" type="button" onclick="javascript:history.go(-1);return false;"><i class="fa fa-arrow-left mr5"></i> Detail Proyek</button> 
+        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/item/periode/<?=$project['ID'];?>'; return false;"><i class="fa fa-list-ul mr5"></i> Periode Pekerjaan</button>    
       </div>  
+
+      <div class="btn-group">
+        <button class="btn btn-default btn-sm add-data" type="button" data-toggle="modal" data-target=".modal-add-item"><i class="fa fa-plus mr5"></i> Tambah Item</button>
+        <button class="btn btn-default btn-sm import-data" type="button" data-toggle="modal" data-target=".modal-import"><i class="fa fa-download mr5"></i> Impor </button>
+        <button class="btn btn-default btn-sm export-data" type="button" data-toggle="modal" data-target=".modal-export"><i class="fa fa-upload mr5"></i> Ekspor </button>
+      </div>
     </div>
   </div>
 </div>
@@ -19,11 +26,11 @@
       <th class="text-center" width="30px">No.</th>
       <th width="200px">Uraian Pekerjaan</th>
       <th>Spesifikasi</th>
-      <th class="text-center" width="30px">Volume</th>
       <th class="text-center" width="30px">Satuan</th>
-      <th class="text-center" width="100px">Harga Satuan (Rp)</th>
+      <th class="text-center" width="30px">Vol</th>
+      <th class="text-center" width="80px">Harga Satuan</th>
       <th class="text-center" width="30px">Bobot (%)</th>
-      <th class="text-center" width="150px">Jumlah</th>
+      <th class="text-center" width="100px">Jumlah</th>
       <th width="60px"></th>
     </tr>
   </thead>
@@ -124,6 +131,46 @@
   </div>
 </div>
 
+<div class="modal fade modal-import" tabindex="-1" role="dialog" id="modal-import" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+          <h4 class="modal-title">Impor dari Excel</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <form class="form-horizontal" id="form-import" method="POST" action="<?= base_url();?>item_task/import">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                    <p>( <span class="asterisk">*</span> ) Menandakan wajib diisi.</p>
+                </div>
+                <div class="panel-body">
+                  <div class="errorForm"></div>
+                  <div class="form-group">
+                      <label class="col-sm-4 control-label">Nama Item<span class="asterisk">*</span></label>
+                      <div class="col-sm-8">
+                          <input type="file" name="import-file" id="import-file" class="form-control" required title="File belum ditentukan!" />
+                      </div>
+                  </div>
+
+                  <!-- Hidden Field -->
+                  <input type="hidden" name="id-project" id="id-project" value="<?=$project['ID'];?>" />
+                </div><!-- panel-body -->
+                <div class="panel-footer">
+                    <button class="btn btn-primary mr5" type="submit">Proses</button>
+                    <button type="reset" class="btn btn-default">Reset</button>
+                </div><!-- panel-footer -->
+              </div><!-- panel-default -->
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
   $(document).ready(function(){
 
@@ -203,6 +250,14 @@
         });
       }
     });
+
+    $('#form-import').ajaxForm({
+      clearForm: true,
+      success: function(a,b,c,d){
+        console.log(a);
+      }
+    });
+
 
   });
 </script>
