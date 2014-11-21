@@ -51,6 +51,7 @@
               '/items' : items,
               '/project/view/:id' : projectDetail,
               '/item/project/:id' : itemProject,
+              '/item/periode/:id' : itemPeriode,
              // '/items/view/:id' : itemDetail,
               '/users' : users,
               // '/my-profile' : myProfile,
@@ -175,6 +176,23 @@
             })
             .done(function(response, textStatus, jqhr){
               initView(idElement,APP_TITLE + ' - Daftar Item Pekerjaan');
+              $(idElement).html(response);
+            }) 
+            .fail(function(e){
+
+            });
+          }
+
+          function itemPeriode(id){
+            var idElement = '#item-periode';
+            $.ajax({
+              url: '<?php echo base_url();?>item_task/periode/' + id,
+              beforeSend: function(){
+                activateMenu('projects');
+              }
+            })
+            .done(function(response, textStatus, jqhr){
+              initView(idElement,APP_TITLE + ' - Daftar Periode Pekerjaan');
               $(idElement).html(response);
             }) 
             .fail(function(e){
