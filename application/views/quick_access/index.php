@@ -338,22 +338,22 @@
               imageHtml += '</ul>';
             }
 
-            html +=  '<div class="media">' +
-                          '<a class="pull-left" href="#">' + 
-                              '<img class="media-object img-circle" src="<?=base_url();?>public/images/photos/profile.png" alt="" />' + 
-                          '</a>' +
-                          '<div class="media-body">' +
-                              '<strong>' + res.data[i].NAME + '</strong><br />' +
-                              '<small class="text-muted">'+ res.data[i].CREATED /**moment(res.data[i].CREATED, 'DD/MM/YYYY HH:mm:ss').fromNow()**/ +'</small>' + 
-                              
-                              '<div class="media blog-media">' +
-                                '<div class="media-body">' +
-                                    '<p>'+ res.data[i].POST +'</p>' + 
-                                '</div>' +
-                              '</div>' + 
-                              imageHtml +
-                          '</div>'+
-                      '</div>';
+            html += '<div class="media">' +
+                      '<a class="pull-left" href="#">' + 
+                          '<img class="media-object img-circle" src="<?=base_url();?>public/images/photos/profile.png" alt="" />' + 
+                      '</a>' +
+                      '<div class="media-body">' +
+                          '<strong>' + res.data[i].NAME + '</strong><br />' +
+                          '<small class="text-muted">'+ res.data[i].CREATED /**moment(res.data[i].CREATED, 'DD/MM/YYYY HH:mm:ss').fromNow()**/ +'</small>' + 
+                          
+                          '<div class="media blog-media">' +
+                            '<div class="media-body">' +
+                                '<p>'+ res.data[i].POST +'</p>' + 
+                            '</div>' +
+                          '</div>' + 
+                          imageHtml +
+                      '</div>'+
+                    '</div>';
           };
 
           $('.activity-list').html(html);
@@ -411,6 +411,5 @@
         $('#btn-attach-image').html(percentComplete + " %");
       }
     });
-
   });
 </script>
