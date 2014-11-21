@@ -250,11 +250,52 @@
 
     $('#form-import').ajaxForm({
       clearForm: true,
+      dataType: 'json',
       success: function(a,b,c,d){
-        console.log(a);
+        if(a.status == 'ok'){
+          $('#modal-import').modal('hide');
+          $('.modal-backdrop').hide();
+
+          jQuery.gritter.add({
+            title: 'Info',
+            text: 'Impor data berhasil.',
+            class_name: 'growl-info',
+            image: false,
+            sticky: false,
+            time: ''
+          });
+
+          setTimeout(function(){location.reload()}, 2000);
+
+        } else {
+          jQuery.gritter.add({
+            title: 'Upss..',
+            text: a.message,
+            class_name: 'growl-danger',
+            image: false,
+            sticky: false,
+            time: ''
+          });
+        }
+      },
+      error: function(e){
+        jQuery.gritter.add({
+          title: 'Upss..',
+          text: e,
+          class_name: 'growl-danger',
+          image: false,
+          sticky: false,
+          time: ''
+        });
       }
     });
 
+    $("input[name='unit_price']").priceFormat({
+      prefix: '',
+      thousandsSeparator: '.',
+      centsSeparator: ',',
+      centsLimit: 0
+    });
 
   });
 </script>

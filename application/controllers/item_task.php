@@ -136,9 +136,9 @@ class Item_task extends CI_Controller {
       $html .= '<td>' . (($isLast) ? $item['SPECIFICATION'] : '' ) . '</td>';
       $html .= '<td class="dt-cols-center">' . (($isLast) ? $item['UNIT'] : '' ) . '</td>';
       $html .= '<td class="dt-cols-right">' . (($isLast) ? $item['VOLUME'] : '') . '</td>';
-      $html .= '<td class="dt-cols-right">' . (($isLast) ? number_format($item['UNIT_PRICE']) : '' ) . '</td>';
+      $html .= '<td class="dt-cols-right">' . (($isLast) ? number_format($item['UNIT_PRICE'], 0,',','.') : '' ) . '</td>';
       $html .= '<td class="dt-cols-right">' . (($isLast) ? round((($item['UNIT_PRICE'] * $item['VOLUME']) / $budget ) * 100, 3) : '' ) . '</td>';
-      $html .= '<td class="dt-cols-right">' . (($isLast) ? number_format($item['UNIT_PRICE'] * $item['VOLUME']) : '' ) . '</td>';
+      $html .= '<td class="dt-cols-right">' . (($isLast) ? number_format($item['UNIT_PRICE'] * $item['VOLUME'], 0,',','.') : '' ) . '</td>';
       $html .= '<td class="dt-cols-center">';
       $html .=    '<a data-toggle="tooltip" title="Edit" class="tooltips edit-row" object="'. $item['ID'] .'"><i class="fa fa-pencil"></i></a> &nbsp;&nbsp;';
       $html .=    '<a data-toggle="tooltip" title="Hapus" class="tooltips delete-row" object="'. $item['ID'] .'"><i class="fa fa-trash-o"></i></a>';
@@ -284,11 +284,19 @@ class Item_task extends CI_Controller {
     $objPHPExcel = $objReader->load($inputFileName);
 
     $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+
+    if(count($sheetData[1]) != 8){
+      echo json_encode(Array('status'=>'not ok', 'message'=> 'Wrong file format'));
+      exit();
+    }
     
     $tmpId = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_ITEM_TASK");
     $maxId = $tmpId[0]['MAX'];
 
     $arrIdParents = Array(0 => 0);
+
+    $successInsert = 0;
+    $failedInsert = 0;
 
     foreach ($sheetData as $key => $value) {
       if($key != 1){
@@ -318,12 +326,16 @@ class Item_task extends CI_Controller {
           'modified_by' => $this->session->userdata('USERNAME')
         );
 
-        $this->builtbyprime->insert('TBL_ITEM_TASK', $taskItem);
+        if($this->builtbyprime->insert('TBL_ITEM_TASK', $taskItem)){
+          $successInsert++;
+        } else {
+          $failedInsert++;
+        }
 
         $maxId++;
       }
     }
 
-    echo 0;
+    echo json_encode(Array('status'=>"ok", "message" => "Jumlah baris sukses diimpor : " . $successInsert ."<br/> Gagal: " . $failedInsert));
   }
 }
