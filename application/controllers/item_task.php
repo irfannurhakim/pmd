@@ -177,11 +177,25 @@ class Item_task extends CI_Controller {
       'a' => $this->session->userdata('ID'),
       'b' => $this->input->post('comment'),
       'c' => $this->input->post('id-item-task'),
-      'd' => $this->session->userdata('USERNAME')
+      'd' => $this->session->userdata('USERNAME'),
+      'e' => $this->input->post('id-image-attachment')
     );
 
     $idItem = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_DISCUSSION");
     $ret = $this->builtbyprime->explicit("INSERT INTO TBL_DISCUSSION (id, id_item_task, post, id_user, created_by, modified_by) VALUES ('".$idItem[0]['MAX']."','".$data['c']."','".$data['b']."','".$data['a']."', '".$data['d']."', '".$data['d']."')");
+
+
+    if($data['e']){
+      $arrOfImages = explode(",", $data['e']);
+      $idImage = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_DISCUSSION_ATTACHMENT_REL");
+
+      foreach ($arrOfImages as $key => $value) {
+        if($value != ''){
+          $this->builtbyprime->insert('TBL_DISCUSSION_ATTACHMENT_REL', array('id' => $idImage[0]['MAX'], 'id_attachment' => $value, 'id_discussion' => $idItem[0]['MAX']));
+          $idImage[0]['MAX']++;  
+        }
+      }
+    }
 
     if($ret){
       echo json_encode(Array('status' => 'ok', 'data' => $data));
@@ -192,6 +206,11 @@ class Item_task extends CI_Controller {
 
   public function get_comment($idItemTask){
     $data = $this->builtbyprime->explicit("SELECT U.NAME, D.*, TO_CHAR(CAST(D.CREATED_DATE AS DATE), 'DD/MM/YYYY HH:MI:SS') CREATED FROM TBL_DISCUSSION D, TBL_USER U WHERE D.ID_ITEM_TASK = '".$idItemTask."' AND D.ID_USER = U.ID ORDER BY D.ID DESC");
+    
+    foreach ($data as $key => $value) {
+      $image = $this->builtbyprime->explicit("SELECT DAR.ID_DISCUSSION, DA.FILE_NAME, DA.FILE_URL, DA.ID FROM TBL_DISCUSSION_ATTACHMENT DA, TBL_DISCUSSION_ATTACHMENT_REL DAR WHERE DA.ID = DAR.ID_ATTACHMENT AND DAR.ID_DISCUSSION = '".$value['ID']."'");
+      $data[$key]['images'] = $image; 
+    }
 
     echo json_encode(Array('status' => 'ok', 'data' => $data));
   }

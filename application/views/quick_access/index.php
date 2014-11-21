@@ -221,7 +221,7 @@
                     <div class="col-md-10">
                       <textarea rows="3" class="form-control" name="comment"></textarea>
                       <input type="hidden" name="id-item-task" value="-1" />
-                      <input type="hidden" name="id-image-attachment" value="-1" />
+                      <input type="hidden" name="id-image-attachment" id="id-image-attachment" />
                     </div>
                   </div>
                   <div class="mb10"></div>
@@ -287,8 +287,6 @@
       $('#modal-add-realisasi').modal('show');
     });
 
-    jQuery("a[data-rel^='prettyPhoto']").prettyPhoto();
-
     $('#form-add-realization').ajaxForm({
       clearForm: true,
       dataType: 'json',
@@ -312,7 +310,8 @@
       success: function(a,b,c,d){
         if(a.status == 'ok'){
           loadComment(a.data.c);
-        } 
+          $('#thumbnail-image').html('');
+        }
       }
     });
 
@@ -330,6 +329,15 @@
         if(res.status == 'ok'){
           var html = '';
           for (var i = 0; i < res.data.length; i++) {
+            var imageHtml = '';
+            if(res.data[i].images.length > 0){
+              imageHtml = '<ul class="uploadphoto-list">';
+              for (var j = 0; j < res.data[i].images.length; j++) {
+                imageHtml += '<li><a href="<?=base_url();?>uploads/'+res.data[i].images[j].FILE_NAME+'" data-rel="prettyPhoto"><img src="<?=base_url();?>uploads/'+res.data[i].images[j].FILE_NAME+'" class="thumbnail img-responsive" alt="" /></a></li>';
+              };   
+              imageHtml += '</ul>';
+            }
+
             html +=  '<div class="media">' +
                           '<a class="pull-left" href="#">' + 
                               '<img class="media-object img-circle" src="<?=base_url();?>public/images/photos/profile.png" alt="" />' + 
@@ -343,15 +351,13 @@
                                     '<p>'+ res.data[i].POST +'</p>' + 
                                 '</div>' +
                               '</div>' + 
-                              
-                              // '<ul class="uploadphoto-list">' +
-                              //     '<li><a href="<?=base_url();?>public/images/photos/media1.jpg" data-rel="prettyPhoto"><img src="<?=base_url();?>public/images/photos/media1.jpg" class="thumbnail img-responsive" alt="" /></a></li>' +
-                              // '</ul>' +
+                              imageHtml +
                           '</div>'+
                       '</div>';
           };
 
           $('.activity-list').html(html);
+          jQuery("a[data-rel^='prettyPhoto']").prettyPhoto();
         }
       })
       .fail(function(e){
@@ -381,8 +387,10 @@
             time: ''
           });
         } else {
-          $('#thumbnail-image').append('<img src="<?=base_url();?>uploads/'+a.file_name+'" style="width:32px;height:32px;border:1px #ddd solid;" class="mr5"/>');
-          
+          $('#thumbnail-image').append('<img src="<?=base_url();?>uploads/'+a.file_name+'" style="width:32px;height:32px;border:1px #ddd solid;" class="mr5" title="'+a.original_file_name+'" data-toggle="tooltip"/>');
+          var val = $('#id-image-attachment').val();
+
+          $('#id-image-attachment').val(val + ',' + a.id);
         }
 
         $('#btn-attach-image').html('<i class="fa fa-camera"></i>');
