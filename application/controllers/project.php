@@ -56,7 +56,7 @@ class Project extends CI_Controller {
     $Carbon = new Carbon\Carbon;
 
 
-    $a = $Carbon::createFromFormat('d-M-y', $data['project']['START_DATE']);
+    $a = date('d-M-y', strtotime($data['project']['START_DATE']));
     $b = $Carbon::now();
 
     

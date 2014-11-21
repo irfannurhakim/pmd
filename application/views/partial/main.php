@@ -24,6 +24,7 @@
     <div class="page-content" id="user-list"></div>
     <div class="page-content" id="item-list"></div>
     <div class="page-content" id="item-detail"></div>
+    <div class="page-content" id="item-periode"></div>
     <div class="page-content" id="profile-detail"></div>
     <div class="page-content" id="quick-access"></div>
     <div class="page-content" id="error-404"></div>
