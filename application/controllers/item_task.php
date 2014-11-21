@@ -94,12 +94,10 @@ class Item_task extends CI_Controller {
   }
 
   public function project($id){ 
-    $lvl2                 = $this->builtbyprime->get('TBL_ITEM_TASK', array('id_parent' => 0));
     $data['item_list']    = $this->builtbyprime->explicit('SELECT LEVEL,TBL_ITEM_TASK.* FROM TBL_ITEM_TASK WHERE ID_PROJECT = '.$id.' START WITH ID_PARENT = 0 CONNECT BY PRIOR ID = ID_PARENT ORDER SIBLINGS BY ID');
-    $data['max_level']    = $this->builtbyprime->explicit('SELECT MAX(LEVEL) AS MAX FROM TBL_ITEM_TASK WHERE ID_PROJECT = 1 START WITH ID_PARENT = 0 CONNECT BY PRIOR ID = ID_PARENT ORDER SIBLINGS BY ID');
     $data['project']      = $this->builtbyprime->get('TBL_PROJECT', array('id' => $id), TRUE);
     $data['id']           = $id;
-  
+
     $t = $this->genMulDimArr($data['item_list']);
     $data['rows'] = $this->flatten($t, $data['project']['BUDGET']);
 
@@ -150,77 +148,78 @@ class Item_task extends CI_Controller {
     return $html;
   }
 
-   public function periode($id){ 
-    $lvl2                 = $this->builtbyprime->get('TBL_ITEM_TASK', array('id_parent' => 0));
+  public function periode($id){ 
+
     $data['item_list']    = $this->builtbyprime->explicit('SELECT LEVEL,A.* FROM TBL_ITEM_TASK A WHERE A.ID_PROJECT = '.$id.' START WITH A.ID_PARENT = 0 CONNECT BY PRIOR A.ID = A.ID_PARENT ORDER SIBLINGS BY NAME');
-    $data['max_level']    = $this->builtbyprime->explicit('SELECT MAX(LEVEL) AS MAX FROM TBL_ITEM_TASK WHERE ID_PROJECT = 1 START WITH ID_PARENT = 0 CONNECT BY PRIOR ID = ID_PARENT ORDER SIBLINGS BY NAME');
     $data['project']      = $this->builtbyprime->get('TBL_PROJECT', array('id' => $id), TRUE);
     $data['id']           = $id;
+    $tempAllTask          = $this->builtbyprime->explicit("SELECT * FROM TBL_PROJECT_PLANNING_DETAIL WHERE ID_PROJECT_PLANNING = (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$id."')");  
 
-    $project              = $this->builtbyprime->explicit('select START_DATE,FINISH_DATE from TBL_PROJECT WHERE ID = '.$id.'');
-    $start                = explode(' ',$project[0]['START_DATE']); 
-    $finish               = explode(' ',$project[0]['FINISH_DATE']);
+    $allTask = Array();
+
+    foreach ($tempAllTask as $key => $value) {
+      $allTask[(integer) $value['ID_ITEM_TASK']][(integer) $value['WEEK_NUMBER']] = $value;
+    }
+
+    $start                = explode(' ',$data['project']['START_DATE']); 
+    $finish               = explode(' ',$data['project']['FINISH_DATE']);
     $datediff             = strtotime($finish[0]) - strtotime($start[0]);
     $week                 = floor(($datediff/(60*60*24))/7);
     
     $html = '';
-    for($i=1;$i<=$week;$i++)
-    {
-       $html .= '<th class="text-center">'.$i.'</th>';
+    for($i=1;$i<=$week;$i++){
+      $html .= '<th width="30px" class="text-center">'.$i.'</th>';
     }
+
     $data['column'] = $html;
     $data['week']   = $week;
 
     $t            = $this->genMulDimArr($data['item_list']);
-    $data['rows'] = $this->flatten_periode($t, $data['project']['BUDGET']);
+    $data['rows'] = $this->flatten_periode($t, $week, $allTask);
 
     $this->load->view('item_task/periode', $data);
   }
 
-   public function flatten_periode($nav, $budget){
+  public function flatten_periode($arr, $week, $allTask){
     $html = '';
     $isLast = false;
 
-    foreach($nav as $page){
-      if($page['SUB'] == null) {
+    foreach($arr as $item){
+      if($item['SUB'] == null) {
         $isLast = true;
       } 
 
-    $project              = $this->builtbyprime->explicit('select START_DATE,FINISH_DATE from TBL_PROJECT WHERE ID = '.$page['ID_PROJECT'].'');
-    $start                = explode(' ',$project[0]['START_DATE']); 
-    $finish               = explode(' ',$project[0]['FINISH_DATE']);
-    $datediff             = strtotime($finish[0]) - strtotime($start[0]);
-    $week                 = floor(($datediff/(60*60*24))/7);
+      $style = ($item['LEVEL'] == 1) ? 'style="font-weight:bold;"' : '';
+      $html .= '<tr '. $style . '>';
+      $html .= '<td>' . $item['NUMBER'] . '</td>';
+      $html .= '<td>' . (($item['LEVEL'] == 1) ? strtoupper($item['NAME']) : $item['NAME']) . '</td>';
 
-     $style = ($page['LEVEL'] == 1) ? 'style="font-weight:bold;"' : '';
-     $html .= '<tr '. $style . '>';
-     $html .= '<td>' . $page['NUMBER'] . '</td>';
-     $html .= '<td>' . (($page['LEVEL'] == 1) ? strtoupper($page['NAME']) : $page['NAME']) . '</td>';
-     $html .= '<td>' . (($isLast) ? $page['SPECIFICATION'] : '' ) . '</td>';
+      for($i=1;$i<=$week;$i++){
+        $value = null;
+        if(array_key_exists((integer) $item['ID'], $allTask)){
+          if(array_key_exists((integer) $i, $allTask[$item['ID']])){
+            $value = $allTask[$item['ID']][$i];
+          }
+        }
+        $val   = ($value) ? number_format($value['WEIGHT_PLANNING'], 3) : '';
+        $html .= '<td class="dt-cols-center">' . (($isLast) ? '<input type="text" value ="'.$val.'" style="width:50px;text-align:right;" id="'.$item['ID'].'" week="'.$i.'" class="item-value"  />' : '').'</td>';
+      }
 
-     for($i=1;$i<=$week;$i++)
-     {
-       $value = $this->builtbyprime->explicit('select * from TBL_ITEM_TASK_TIME where ID_ITEM_TASK = '.$page['ID'].' and NO_WEEK = '.$i.' ');
-       $val   = ($value)? number_format($value[0]['PERCENTAGE']) : '';
-       $html .= '<td class="dt-cols-center">
-                '.(($isLast) ? '<input type="text" value ="'.$val.'" style="width:90px;text-align:right;" id="'.$page['ID'].'" week="'.$i.'" class="item-value"  />' : '').'</td>';
-     }
-
-     $html .= '</tr>';
-     $html .= $this->flatten_periode($page['SUB'], $budget);
+      $html .= '</tr>';
+      $html .= $this->flatten_periode($item['SUB'], $week, $allTask);
     }
 
     return $html;
   }
 
-  function update_value()
+  public function update_value()
   {
     $id      =$_GET['id'];
     $week    =$_GET['week'];
     $value   =str_replace(',','',$_GET['v']);
 
     $idItem = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_ITEM_TASK_TIME");
-    $exists = $this->builtbyprime->explicit('select * from TBL_ITEM_TASK_TIME where ID_ITEM_TASK = '.$id.' and NO_WEEK = '.$week.' ');
+    $exists = $this->builtbyprime->explicit('SELECT * from TBL_ITEM_TASK_TIME WHERE ID_ITEM_TASK = '.$id.' and NO_WEEK = '.$week.' ');
     if($exists)
     {
       $this->builtbyprime->update('TBL_ITEM_TASK_TIME',array('ID_ITEM_TASK'=>$id,'NO_WEEK'=>$week),array('PERCENTAGE'=>$value));
@@ -250,7 +249,6 @@ class Item_task extends CI_Controller {
     }
 
     echo json_encode(Array('status' => 'ok', 'message' => $return));
-
   }
 
   public function add_comment(){

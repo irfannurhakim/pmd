@@ -5,7 +5,7 @@
   <div class="pull-right">
     <div class="btn-toolbar">
       <div class="btn-group">
-        <button class="btn btn-default btn-sm" type="button" onclick="javascript:history.go(-1);return false;"><i class="fa fa-arrow-left mr5"></i> Daftar Proyek</button>     
+        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/projects';return false;"><i class="fa fa-arrow-left mr5"></i> Daftar Proyek</button>     
         <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/item/project/<?=$project['ID'];?>'; return false;"><i class="fa fa-list-ul mr5"></i> Item Pekerjaan</button>
       </div>  
       <div class="btn-group">
@@ -16,7 +16,6 @@
 </div>
 <hr/>
 <div class="row">
- 
   <div class="col-md-3">
     <div class="panel panel-default">
       <div class="panel-body">
@@ -170,63 +169,16 @@
         <div class="activity-list">  
             <div class="media">
                 <a class="pull-left" href="#">
-                    <img class="media-object img-circle" src="images/photos/user1.png" alt="" />
+                    <img class="media-object img-circle" src="<?=base_url();?>public/images/photos/user1.png" alt="" />
                 </a>
                 <div class="media-body">
                     <strong>Ray Sin</strong> started following <strong>Eileen Sideways</strong>. <br />
                     <small class="text-muted">Yesterday at 3:30pm</small>
                 </div>
             </div><!-- media -->
-  
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <img class="media-object img-circle" src="images/photos/profile.png" alt="" />
-                </a>
-                <div class="media-body">
-                    <strong>Elen Adarna</strong> posted a new blog. <br />
-                    <small class="text-muted">Today at 3:18pm</small>
-                  
-                    <div class="media blog-media">
-                        <a class="pull-left" href="#">
-                            <img class="media-object thumbnail" src="images/photos/media5.png" alt="" />
-                        </a>
-                        <div class="media-body">
-                            <h4 class="media-title"><a href="#">Ut Enim Ad Minim Veniam</a></h4>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat... <a href="#">Read more</a></p>
-                        </div>
-                      </div><!-- media -->      
-                </div><!-- media-body -->
-            </div><!-- media -->
-  
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <img class="media-object" src="images/photos/user2.png" alt="" />
-                </a>
-                <div class="media-body">
-                    <strong>Chris Anthemum</strong> started following <strong>Eileen Sideways</strong>. <br />
-                    <small class="text-muted">2 days ago at 8:30am</small>
-                </div>
-            </div><!-- media -->
-  
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <img class="media-object img-circle" src="images/photos/profile.png" alt="" />
-                </a>
-                <div class="media-body">
-                    <strong>Elen Adarna</strong> uploaded <a href="#">5 photos</a>. <br />
-                    <small class="text-muted">5 days ago at 12:30pm</small>
-      
-                    <ul class="uploadphoto-list">
-                        <li><a href="images/photos/media1.jpg" data-rel="prettyPhoto"><img src="images/photos/media1.jpg" class="thumbnail img-responsive" alt="" /></a></li>
-                        <li><a href="images/photos/media2.png" data-rel="prettyPhoto"><img src="images/photos/media2.png" class="thumbnail img-responsive" alt="" /></a></li>
-                        <li><a href="images/photos/media3.png" data-rel="prettyPhoto"><img src="images/photos/media3.png" class="thumbnail img-responsive" alt="" /></a></li>
-                    </ul>
-                </div>
-            </div><!-- media -->
-  
             
         </div><!-- activity-list -->
-
+        <hr/>
         <button class="btn btn-white btn-block">Show More</button>
       </div>
     </div>

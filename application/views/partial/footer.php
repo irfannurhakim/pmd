@@ -6,7 +6,7 @@
         <script src="<?= base_url();?>public/js/jquery-ui-1.10.3.min.js"></script>
         <script src="<?= base_url();?>public/js/bootstrap.min.js"></script>
         <script src="<?= base_url();?>public/js/modernizr.min.js"></script>
-<!--        <script src="<?= base_url();?>public/js/pace.min.js"></script> -->
+        <script src="<?= base_url();?>public/js/pace.min.js"></script> 
         <script src="<?= base_url();?>public/js/retina.min.js"></script>
         <script src="<?= base_url();?>public/js/jquery.cookies.js"></script>
         <script src="<?= base_url();?>public/js/select2.min.js"></script>

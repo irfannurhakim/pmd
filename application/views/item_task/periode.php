@@ -11,34 +11,54 @@
   </div>
 </div>
 <hr/>
-<table class="table table-bordered responsive table-hover table-item-list" id="table-list-item">
-  <thead class="">
-    <tr>
-      <th class="text-center" width="30px" rowspan="3" style="vertical-align:middle;">No.</th>
-      <th width="200px" rowspan="3" style="vertical-align:middle;" style="vertical-align:middle;">Uraian Pekerjaan</th>
-      <th rowspan="3" style="vertical-align:middle;">Spesifikasi</th>
-      <th class="text-center" colspan="<?=$week;?>">Week</th>
-    </tr>
-    <tr>
-      <?=$column;?>
-    </tr>
-  </thead>
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-bordered responsive table-hover table-item-list" id="table-list-periode">
+      <thead class="">
+        <tr>
+          <th rowspan="3">No.</th>
+          <th rowspan="3"><div style="width:250px;">&nbsp;</div>Uraian Pekerjaan</th>
+          <th class="text-center" colspan="<?=$week;?>">Minggu</th>
+        </tr>
+        <tr>
+          <?=$column;?>
+        </tr>
+      </thead>
 
-  <tbody>
-    <?= $rows;?>
-  </tbody>
-</table>
+      <tbody>
+        <?= $rows;?>
+      </tbody>
+    </table>
+  </div>
+</div>
 
 <script type="text/javascript">
- $('.item-value').change(function(){
-  var id   = $(this).attr('id'),
-      week = $(this).attr('week'),
-      v    = $(this).val();
-  
-    $.ajax({
-      url: '<?php echo base_url();?>item_task/update_value',
-      data: "id="+id+"&week="+week+"&v="+v,
-      dataType: 'json'
+
+  $(document).ready(function(){
+    $('.item-value').change(function(){
+      var id   = $(this).attr('id'),
+          week = $(this).attr('week'),
+          v    = $(this).val();
+    
+      $.ajax({
+        url: '<?php echo base_url();?>item_task/update_value',
+        data: "id="+id+"&week="+week+"&v="+v,
+        dataType: 'json'
+      });
     });
-});
+
+
+
+    // var tbl = $('#table-list-periode').dataTable({
+    //     "scrollY": "300px",
+    //     "scrollX": "100%",
+    //     "scrollCollapse": true,
+    //     "paging": false
+    // });
+
+    //new $.fn.dataTable.FixedColumns( tbl );
+
+  });
+
+
 </script>

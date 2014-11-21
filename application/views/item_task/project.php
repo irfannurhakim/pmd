@@ -5,7 +5,7 @@
   <div class="pull-right">
     <div class="btn-toolbar">
       <div class="btn-group">
-        <button class="btn btn-default btn-sm" type="button" onclick="javascript:history.go(-1);return false;"><i class="fa fa-arrow-left mr5"></i> Detail Proyek</button>     
+        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/project/view/<?=$project['ID'];?>';return false;"><i class="fa fa-arrow-left mr5"></i> Detail Proyek</button>     
         <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/item/periode/<?=$project['ID'];?>'; return false;"><i class="fa fa-list-ul mr5"></i> Periode Pekerjaan</button>    
       </div>  
 
@@ -18,32 +18,32 @@
   </div>
 </div>
 <hr/>
-<table class="table table-bordered responsive table-hover table-item-list" id="table-list-item">
-  <thead class="">
-    <tr>
-      <th class="text-center" width="30px">No.</th>
-      <th width="200px">Uraian Pekerjaan</th>
-      <th>Spesifikasi</th>
-      <th class="text-center" width="30px">Satuan</th>
-      <th class="text-center" width="30px">Vol</th>
-      <th class="text-center" width="80px">Harga Satuan</th>
-      <th class="text-center" width="30px">Bobot (%)</th>
-      <th class="text-center" width="100px">Jumlah</th>
-      <th width="60px"></th>
-    </tr>
-  </thead>
 
-  <tbody>
-    <?= $rows;?>
-    <tr><td colspan="9">&nbsp;</td></tr>
-    <!-- <tr>
-      <td colspan="6" class="text-center"><strong>Total</strong></td>
-      <td class="text-center"><strong <?=$color_persen;?>><?=array_sum($ar_total_persen);?></strong></td>
-      <td class="text-right"><strong <?=$color_total;?>><?=number_format(array_sum($ar_total_jumlah));?></strong></td>
-      <td>&nbsp;</td>
-    </tr> -->
-  </tbody>
-</table>
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-bordered responsive table-hover table-item-list" id="table-list-item">
+      <thead class="">
+        <tr>
+          <th class="text-center" width="30px">No.</th>
+          <th width="200px">Uraian Pekerjaan</th>
+          <th>Spesifikasi</th>
+          <th class="text-center" width="30px">Satuan</th>
+          <th class="text-center" width="30px">Vol</th>
+          <th class="text-center" width="80px">Harga Satuan</th>
+          <th class="text-center" width="30px">Bobot (%)</th>
+          <th class="text-center" width="100px">Jumlah</th>
+          <th width="60px"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <?= $rows;?>
+        <tr><td colspan="9">&nbsp;</td></tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>
 
 
 <div class="modal fade modal-add-item" tabindex="-1" role="dialog" id="modal-add-item" >
@@ -172,19 +172,6 @@
 <script type="text/javascript">
   $(document).ready(function(){
 
-    /*
-    jQuery('#table-list-item').DataTable({
-      "responsive": true,
-      "aoColumns": [
-			{ "bSortable": false },
-			{ "bSortable": false },
-			{ "bSortable": false },
-			{ "bSortable": false },
-			{ "bSortable": false }
-		],
-    });
-    */
-
     jQuery('#select-id-parent').select2();
 
     $('.add-data').click(function(){
@@ -266,7 +253,7 @@
             time: ''
           });
 
-          setTimeout(function(){location.reload()}, 2000);
+          //setTimeout(function(){location.reload()}, 2000);
 
         } else {
           jQuery.gritter.add({
