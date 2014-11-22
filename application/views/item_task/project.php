@@ -21,7 +21,7 @@
 
 <div class="row">
   <div class="col-md-12">
-    <table class="table table-bordered responsive table-hover table-item-list" id="table-list-item">
+    <table class="table table-bordered responsive table-hover table-item-list display" id="table-list-item" style="margin:0px!important;">
       <thead class="">
         <tr>
           <th class="text-center" width="30px">No.</th>
@@ -30,16 +30,23 @@
           <th class="text-center" width="30px">Satuan</th>
           <th class="text-center" width="30px">Vol</th>
           <th class="text-center" width="80px">Harga Satuan</th>
-          <th class="text-center" width="30px">Bobot (%)</th>
+          <th class="text-center" width="50px">Bobot (%)</th>
           <th class="text-center" width="100px">Jumlah</th>
           <th width="60px"></th>
         </tr>
       </thead>
 
+      <tfoot>
+          <tr ">
+              <th colspan="6" style="text-align:right">Total:</th>
+              <th class="col-total dt-cols-right"></th>
+              <th class="col-total dt-cols-right"></th>
+              <th></th>
+          </tr>
+      </tfoot>
+
       <tbody>
         <?= $rows;?>
-        <tr><td colspan="9">&nbsp;</td></tr>
-
       </tbody>
     </table>
   </div>
@@ -169,8 +176,51 @@
   </div>
 </div>
 
+<script type="text/javascript" src="<?=base_url();?>public/js/dataTables.fixedHeader.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
+
+    var table = $('#table-list-item').DataTable({
+      paging : false,
+      ordering : false,
+      footerCallback: function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+ 
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ? i.replace(/[.]/g, '')*1 : typeof i === 'number' ? i : 0;
+            };
+
+            var floatVal = function ( i ) {
+                return typeof i === 'string' ? parseFloat(i*1) : typeof i === 'number' ? parseFloat(i) : 0;
+            };
+ 
+            // Total over all pages
+            total = api
+                .column( 7 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                } );
+            
+            totalBobot = api
+                .column( 6 )
+                .data()
+                .reduce( function (a, b) {
+                    return floatVal(a) + floatVal(b);
+                } );
+ 
+            // Update footer
+            $( api.column( 7 ).footer() ).html(
+                'Rp. '+ total
+            );
+
+            $( api.column( 6 ).footer() ).html(
+                //totalBobot
+            );
+        }
+    });
+    new $.fn.dataTable.FixedHeader( table );
 
     jQuery('#select-id-parent').select2();
 
@@ -278,12 +328,13 @@
       }
     });
 
-    $("input[name='unit_price']").priceFormat({
+    $("input[name='unit_price'], .col-total").priceFormat({
       prefix: '',
       thousandsSeparator: '.',
       centsSeparator: ',',
       centsLimit: 0
     });
+
 
   });
 </script>

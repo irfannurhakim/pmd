@@ -40,6 +40,11 @@
           .table-item-list{
             font-size: 8pt;
           }
+          div.FixedHeader_Cloned th,
+          div.FixedHeader_Cloned td {
+            background-color: white !important;
+            top : 60px!important;
+          }
 
         </style>
 
