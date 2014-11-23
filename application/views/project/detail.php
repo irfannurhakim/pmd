@@ -5,9 +5,12 @@
   <div class="pull-right">
     <div class="btn-toolbar">
       <div class="btn-group">
-        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/projects';return false;"><i class="fa fa-arrow-left mr5"></i> Daftar Proyek</button>     
-        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/item/project/<?=$project['ID'];?>'; return false;"><i class="fa fa-list-ul mr5"></i> Item Pekerjaan</button>
+        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/projects';return false;"><i class="fa fa-arrow-left mr5"></i> Daftar Proyek</button>    
       </div>  
+      <div class="btn-group">
+        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/item/project/<?=$project['ID'];?>'; return false;"><i class="fa fa-list-ul mr5"></i> Item Pekerjaan</button>
+        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/item/periode/<?=$project['ID'];?>'; return false;"><i class="fa fa-clock-o mr5"></i> Rencana Pekerjaan</button>
+      </div>
       <div class="btn-group">
           <button class="btn btn-default btn-sm" type="button"><i class="fa fa-trash-o mr5"></i> Hapus</button>
       </div>

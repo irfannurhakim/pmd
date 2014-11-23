@@ -5,6 +5,10 @@
   <div class="pull-right">
     <div class="btn-toolbar">
       <div class="btn-group">
+        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/project/view/<?=$project['ID'];?>';return false;"><i class="fa fa-arrow-left mr5"></i> Detail Proyek</button>     
+      </div>  
+      
+      <div class="btn-group">
         <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/item/project/<?=$project['ID'];?>'; return false;"><i class="fa fa-list-ul mr5"></i> Item Pekerjaan</button>
       </div>  
     </div>

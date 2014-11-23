@@ -6,11 +6,10 @@
     <div class="btn-toolbar">
       <div class="btn-group">
         <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/project/view/<?=$project['ID'];?>';return false;"><i class="fa fa-arrow-left mr5"></i> Detail Proyek</button>     
-        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/item/periode/<?=$project['ID'];?>'; return false;"><i class="fa fa-list-ul mr5"></i> Periode Pekerjaan</button>    
       </div>  
 
       <div class="btn-group">
-        <button class="btn btn-default btn-sm add-data" type="button" data-toggle="modal" data-target=".modal-add-item"><i class="fa fa-plus mr5"></i> Tambah Item</button>
+        <button class="btn btn-default btn-sm add-data" type="button" data-toggle="modal" data-target=".modal-add-item"><i class="fa fa-plus mr5"></i> Tambah </button>
         <button class="btn btn-default btn-sm import-data" type="button" data-toggle="modal" data-target=".modal-import"><i class="fa fa-download mr5"></i> Impor </button>
         <button class="btn btn-default btn-sm export-data" type="button" data-toggle="modal" data-target=".modal-export"><i class="fa fa-upload mr5"></i> Ekspor </button>
       </div>
@@ -25,21 +24,21 @@
       <thead class="">
         <tr>
           <th class="text-center" width="30px">No.</th>
-          <th width="200px">Uraian Pekerjaan</th>
+          <th width="150px">Uraian Pekerjaan</th>
           <th>Spesifikasi</th>
           <th class="text-center" width="30px">Satuan</th>
           <th class="text-center" width="30px">Vol</th>
-          <th class="text-center" width="80px">Harga Satuan</th>
+          <th class="text-center" width="60px">Harga Satuan (Rp)</th>
           <th class="text-center" width="50px">Bobot (%)</th>
-          <th class="text-center" width="100px">Jumlah</th>
+          <th class="text-center" width="80px">Jumlah (Rp)</th>
           <th width="60px"></th>
         </tr>
       </thead>
 
       <tfoot>
-          <tr ">
+          <tr>
               <th colspan="6" style="text-align:right">Total:</th>
-              <th class="col-total dt-cols-right"></th>
+              <th class=" dt-cols-right"></th>
               <th class="col-total dt-cols-right"></th>
               <th></th>
           </tr>
@@ -203,24 +202,20 @@
                     return intVal(a) + intVal(b);
                 } );
             
-            totalBobot = api
-                .column( 6 )
-                .data()
-                .reduce( function (a, b) {
-                    return floatVal(a) + floatVal(b);
-                } );
- 
             // Update footer
             $( api.column( 7 ).footer() ).html(
                 'Rp. '+ total
             );
 
+            var budget = <?=$project['BUDGET'];?>;
+            var totalBobot = (total/budget) * 100;
+
             $( api.column( 6 ).footer() ).html(
-                //totalBobot
+                totalBobot.toPrecision(3)
             );
         }
     });
-    new $.fn.dataTable.FixedHeader( table );
+    //new $.fn.dataTable.FixedHeader( table );
 
     jQuery('#select-id-parent').select2();
 
