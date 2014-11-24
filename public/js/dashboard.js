@@ -13,31 +13,31 @@ jQuery(document).ready(function(){
     
     /*****SIMPLE CHART*****/
     
-    var newCust = [[0, 0], [1, 10], [2,5], [3, 12], [4, 5], [5, 8], [6, 0]];
-    var retCust = [[0, 0], [1, 8], [2,3], [3, 10], [4, 3], [5, 6], [6,0]];
+    var newCust = [[0, 0], [1, 2], [2,3], [3, 12], [4, 25], [5, 50], [6, 70], [7, 90], [8, 95], [9, 98], [10, 100]];
+    var retCust = [[0, 0], [1, 1], [2,4], [3, 10], [4, 20], [5, 45], [6, 55]];
 	
     var plot = jQuery.plot(jQuery("#basicflot"),
 	[{
 	    data: newCust,
-	    label: "New Customer",
-	    color: "#03c3c4"
+	    label: "Rencana",
+	    color: null,
 	},
         {
 	    data: retCust,
-	    label: "Returning Customer",
-	    color: "#905dd1"
+	    label: "Realisasi",
+	    color: null,
         }
 	],
 	{
 	    series: {
 		lines: {
-		    show: false
+		    show: true
 		},
 		splines: {
 		    show: true,
-		    tension: 0.4,
+		    tension: 0.1,
 		    lineWidth: 1,
-		    fill: 0.4
+		    fill: 0.0
 		},
 		shadowSize: 0
 	    },
@@ -58,7 +58,7 @@ jQuery(document).ready(function(){
 	    },
 	    yaxis: {
 		min: 0,
-		max: 15,
+		max: 100,
 		color: '#eee'
 	    },
 	    xaxis: {
@@ -99,31 +99,29 @@ jQuery(document).ready(function(){
     
     /*****CHART 2 *****/
     
-    var visitors = [[0, 0], [1, 3], [2,2], [3, 5], [4, 4], [5, 5], [6, 0]];
-    var unique = [[0, 0], [1, 2], [2,1], [3, 3], [4, 3], [5, 4], [6,0]];
+    var visitors = [[0, 0], [1, 2], [2,3], [3, 12], [4, 25], [5, 50], [6, 70], [7, 90], [8, 95], [9, 98], [10, 100]];
+    var unique = [[0, 0], [1, 1], [2,4], [3, 10], [4, 20], [5, 45], [6, 55], [7, 90], [8, 95], [9, 98]];
 	
     var plot = jQuery.plot(jQuery("#basicflot2"),
 	[{
 	    data: visitors,
-	    label: "Visits",
-	    color: "#428bca"
+	    label: "Rencana",
 	},
         {
 	    data: unique,
-	    label: "Unique Visits",
-	    color: "#b830b3"
+	    label: "Realisasi",
         }
 	],
 	{
 	    series: {
 		lines: {
-		    show: false
+		    show: true
 		},
 		splines: {
 		    show: true,
-		    tension: 0.4,
+		    tension: 0.1,
 		    lineWidth: 1,
-		    fill: 0.5
+		    fill: 0.0
 		},
 		shadowSize: 0
 	    },
@@ -144,7 +142,7 @@ jQuery(document).ready(function(){
 	    },
 	    yaxis: {
 		min: 0,
-		max: 15,
+		max: 100,
 		color: '#eee'
 	    },
 	    xaxis: {
@@ -185,31 +183,29 @@ jQuery(document).ready(function(){
     
     /*****CHART 3 *****/
     
-    var impressions =       [[0, 0], [1, 5], [2,2], [3, 7], [4, 4], [5, 5], [6, 0]];
-    var uniqueimpressions = [[0, 0], [1, 2], [2,1], [3, 6], [4, 3], [5, 4], [6,0]];
+    var impressions = [[0, 0], [1, 2], [2,3], [3, 12], [4, 25], [5, 50], [6, 70], [7, 90], [8, 95], [9, 98], [10, 100]];
+    var uniqueimpressions = [[0, 0], [1, 1], [2,4], [3, 10]];
 	
     var plot = jQuery.plot(jQuery("#basicflot3"),
 	[{
 	    data: impressions,
-	    label: "Impressions",
-	    color: "#905dd1"
+	    label: "Rencana",
 	},
         {
 	    data: uniqueimpressions,
-	    label: "Unique Impressions",
-	    color: "#428bca"
+	    label: "Realisasi",
         }
 	],
 	{
 	    series: {
 		lines: {
-		    show: false
+		    show: true
 		},
 		splines: {
 		    show: true,
-		    tension: 0.4,
+		    tension: 0.1,
 		    lineWidth: 1,
-		    fill: 0.4
+		    fill: 0.0
 		},
 		shadowSize: 0
 	    },
@@ -230,7 +226,7 @@ jQuery(document).ready(function(){
 	    },
 	    yaxis: {
 		min: 0,
-		max: 15,
+		max: 100,
 		color: '#eee'
 	    },
 	    xaxis: {
@@ -306,79 +302,79 @@ jQuery(document).ready(function(){
     });
     
     
-    /***** BAR CHART *****/
+ //    /***** BAR CHART *****/
     
-    var m3 = new Morris.Bar({
-        // ID of the element in which to draw the chart.
-        element: 'bar-chart',
-        // Chart data records -- each entry in this array corresponds to a point on
-        // the chart.
-        data: [
-            { y: '2006', a: 30, b: 20 },
-            { y: '2007', a: 75,  b: 65 },
-            { y: '2008', a: 50,  b: 40 },
-            { y: '2009', a: 75,  b: 65 },
-            { y: '2010', a: 50,  b: 40 },
-            { y: '2011', a: 75,  b: 65 },
-            { y: '2012', a: 100, b: 90 }
-        ],
-        xkey: 'y',
-        ykeys: ['a', 'b'],
-        labels: ['Series A', 'Series B'],
-        lineWidth: '1px',
-        fillOpacity: 0.8,
-        smooth: false,
-        hideHover: true,
-        resize: true
-    });
+ //    var m3 = new Morris.Bar({
+ //        // ID of the element in which to draw the chart.
+ //        element: 'bar-chart',
+ //        // Chart data records -- each entry in this array corresponds to a point on
+ //        // the chart.
+ //        data: [
+ //            { y: '2006', a: 30, b: 20 },
+ //            { y: '2007', a: 75,  b: 65 },
+ //            { y: '2008', a: 50,  b: 40 },
+ //            { y: '2009', a: 75,  b: 65 },
+ //            { y: '2010', a: 50,  b: 40 },
+ //            { y: '2011', a: 75,  b: 65 },
+ //            { y: '2012', a: 100, b: 90 }
+ //        ],
+ //        xkey: 'y',
+ //        ykeys: ['a', 'b'],
+ //        labels: ['Series A', 'Series B'],
+ //        lineWidth: '1px',
+ //        fillOpacity: 0.8,
+ //        smooth: false,
+ //        hideHover: true,
+ //        resize: true
+ //    });
     
-    var delay = (function() {
-	var timer = 0;
-	return function(callback, ms) {
-	    clearTimeout(timer);
-	    timer = setTimeout(callback, ms);
-	};
-    })();
+ //    var delay = (function() {
+	// var timer = 0;
+	// return function(callback, ms) {
+	//     clearTimeout(timer);
+	//     timer = setTimeout(callback, ms);
+	// };
+ //    })();
 
-    jQuery(window).resize(function() {
-	delay(function() {
-	    m3.redraw();
-	}, 200);
-    }).trigger('resize');
+ //    jQuery(window).resize(function() {
+	// delay(function() {
+	//     m3.redraw();
+	// }, 200);
+ //    }).trigger('resize');
     
     
-    // This will empty first option in select to enable placeholder
-    jQuery('select option:first-child').text('');
+ //    // This will empty first option in select to enable placeholder
+ //    jQuery('select option:first-child').text('');
     
-    // Select2
-    jQuery("select").select2({
-        minimumResultsForSearch: -1
-    });
+ //    // Select2
+ //    jQuery("select").select2({
+ //        minimumResultsForSearch: -1
+ //    });
                 
-    // Basic Wizard
-    jQuery('#basicWizard').bootstrapWizard({
-        onTabShow: function(tab, navigation, index) {
-            tab.prevAll().addClass('done');
-            tab.nextAll().removeClass('done');
-            tab.removeClass('done');
+ //    // Basic Wizard
+ //    jQuery('#basicWizard').bootstrapWizard({
+ //        onTabShow: function(tab, navigation, index) {
+ //            tab.prevAll().addClass('done');
+ //            tab.nextAll().removeClass('done');
+ //            tab.removeClass('done');
                         
-            var $total = navigation.find('li').length;
-            var $current = index + 1;
+ //            var $total = navigation.find('li').length;
+ //            var $current = index + 1;
                         
-            if($current >= $total) {
-                $('#basicWizard').find('.wizard .next').addClass('hide');
-                $('#basicWizard').find('.wizard .finish').removeClass('hide');
-            } else {
-                $('#basicWizard').find('.wizard .next').removeClass('hide');
-                $('#basicWizard').find('.wizard .finish').addClass('hide');
-            }
-        }
-    });
+ //            if($current >= $total) {
+ //                $('#basicWizard').find('.wizard .next').addClass('hide');
+ //                $('#basicWizard').find('.wizard .finish').removeClass('hide');
+ //            } else {
+ //                $('#basicWizard').find('.wizard .next').removeClass('hide');
+ //                $('#basicWizard').find('.wizard .finish').addClass('hide');
+ //            }
+ //        }
+ //    });
     
-    // This will submit the basicWizard form
-    jQuery('.panel-wizard').submit(function() {    
-        alert('This will submit the form wizard');
-        return false // remove this to submit to specified action url
-    });
+ //    // This will submit the basicWizard form
+ //    jQuery('.panel-wizard').submit(function() {    
+ //        alert('This will submit the form wizard');
+ //        return false // remove this to submit to specified action url
+ //    });
     
 });
