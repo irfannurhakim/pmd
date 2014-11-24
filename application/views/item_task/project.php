@@ -18,37 +18,35 @@
 </div>
 <hr/>
 
-<div class="row">
-  <div class="col-md-12">
-    <table class="table table-bordered responsive table-hover table-item-list display" id="table-list-item" style="margin:0px!important;">
-      <thead class="">
+<div class="container-dt">
+  <table class="table table-bordered table-hover table-item-list" id="table-list-item" style="margin:0px!important;">
+    <thead class="">
+      <tr>
+        <th class="text-center" width="30px">No.</th>
+        <th width="150px">Uraian Pekerjaan</th>
+        <th>Spesifikasi</th>
+        <th class="text-center" width="30px">Satuan</th>
+        <th class="text-center" width="30px">Vol</th>
+        <th class="text-center" width="60px">Harga Satuan (Rp)</th>
+        <th class="text-center" width="50px">Bobot (%)</th>
+        <th class="text-center" width="80px">Jumlah (Rp)</th>
+        <th width="60px"></th>
+      </tr>
+    </thead>
+
+    <tfoot>
         <tr>
-          <th class="text-center" width="30px">No.</th>
-          <th width="150px">Uraian Pekerjaan</th>
-          <th>Spesifikasi</th>
-          <th class="text-center" width="30px">Satuan</th>
-          <th class="text-center" width="30px">Vol</th>
-          <th class="text-center" width="60px">Harga Satuan (Rp)</th>
-          <th class="text-center" width="50px">Bobot (%)</th>
-          <th class="text-center" width="80px">Jumlah (Rp)</th>
-          <th width="60px"></th>
+            <th colspan="6" style="text-align:right">Total:</th>
+            <th class=" dt-cols-right"></th>
+            <th class="col-total dt-cols-right"></th>
+            <th></th>
         </tr>
-      </thead>
+    </tfoot>
 
-      <tfoot>
-          <tr>
-              <th colspan="6" style="text-align:right">Total:</th>
-              <th class=" dt-cols-right"></th>
-              <th class="col-total dt-cols-right"></th>
-              <th></th>
-          </tr>
-      </tfoot>
-
-      <tbody>
-        <?= $rows;?>
-      </tbody>
-    </table>
-  </div>
+    <tbody>
+      <?= $rows;?>
+    </tbody>
+  </table>
 </div>
 
 
@@ -184,7 +182,8 @@
       ordering : false,
       footerCallback: function ( row, data, start, end, display ) {
             var api = this.api(), data;
- 
+            var total = 0;
+            var totalBobot = 0;
             // Remove the formatting to get integer data for summation
             var intVal = function ( i ) {
                 return typeof i === 'string' ? i.replace(/[.]/g, '')*1 : typeof i === 'number' ? i : 0;
@@ -194,21 +193,24 @@
                 return typeof i === 'string' ? parseFloat(i*1) : typeof i === 'number' ? parseFloat(i) : 0;
             };
  
-            // Total over all pages
-            total = api
-                .column( 7 )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                } );
+            if(data.length > 1){
+              // Total over all pages
+              total = api
+                  .column( 7 )
+                  .data()
+                  .reduce( function (a, b) {
+                      return intVal(a) + intVal(b);
+                  });
+
+              var budget = <?=$project['BUDGET'];?>;
+              totalBobot = (total/budget) * 100;
+            } 
             
             // Update footer
             $( api.column( 7 ).footer() ).html(
                 'Rp. '+ total
             );
 
-            var budget = <?=$project['BUDGET'];?>;
-            var totalBobot = (total/budget) * 100;
 
             $( api.column( 6 ).footer() ).html(
                 totalBobot.toPrecision(3)

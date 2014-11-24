@@ -56,6 +56,7 @@ class Project extends CI_Controller {
     $data['project'] = $this->builtbyprime->get('TBL_PROJECT', array('id' => $id), TRUE);
     $data['document'] = $this->builtbyprime->get('TBL_PROJECT_DOCUMENT', array('id_project' => $id));
     $data['supervisor'] = $this->builtbyprime->get('TBL_SUPERVISOR_PROJECT', array('id_project' => $id));
+    $data['notice'] = $this->builtbyprime->explicit("SELECT type_history, notice_type FROM TBL_PROJECT_NOTICE_HISTORY where id_project = '".$id."' AND status = 1 ORDER BY notice_type");
     $data['user'] = $this->builtbyprime->get('TBL_USER');
 
 
@@ -90,5 +91,32 @@ class Project extends CI_Controller {
     }
 
     echo json_encode($res);
+  }
+
+  public function update_notice($projectId){
+
+    $id = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_PROJECT_NOTICE_HISTORY");
+    $data = Array(
+      'id' => $id[0]['MAX'],
+      'id_project' => $projectId,
+      'notice_type' => $this->input->post('value'),
+      'type_history' => $this->input->post('is-checked'),
+      'description' => '-',
+      'name' => $this->input->post('name'),
+      'status' => 1,
+      'created_by' => $this->session->userdata('USERNAME'),
+      'modified_by' => $this->session->userdata('USERNAME')
+    );
+
+    $upd = $this->builtbyprime->update('TBL_PROJECT_NOTICE_HISTORY', Array('id_project' => $projectId, 'notice_type' => $this->input->post('value')), Array('status' => 0));
+
+    $res = $this->builtbyprime->insert('TBL_PROJECT_NOTICE_HISTORY', $data);
+
+    if($res){
+      echo json_encode(Array('status'=> 'ok', 'data' => $res));
+    } else {
+      echo json_encode(Array());
+    }
+
   }
 }

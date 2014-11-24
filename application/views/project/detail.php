@@ -159,6 +159,55 @@
         </ul>
         </div>
       </div>
+      <div class="panel panel-default">
+        <div class="panel-body nopadding">
+           <form class="form-bordered" id="form-add-notice" method="POST" action="<?=base_url();?>project/update_notice/<?=$project['ID'];?>">
+              <div class="form-group">
+                  <div class="col-sm-12 control-label">
+                     <div class="ckbox ckbox-danger">
+                        <?php
+                          $noticeOne ='';
+                          $noticeTwo ='';
+                          $noticeThree = '';
+
+                          foreach ($notice as $key => $value) {
+                            if($value['NOTICE_TYPE'] == 1 && $value['TYPE_HISTORY'] == 1){
+                              $noticeOne = 'checked="checked"';
+                            }
+
+                            if($value['NOTICE_TYPE'] == 2 && $value['TYPE_HISTORY'] == 1){
+                              $noticeTwo = 'checked="checked"';
+                            }
+
+                            if($value['NOTICE_TYPE'] == 3 && $value['TYPE_HISTORY'] == 1){
+                              $noticeThree = 'checked="checked"';
+                            }
+                          }
+                        ?>
+                        <input type="checkbox" id="notice-one" name="notice-one" class="notice-choice" value="1" <?=$noticeOne;?> />
+                        <label for="notice-one">Surat Peringatan 1</label>
+                    </div>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <div class="col-sm-12 control-label">
+                     <div class="ckbox ckbox-danger">
+                        <input type="checkbox" id="notice-two" name="notice-two" class="notice-choice" value="2" <?=$noticeTwo;?>/>
+                        <label for="notice-two">Surat Peringatan 2</label>
+                    </div>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <div class="col-sm-12 control-label">
+                     <div class="ckbox ckbox-danger">
+                        <input type="checkbox" id="notice-three" name="notice-three" class="notice-choice" value="3" <?=$noticeThree;?>/>
+                        <label for="notice-three">Surat Peringatan 3</label>
+                    </div>
+                  </div>
+              </div>
+            </form>
+        </div>
+      </div>
   </div>
 </div>
 
@@ -301,6 +350,64 @@
       }
     });
 
+    $('#form-add-notice').ajaxForm({
+      dataType: 'json',
+      success: function(a,b,c,d){
+
+      },
+      error: function(e){
+
+      }
+    });
+
+    $('.notice-choice').change(function(){
+      var isChecked = $(this).is(':checked');
+      var name = $(this).next().html();
+      var value = $(this).val();
+      var self = this;
+
+      var c = confirm("Apakah anda yakin untuk mengubah status proyek?");
+      if(c){
+        $.ajax({
+          url: "<?=base_url();?>project/update_notice/<?=$project['ID'];?>",
+          type: 'POST',
+          dataType: 'json',
+          data: {
+            'name': name,
+            'is-checked' : (isChecked) ? 1 : 0,
+            'value' : value
+          }
+        })
+        .done(function(a){
+          if(a.status == 'ok'){
+            jQuery.gritter.add({
+              title: 'Info',
+              text: 'Simpan perubahan berhasil.',
+              class_name: 'growl-info',
+              image: false,
+              sticky: false,
+              time: ''
+            });
+          } else {
+            toggleCheck(isChecked, self);
+          }
+        })
+        .fail(function(){
+          toggleCheck(isChecked, self);
+        })
+      } else {
+        toggleCheck(isChecked, self);
+      }
+      return false;
+    });
+
+    function toggleCheck(isChecked, ctx){
+      if(isChecked, ctx){
+        $(ctx).attr('checked', false);
+      } else {
+        $(ctx).attr('checked', true);
+      }      
+    }
   });
     
 </script>

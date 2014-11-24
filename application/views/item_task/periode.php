@@ -7,7 +7,7 @@
       <div class="btn-group">
         <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/project/view/<?=$project['ID'];?>';return false;"><i class="fa fa-arrow-left mr5"></i> Detail Proyek</button>     
       </div>  
-      
+
       <div class="btn-group">
         <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/item/project/<?=$project['ID'];?>'; return false;"><i class="fa fa-list-ul mr5"></i> Item Pekerjaan</button>
       </div>  
@@ -15,25 +15,23 @@
   </div>
 </div>
 <hr/>
-<div class="row">
-  <div class="col-md-12">
-    <table class="table table-bordered responsive table-hover table-item-list" id="table-list-periode">
-      <thead class="">
-        <tr>
-          <th rowspan="3">No.</th>
-          <th rowspan="3"><div style="width:250px;">&nbsp;</div>Uraian Pekerjaan</th>
-          <th class="text-center" colspan="<?=$week;?>">Minggu</th>
-        </tr>
-        <tr>
-          <?=$column;?>
-        </tr>
-      </thead>
+<div class="container-dt">
+  <table class="table table-bordered responsive table-hover table-item-list" id="table-list-periode">
+    <thead class="">
+      <tr>
+        <th rowspan="3">No.</th>
+        <th rowspan="3"><div style="width:250px;">&nbsp;</div>Uraian Pekerjaan</th>
+        <th class="text-center" colspan="<?=$week;?>">Minggu</th>
+      </tr>
+      <tr>
+        <?=$column;?>
+      </tr>
+    </thead>
 
-      <tbody>
-        <?= $rows;?>
-      </tbody>
-    </table>
-  </div>
+    <tbody>
+      <?= $rows;?>
+    </tbody>
+  </table>
 </div>
 
 <script type="text/javascript">
