@@ -68,7 +68,9 @@
             content: '\e003';
             color: #666;
           }
-
+          table.table-bordered th:last-child, table.table-bordered td:last-child {
+            border-right-width: 1px!important;
+          }
         </style>
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->

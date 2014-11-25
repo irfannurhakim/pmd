@@ -117,6 +117,150 @@
                         </div><!-- panel -->
                     </div>
                 </div><!-- row -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="panel panel-default widget-todo">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Statistik Umum</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <h5 class="md-title">Top 5 Kontraktor 2014</h5>
+                                    <div class="list-group people-group">
+                                        <a href="#" class="list-group-item">
+                                            <div class="media">
+                                                <div class="pull-left">
+                                                    <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user1.png" alt="...">
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading">PT. Adhi Karya Persada</h4>
+                                                    <small>Rp. 23.239.330.000 (11 Proyek)</small>
+                                                </div>
+                                            </div><!-- media -->
+                                        </a><!-- list-group -->
+                                        <a href="#" class="list-group-item">
+                                            <div class="media">
+                                                <div class="pull-left">
+                                                    <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user2.png" alt="...">
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading">PT. Anugrah Bintang Persada</h4>
+                                                    <small>Rp. 19.002.039.500 (7 Proyek)</small>
+                                                </div>
+                                            </div><!-- media -->
+                                        </a><!-- list-group -->
+                                        <a href="#" class="list-group-item">
+                                            <div class="media">
+                                                <div class="pull-left">
+                                                    <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user3.png" alt="...">
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading">CV. Kurnia Semesta Lestari</h4>
+                                                    <small>Rp. 1.980.4932.233 (7 Proyek)</small>
+                                                </div>
+                                            </div><!-- media -->
+                                        </a><!-- list-group -->
+                                        <a href="#" class="list-group-item">
+                                            <div class="media">
+                                                <div class="pull-left">
+                                                    <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user4.png" alt="...">
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading">PT. Agrikultur Akua Indonesia</h4>
+                                                    <small>Rp. 980.002.000 (5 Proyek)</small>
+                                                </div>
+                                            </div><!-- media -->
+                                        </a><!-- list-group -->
+                                    </div><!-- list-group -->
+                                  </div>
+
+                                  <div class="col-md-6">
+                                    <h5 class="md-title">Top 5 Pengawas 2014</h5>
+                                     <div class="list-group people-group">
+                                        <a href="#" class="list-group-item">
+                                            <div class="media">
+                                                <div class="pull-left">
+                                                    <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user1.png" alt="...">
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading">Weno Carasbong</h4>
+                                                    <small>7 Proyek Diawasi</small>
+                                                </div>
+                                            </div><!-- media -->
+                                        </a><!-- list-group -->
+                                        <a href="#" class="list-group-item">
+                                            <div class="media">
+                                                <div class="pull-left">
+                                                    <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user2.png" alt="...">
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading">Renov Leonga</h4>
+                                                    <small>7 Proyek Diawasi</small>
+                                                </div>
+                                            </div><!-- media -->
+                                        </a><!-- list-group -->
+                                        <a href="#" class="list-group-item">
+                                            <div class="media">
+                                                <div class="pull-left">
+                                                    <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user3.png" alt="...">
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading">Zaham Sindilmaca</h4>
+                                                    <small>7 Proyek Diawasi</small>
+                                                </div>
+                                            </div><!-- media -->
+                                        </a><!-- list-group -->
+                                        <a href="#" class="list-group-item">
+                                            <div class="media">
+                                                <div class="pull-left">
+                                                    <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user4.png" alt="...">
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading">Nusja Nawancali</h4>
+                                                    <small>6 Proyek Diawasi</small>
+                                                </div>
+                                            </div><!-- media -->
+                                        </a><!-- list-group -->
+                                    </div><!-- list-group -->
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- col-md-4 -->
+
+                    <div class="col-md-4">
+                      <div class="panel panel-success-alt noborder">
+                          <div class="panel-heading noborder">
+                              <div class="panel-btns">
+                                  <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
+                              </div><!-- panel-btns -->
+                              <div class="media-body">
+                                  <h5 class="md-title nomargin">Total Nilai Proyek Tahun 2014</h5>
+                                  <h1 class="mt5">Rp. 124,35 M</h1>
+                              </div><!-- media-body -->
+                              <hr>
+                              <div class="media-body">
+                                  <h5 class="md-title nomargin">Jumlah Proyek 2014</h5>
+                                  <h1 class="mt5">24</h1>
+                              </div><!-- media-body -->
+                              <hr>
+
+                              <div class="clearfix mt20">
+                                  <div class="pull-left">
+                                      <h5 class="md-title nomargin">Selesai</h5>
+                                      <h4 class="nomargin">21</h4>
+                                  </div>
+                                  <div class="pull-right">
+                                      <h5 class="md-title nomargin">Berlangsung</h5>
+                                      <h4 class="nomargin">4</h4>
+                                  </div>
+                              </div>
+                              
+                          </div><!-- panel-body -->
+                      </div><!-- panel -->          
+                    </div>
+                </div><!-- row -->
 
 <script src="<?= base_url();?>public/js/flot/jquery.flot.min.js"></script>
 <script src="<?= base_url();?>public/js/flot/jquery.flot.resize.min.js"></script>

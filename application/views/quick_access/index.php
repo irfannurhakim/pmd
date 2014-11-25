@@ -8,9 +8,9 @@
                         <a data-toggle="collapse" data-parent="#accordion2" href="#collapse-<?=$project['ID'];?>">
                             <?=$project['NAME'];?>
                         </a>
-                        <span class="pull-right">
+<!--                         <span class="pull-right">
                           Item Selesai Minggu ini : 2 / 5
-                        </span>
+                        </span> -->
                     </h4>
                 </div>
                 <div id="collapse-<?=$project['ID'];?>" class="panel-collapse collapse">
@@ -100,15 +100,15 @@
                       </div> 
 
                       <div class="mb20"></div> -->
-                      <div class="pull-right">
+<!--                       <div class="pull-right">
                       Pilih Minggu  
                         <select class="select-week" >
                           <option>Minggu ke-1</option>
                         </select>
                       </div>
-
+ -->
                       <div class="mb10" style="clear:both;"></div>
-                      <table class="table table-bordered responsive table-hover tbl-item-list">
+                      <table class="table table-bordered responsive table-hover tbl-item-list" id="tbl-realisasi-<?=$project['ID'];?>">
                         <thead>
                           <tr>
                             <th width="50px" rowspan="2" class="dt-cols-center">No</th>
@@ -129,13 +129,12 @@
                         <tbody class="selectable">
                           <?php
                             $i = 1;
-
                             foreach ($items as $item) {
                               if($item['ID_PROJECT'] == $project['ID']){
                                 $bobot = round((($item['UNIT_PRICE'] * $item['VOLUME']) / $project['BUDGET'] ) * 100, 4);
                           ?>
                           <tr object="<?=$item['ID_ITEM_TASK'];?>">
-                            <td><?=$i;?></td>
+                            <td><?=$i;?></td>                            
                             <td><?=$item['NAME'];?></td>
                             <td class="dt-cols-right"><?=$bobot;?></td>
                             <td class="dt-cols-right"><?=round($item['VOLUME'], 4);?></td>
@@ -279,6 +278,13 @@
 <script type="text/javascript">
   $(document).ready(function(){
     jQuery('.select-week').select2();
+
+  <?php foreach ($projects as $project) { ?>
+   // jQuery("#tbl-realisasi-<?=$project['ID'];?>").DataTable({
+   //   paging : false,
+    //  ordering: false
+    //});
+  <?php } ?>
 
     jQuery('.tbl-item-list tbody').on( 'click', 'tr', function () {
       var id = $(this).attr('object');
