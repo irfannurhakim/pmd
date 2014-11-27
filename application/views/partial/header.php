@@ -45,7 +45,32 @@
             background-color: white !important;
             top : 60px!important;
           }
+          .form-search .form-control{
+            height: 40px;
+            font-size: 16px;
+            padding-left: 30px;
+            -moz-border-radius: 50px;
+            -webkit-border-radius: 50px;
+            border-radius: 50px;
+          }
 
+          .form-search{
+            margin-right: 10px;
+            margin-top: 0;
+            position: relative;
+          }
+
+          .form-search:before {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            font-family: 'Glyphicons Halflings';
+            content: '\e003';
+            color: #666;
+          }
+          table.table-bordered th:last-child, table.table-bordered td:last-child {
+            border-right-width: 1px!important;
+          }
         </style>
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -73,11 +98,8 @@
                 <div class="header-right">
                     <div class="pull-left"></div>
                     <div class="pull-right">
-                        
-                        <!-- <form class="form form-search" action="http://themepixels.com/demo/webpage/chain/search-results.html">
-                            <input type="search" class="form-control" placeholder="Search" />
-                        </form> -->
-                        
+                   
+                       
                         <div class="btn-group btn-group-list btn-group-notification">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                               <i class="fa fa-bell-o"></i>
