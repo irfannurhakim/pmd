@@ -201,8 +201,8 @@ class Item_task extends CI_Controller {
             $value = $allTask[$item['ID']][$i];
           }
         }
-        $val   = ($value) ? number_format($value['WEIGHT_PLANNING'], 3) : '';
-        $html .= '<td class="dt-cols-center">' . (($isLast) ? '<input type="text" value ="'.$val.'" style="width:50px;text-align:right;" id="'.$item['ID'].'" week="'.$i.'" class="item-value"  />' : '').'</td>';
+        $val   = ($value) ? $value['WEIGHT_PLANNING'] : '';
+        $html .= '<td class="dt-cols-center">' . (($isLast) ? '<input type="text" value ="'.$val.'" style="width:50px;text-align:right;" name="'.$item['ID'].'_'.$i.'" class="item-value"  />' : '').'</td>';
       }
 
       $html .= '</tr>';
@@ -212,21 +212,56 @@ class Item_task extends CI_Controller {
     return $html;
   }
 
-  public function update_value()
+  public function update_value($id)
   {
-    $id      =$_GET['id'];
-    $week    =$_GET['week'];
-    $value   =str_replace(',','',$_GET['v']);
+    $project     = $this->builtbyprime->get('TBL_PROJECT', array('id' => $id), TRUE);
+    $item_list   = $this->builtbyprime->explicit('SELECT LEVEL,A.* FROM TBL_ITEM_TASK A WHERE A.ID_PROJECT = '.$id.' START WITH A.ID_PARENT = 0 CONNECT BY PRIOR A.ID = A.ID_PARENT ORDER SIBLINGS BY NAME');
 
-    $idItem = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_ITEM_TASK_TIME");
-    $exists = $this->builtbyprime->explicit('SELECT * from TBL_ITEM_TASK_TIME WHERE ID_ITEM_TASK = '.$id.' and NO_WEEK = '.$week.' ');
-    if($exists)
+    $start       = explode(' ',$project['START_DATE']); 
+    $finish      = explode(' ',$project['FINISH_DATE']);
+    $datediff    = strtotime($finish[0]) - strtotime($start[0]);
+    $week        = floor(($datediff/(60*60*24))/7);
+
+    $idplanning = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_PROJECT_PLANNING");
+    $this->builtbyprime->insert('TBL_PROJECT_PLANNING',array('ID'=>$idplanning[0]['MAX'],'NAME'=>$project['NAME'],'ID_PROJECT'=>$id));
+    $idprojectplanning = $this->builtbyprime->explicit("SELECT MAX(ID) MAX FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$id."' ");  
+    
+    for($i=1;$i<=$week;$i++)
     {
-      $this->builtbyprime->update('TBL_ITEM_TASK_TIME',array('ID_ITEM_TASK'=>$id,'NO_WEEK'=>$week),array('PERCENTAGE'=>$value));
-    }
-    else
-    {
-      $this->builtbyprime->insert('TBL_ITEM_TASK_TIME',array('ID'=>$idItem[0]['MAX'],'ID_ITEM_TASK'=>$id,'NO_WEEK'=>$week,'PERCENTAGE'=>$value));
+      foreach ($item_list as $row) 
+      {
+        if(isset($_POST[$row['ID'].'_'.$i]))
+        {
+          //cek planning parent
+          //$planning = $this->builtbyprime->get('TBL_PROJECT_PLANNING', array('ID_PROJECT' => $id), TRUE);
+          //if(!$planning)
+          // {
+            //create planning parent
+            //$idplanning = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_PROJECT_PLANNING");
+            //$this->builtbyprime->insert('TBL_PROJECT_PLANNING',array('ID'=>$idplanning[0]['MAX'],'NAME'=>$project['NAME'],'ID_PROJECT'=>$id));
+          // }
+
+          //get id planning parent
+          //$idprojectplanning = $this->builtbyprime->explicit("SELECT MAX(ID) MAX FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$id."' ");  
+
+          //cek planning detail
+          //$planningdetail = $this->builtbyprime->explicit('SELECT * from TBL_PROJECT_PLANNING_DETAIL WHERE ID_ITEM_TASK = '.$row['ID'].' and WEEK_NUMBER = '.$i.' and ID_PROJECT_PLANNING = '.$idprojectplanning[0]['MAX'].' ');
+          //if($planningdetail)
+          //{
+          //update
+          // $this->builtbyprime->update('TBL_PROJECT_PLANNING_DETAIL',array('ID_ITEM_TASK'=>$row['ID'],'WEEK_NUMBER'=>$i,'ID_PROJECT_PLANNING'=>$idprojectplanning[0]['MAX']),array('WEIGHT_PLANNING'=>$_POST[$row['ID'].'_'.$i]));
+          //}
+          //else
+          //{
+            if($_POST[$row['ID'].'_'.$i] != '')
+            {
+              //create
+              $idplanningdetail = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_PROJECT_PLANNING_DETAIL");
+              $this->builtbyprime->insert('TBL_PROJECT_PLANNING_DETAIL',array('ID'=>$idplanningdetail[0]['MAX'],'ID_ITEM_TASK'=>$row['ID'],'ID_PROJECT_PLANNING'=>$idprojectplanning[0]['MAX'],'WEEK_NUMBER'=>$i,'WEIGHT_PLANNING'=>$_POST[$row['ID'].'_'.$i]));
+            }
+          //}
+        }
+      }
     }
   }
 
