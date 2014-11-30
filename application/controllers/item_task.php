@@ -150,7 +150,7 @@ class Item_task extends CI_Controller {
 
   public function periode($id){ 
 
-    $data['item_list']    = $this->builtbyprime->explicit('SELECT LEVEL,A.* FROM TBL_ITEM_TASK A WHERE A.ID_PROJECT = '.$id.' START WITH A.ID_PARENT = 0 CONNECT BY PRIOR A.ID = A.ID_PARENT ORDER SIBLINGS BY NAME');
+    $data['item_list']    = $this->builtbyprime->explicit('SELECT LEVEL,A.* FROM TBL_ITEM_TASK A WHERE A.ID_PROJECT = '.$id.' START WITH A.ID_PARENT = 0 CONNECT BY PRIOR A.ID = A.ID_PARENT ORDER SIBLINGS BY ID');
     $data['project']      = $this->builtbyprime->get('TBL_PROJECT', array('id' => $id), TRUE);
     $data['id']           = $id;
     $tempAllTask          = $this->builtbyprime->explicit("SELECT * FROM TBL_PROJECT_PLANNING_DETAIL WHERE ID_PROJECT_PLANNING = (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$id."')");  
@@ -164,7 +164,7 @@ class Item_task extends CI_Controller {
     $start                = explode(' ',$data['project']['START_DATE']); 
     $finish               = explode(' ',$data['project']['FINISH_DATE']);
     $datediff             = strtotime($finish[0]) - strtotime($start[0]);
-    $week                 = floor(($datediff/(60*60*24))/7);
+    $week                 = ceil(($datediff/(60*60*24))/7);
     
     $html = '';
     for($i=1;$i<=$week;$i++){
@@ -175,12 +175,12 @@ class Item_task extends CI_Controller {
     $data['week']   = $week;
 
     $t            = $this->genMulDimArr($data['item_list']);
-    $data['rows'] = $this->flatten_periode($t, $week, $allTask);
+    $data['rows'] = $this->flatten_periode($t, $week, $allTask, $data['project']['BUDGET']);
 
     $this->load->view('item_task/periode', $data);
   }
 
-  public function flatten_periode($arr, $week, $allTask){
+  public function flatten_periode($arr, $week, $allTask, $budget){
     $html = '';
     $isLast = false;
 
@@ -189,10 +189,11 @@ class Item_task extends CI_Controller {
         $isLast = true;
       } 
 
-      $style = ($item['LEVEL'] == 1) ? 'style="font-weight:bold;"' : '';
+      $style = ($item['LEVEL'] == 1 || $item['LEVEL'] == 2) ? 'style="font-weight:bold;"' : '';
       $html .= '<tr '. $style . '>';
       $html .= '<td>' . $item['NUMBER'] . '</td>';
       $html .= '<td>' . (($item['LEVEL'] == 1) ? strtoupper($item['NAME']) : $item['NAME']) . '</td>';
+      $html .= '<td class="dt-cols-right">' . (($isLast) ? round((($item['UNIT_PRICE'] * $item['VOLUME']) / $budget ) * 100, 3) : '' ) . '</td>';
 
       for($i=1;$i<=$week;$i++){
         $value = null;
@@ -202,11 +203,11 @@ class Item_task extends CI_Controller {
           }
         }
         $val   = ($value) ? $value['WEIGHT_PLANNING'] : '';
-        $html .= '<td class="dt-cols-center">' . (($isLast) ? '<input type="text" value ="'.$val.'" style="width:50px;text-align:right;" name="'.$item['ID'].'_'.$i.'" class="item-value"  />' : '').'</td>';
+        $html .= '<td class="dt-cols-center">' . (($isLast) ? '<input type="text" value ="'.$val.'" style="width:45px;text-align:right;" name="'.$item['ID'].'_'.$i.'" class="item-value"  />' : '').'</td>';
       }
 
       $html .= '</tr>';
-      $html .= $this->flatten_periode($item['SUB'], $week, $allTask);
+      $html .= $this->flatten_periode($item['SUB'], $week, $allTask, $budget);
     }
 
     return $html;
@@ -399,18 +400,35 @@ class Item_task extends CI_Controller {
 
     $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 
-    if(count($sheetData[1]) != 8){
-      echo json_encode(Array('status'=>'not ok', 'message'=> 'Wrong file format'));
-      exit();
-    }
+    // if(count($sheetData[1]) != 8){
+    //   echo json_encode(Array('status'=>'not ok', 'message'=> 'Wrong file format'));
+    //   exit();
+    // }
     
     $tmpId = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_ITEM_TASK");
     $maxId = $tmpId[0]['MAX'];
+
+    $tmpDtlId = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_PROJECT_PLANNING_DETAIL");
+    $maxDtlId = $tmpDtlId[0]['MAX'];
+
+    $tmpPlanId = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_PROJECT_PLANNING");
+    $maxPlanId = $tmpPlanId[0]['MAX'];
+
+    $planning = Array(
+      'id' => $maxPlanId,
+      'name' => 'plan',
+      'id_project' => $data['id_project'],
+      'created_by' => $this->session->userdata('USERNAME'),
+      'modified_by' => $this->session->userdata('USERNAME')
+    );
+
+    $this->builtbyprime->insert('TBL_PROJECT_PLANNING', $planning);
 
     $arrIdParents = Array(0 => 0);
 
     $successInsert = 0;
     $failedInsert = 0;
+    $numberWeek = $sheetData[1]['I'];
 
     foreach ($sheetData as $key => $value) {
       if($key != 1){
@@ -439,6 +457,22 @@ class Item_task extends CI_Controller {
           'created_by' => $this->session->userdata('USERNAME'),
           'modified_by' => $this->session->userdata('USERNAME')
         );
+
+        for ($i=0; $i < $numberWeek; $i++) { 
+          if($i > 7 && current($value) !== null){
+            $planningItem = Array(
+              'id' => $maxDtlId,
+              'id_item_task' => $maxId,
+              'week_number' => $i - 8,
+              'weight_planning' => current($value),
+              'id_project_planning' => $maxPlanId
+            );
+            $this->builtbyprime->insert('TBL_PROJECT_PLANNING_DETAIL', $planningItem);
+            //print_r($planningItem);
+            $maxDtlId++;
+          }
+          next($value);
+        }
 
         if($this->builtbyprime->insert('TBL_ITEM_TASK', $taskItem)){
           $successInsert++;

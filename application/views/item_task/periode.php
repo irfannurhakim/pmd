@@ -24,6 +24,7 @@
       <tr>
         <th rowspan="3">No.</th>
         <th rowspan="3"><div style="width:250px;">&nbsp;</div>Uraian Pekerjaan</th>
+        <th rowspan="3" class="dt-cols-center">Bobot</th>
         <th class="text-center" colspan="<?=$week;?>">Minggu</th>
       </tr>
       <tr>
@@ -69,14 +70,14 @@
     });
 
      
-     $('#table-list-periode').dataTable({
-         "scrollY": "300px",
-         "scrollX": "100%",
-         "scrollCollapse": true,
-         "paging": false
-     });
+    //  $('#table-list-periode').dataTable({
+    //      "scrollY": "300px",
+    //      "scrollX": "100%",
+    //      "scrollCollapse": true,
+    //      "paging": false
+    //  });
 
-    new $.fn.dataTable.FixedColumns( tbl );
+    // new $.fn.dataTable.FixedColumns( tbl );
   
   });
 
