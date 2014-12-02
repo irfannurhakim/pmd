@@ -55,7 +55,8 @@
              // '/items/view/:id' : itemDetail,
               '/users' : users,
               // '/my-profile' : myProfile,
-              '/quick_access' : quickAccess
+              '/quick_access' : quickAccess,
+              '/notices' : notices
             }
             
             var router = Router(routes).configure({
@@ -217,6 +218,23 @@
             });            
           }
 
+          function notices(){
+            var idElement = '#notice-list';
+            $.ajax({
+              url: '<?php echo base_url();?>notice',
+              beforeSend: function(){
+                activateMenu('settings, #menu-notices');
+              }
+            })
+            .done(function(response, textStatus, jqhr){
+              initView(idElement,APP_TITLE + ' - Daftar Surat');
+              $(idElement).html(response);
+            }) 
+            .fail(function(e){
+
+            });
+          } 
+
           function notfound(){
             var idElement = '#error-404';
             initView(idElement,APP_TITLE + ' - 404');
@@ -226,6 +244,7 @@
           $('body').tooltip({
             selector: '[data-toggle=tooltip]'
           });
+
     
         </script>
 

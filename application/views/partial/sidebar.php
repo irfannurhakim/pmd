@@ -22,6 +22,7 @@
         <li id="menu-settings" class="parent activable"><a href="#"><i class="fa fa-gear"></i> <span>Pengaturan</span></a>
           <ul class="children">
             <li class="activable" id="menu-users"><a href="<?=base_url();?>#/users"> Pengguna</a></li>
+            <li class="activable" id="menu-notices"><a href="<?=base_url();?>#/notices"> Master Surat Peringatan</a></li>
             <li class="activable" id="menu-apps"><a href="<?=base_url();?>#/apps"> Aplikasi</a></li>
           </ul>
         </li>    
