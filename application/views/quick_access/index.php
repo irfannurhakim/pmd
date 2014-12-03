@@ -132,6 +132,7 @@
                             foreach ($items as $item) {
                               if($item['ID_PROJECT'] == $project['ID']){
                                 $bobot = round((($item['UNIT_PRICE'] * $item['VOLUME']) / $project['BUDGET'] ) * 100, 4);
+                                $vol = ($item['VOLUME'] > 0) ? round((($item['SUPERVISOR_PROGRESS_VOLUME'] / $item['VOLUME']) * $bobot), 4) : 0;
                           ?>
                           <tr object="<?=$item['ID_ITEM_TASK'];?>">
                             <td><?=$i;?></td>                            
@@ -141,14 +142,14 @@
                             <td class="dt-cols-right"><?=round($item['SUPERVISOR_PROGRESS_VOLUME'], 4);?></td>
                             <td class="dt-cols-right"><?=round($item['VENDOR_PROGRESS_VOLUME'], 4);?></td>
                             <td class="dt-cols-right"><?=round($item['WEIGHT_PLANNING'], 4);?></td>
-                            <td class="dt-cols-right"><?=round((($item['SUPERVISOR_PROGRESS_VOLUME'] / $item['VOLUME']) * $bobot), 4);?></td>
+                            <td class="dt-cols-right"><?=$vol;?></td>
 <!--                             <td class="dt-cols-center">
                               <a data-toggle="tooltip" title="Input Realisasi" class="tooltips input-realisasi" object="<?php echo $item['ID'];?> "><i class="fa fa-pencil"></i></a>
                               <a data-toggle="tooltip" title="Detail" class="tooltips detail-realisasi                                                                                                                                           " object="<?php echo $item['ID'];?>"><i class="fa fa-external-link"></i></a>
                             </td> -->
                             <td class="dt-cols-center">
                                   <i class="fa fa-comments"></i>
-                                  <span class="badge"><?=$item['COMMENTS'];?></span>
+                                  <span class="badge"><?=($item['COMMENTS']) ? $item['COMMENTS'] : 0;?></span>
                             </td>
                           </tr>
                           <?php

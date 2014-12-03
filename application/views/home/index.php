@@ -119,10 +119,14 @@
                 </div><!-- row -->
                 <div class="row">
                     <div class="col-md-8">
-                        <div class="panel panel-default widget-todo">
+                        <div class="panel panel-default">
                             <div class="panel-heading">
+                                <div class="pull-right">
+                                    <a href="#" class="tooltips mr5" data-toggle="modal" title="Settings" id="btn-setting-sorting" data-target=".bs-example-modal"><span class="fa fa-cog"></span></a>
+                                </div><!-- panel-btns -->
                                 <h3 class="panel-title">Statistik Umum</h3>
                             </div>
+
                             <div class="panel-body">
                                 <div class="row">
                                   <div class="col-md-6">
@@ -262,6 +266,55 @@
                     </div>
                 </div><!-- row -->
 
+<div class="modal fade bs-example-modal" tabindex="-1" role="dialog" id="modal-sorting-setting" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+          <h4 class="modal-title">Atur Pengurutan</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <form class="form-horizontal" id="form-sorting-setting" method="POST" action="<?= base_url();?>notice/add">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="errorForm"></div>
+             
+                  <div class="form-group">
+                      <label class="col-sm-6 control-label">Urutkan Kontraktor Berdasarkan</label>
+                      <div class="col-sm-6">
+                        <select id="select-sorting-kontraktor" data-placeholder="Pilih tipe user" class="col-sm-6" name="sort-kontraktor">
+                            <option value="1">Nilai Proyek</option>
+                            <option value="1">Jumlah Proyek</option>
+                        </select>
+                      </div>
+                  </div><!-- form-group -->
+
+                  <div class="form-group">
+                      <label class="col-sm-6 control-label">Urutkan Pengawas Berdasarkan</label>
+                      <div class="col-sm-6">
+                        <select id="select-sorting-pengawas" data-placeholder="Pilih tipe user"  class="col-sm-6" name="sort-pengawas">
+                            <option value="1">Nilai Proyek</option>
+                            <option value="1">Jumlah Proyek</option>
+                        </select>
+                      </div>
+                  </div><!-- form-group -->
+
+                </div><!-- panel-body -->
+                <div class="panel-footer">
+                    <button class="btn btn-primary mr5" type="submit">Submit</button>
+                    <button type="reset" class="btn btn-default">Reset</button>
+                </div><!-- panel-footer -->
+              </div><!-- panel-default -->
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="<?= base_url();?>public/js/flot/jquery.flot.min.js"></script>
 <script src="<?= base_url();?>public/js/flot/jquery.flot.resize.min.js"></script>
 <script src="<?= base_url();?>public/js/flot/jquery.flot.spline.min.js"></script>
@@ -274,6 +327,11 @@
 
   $(document).ready(function(){
     drawChart();
+
+    jQuery('#select-sorting-pengawas, #select-sorting-kontraktor').select2({
+      minimumResultsForSearch: -1
+    });
+
   });
 
   function drawChart() {
@@ -307,4 +365,7 @@
     chart2.draw(data2, options);
     chart3.draw(data3, options);
   }
+
+
+
 </script>
