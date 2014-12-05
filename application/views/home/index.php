@@ -315,13 +315,6 @@
   </div>
 </div>
 
-<script src="<?= base_url();?>public/js/flot/jquery.flot.min.js"></script>
-<script src="<?= base_url();?>public/js/flot/jquery.flot.resize.min.js"></script>
-<script src="<?= base_url();?>public/js/flot/jquery.flot.spline.min.js"></script>
-<script src="<?= base_url();?>public/js/jquery.sparkline.min.js"></script>
-<script src="<?= base_url();?>public/js/morris.min.js"></script>
-<script src="<?= base_url();?>public/js/raphael-2.1.0.min.js"></script>
-
 <script src="<?= base_url();?>public/js/dashboard.js"></script>
 <script type="text/javascript">
 

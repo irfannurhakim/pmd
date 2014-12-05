@@ -115,7 +115,7 @@
                             <th rowspan="2">Uraian Pekerjaan</th>
                             <th rowspan="2" width="20px">Bobot Total</th>
                             <th colspan="3" class="dt-cols-center">Volume</th>
-                            <th colspan="2" class="dt-cols-center">Bobot Minggu ini</th>
+                            <th colspan="2" class="dt-cols-center">Bobot</th>
                             <th rowspan="2" class="dt-cols-center" width="80px">Ket.</th>
                           </tr>
                           <tr>
@@ -188,6 +188,9 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Realisasi Volume<span class="asterisk">*</span></label>
                         <?php if($this->session->userdata('ID_USER_TYPE') == 3 || $this->session->userdata('ID_USER_TYPE') == 1 || $this->session->userdata('ID_USER_TYPE') == 2 ){ ?>
+                        <div class="col-sm-1">
+                          <input value="1" readonly="readonly" class="form-control" />
+                        </div>
                         <div class="col-sm-3">
                           <input type="text" name="supervisor-volume" class="form-control" required title="Kolom Volume wajib diisi!" />
                         </div>
@@ -198,7 +201,7 @@
                           <input type="text" name="vendor-volume" class="form-control" required title="Kolom Volume wajib diisi!"  />
                         </div>
                         <?php } ?>
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                           <button class="btn btn-primary" type="submit">Simpan</button>
                         </div>
                     </div><!-- form-group -->
@@ -240,27 +243,7 @@
                   </form>
                   <hr/>
                   <div class="activity-list">  
-                      <div class="media">
-                          <a class="pull-left" href="#">
-                              <img class="media-object img-circle" src="<?=base_url();?>public/images/photos/profile.png" alt="" />
-                          </a>
-                          <div class="media-body">
-                              <strong>Elen Adarna</strong><br />
-                              <small class="text-muted">5 days ago at 12:30pm</small>
-                              
-                              <div class="media blog-media">
-                                <div class="media-body">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat... <a href="#">Read more</a></p>
-                                </div>
-                              </div><!-- media -->   
-                              
-                              <ul class="uploadphoto-list">
-                                  <li><a href="<?=base_url();?>public/images/photos/media1.jpg" data-rel="prettyPhoto"><img src="<?=base_url();?>public/images/photos/media1.jpg" class="thumbnail img-responsive" alt="" /></a></li>
-                                  <li><a href="<?=base_url();?>public/images/photos/media2.png" data-rel="prettyPhoto"><img src="<?=base_url();?>public/images/photos/media2.png" class="thumbnail img-responsive" alt="" /></a></li>
-                                  <li><a href="<?=base_url();?>public/images/photos/media3.png" data-rel="prettyPhoto"><img src="<?=base_url();?>public/images/photos/media3.png" class="thumbnail img-responsive" alt="" /></a></li>
-                              </ul>
-                          </div>
-                      </div>
+
                   </div><!-- activity-list -->
 
                 </div><!-- panel-body -->
@@ -283,8 +266,8 @@
   <?php foreach ($projects as $project) { ?>
    // jQuery("#tbl-realisasi-<?=$project['ID'];?>").DataTable({
    //   paging : false,
-    //  ordering: false
-    //});
+   //   ordering: false
+   //  });
   <?php } ?>
 
     jQuery('.tbl-item-list tbody').on( 'click', 'tr', function () {

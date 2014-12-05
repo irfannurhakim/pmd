@@ -139,7 +139,7 @@ class Item_task extends CI_Controller {
       $html .= '<td class="dt-cols-right">' . (($isLast) ? number_format($item['UNIT_PRICE'] * $item['VOLUME'], 0,',','.') : '' ) . '</td>';
       $html .= '<td class="dt-cols-center">';
       $html .=    '<a data-toggle="tooltip" title="Edit" class="tooltips edit-row" object="'. $item['ID'] .'"><i class="fa fa-pencil"></i></a> &nbsp;&nbsp;';
-      $html .=    '<a data-toggle="tooltip" title="Hapus" class="tooltips delete-row" object="'. $item['ID'] .'"><i class="fa fa-trash-o"></i></a>';
+      $html .=    (($this->session->userdata('ID_USER_TYPE') == 1) || ($this->session->userdata('ID_USER_TYPE') == 6)) ? '<a data-toggle="tooltip" title="Hapus" class="tooltips delete-row" object="'. $item['ID'] .'"><i class="fa fa-trash-o"></i></a>' : '';
       $html .=  '</td>';
       $html .= '</tr>';
       $html .= $this->flatten($item['SUB'], $budget);
@@ -202,7 +202,7 @@ class Item_task extends CI_Controller {
             $value = $allTask[$item['ID']][$i];
           }
         }
-        $val   = ($value) ? $value['WEIGHT_PLANNING'] : '';
+        $val   = ($value) ? round($value['WEIGHT_PLANNING'],4) : '';
         $html .= '<td class="dt-cols-center">' . (($isLast) ? '<input type="text" value ="'.$val.'" style="width:45px;text-align:right;" name="'.$item['ID'].'_'.$i.'" class="item-value"  />' : '').'</td>';
       }
 
@@ -400,11 +400,7 @@ class Item_task extends CI_Controller {
 
     $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 
-    // if(count($sheetData[1]) != 8){
-    //   echo json_encode(Array('status'=>'not ok', 'message'=> 'Wrong file format'));
-    //   exit();
-    // }
-    
+  
     $tmpId = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_ITEM_TASK");
     $maxId = $tmpId[0]['MAX'];
 
@@ -428,7 +424,7 @@ class Item_task extends CI_Controller {
 
     $successInsert = 0;
     $failedInsert = 0;
-    $numberWeek = $sheetData[1]['I'];
+    $numberWeek = $sheetData[1]['I'] + 9;
 
     foreach ($sheetData as $key => $value) {
       if($key != 1){
@@ -458,7 +454,7 @@ class Item_task extends CI_Controller {
           'modified_by' => $this->session->userdata('USERNAME')
         );
 
-        for ($i=0; $i < $numberWeek; $i++) { 
+        for ($i=0; $i <= $numberWeek; $i++) { 
           if($i > 7 && current($value) !== null){
             $planningItem = Array(
               'id' => $maxDtlId,
@@ -468,7 +464,7 @@ class Item_task extends CI_Controller {
               'id_project_planning' => $maxPlanId
             );
             $this->builtbyprime->insert('TBL_PROJECT_PLANNING_DETAIL', $planningItem);
-            //print_r($planningItem);
+
             $maxDtlId++;
           }
           next($value);
@@ -479,12 +475,90 @@ class Item_task extends CI_Controller {
         } else {
           $failedInsert++;
         }
-
         $maxId++;
       }
     }
 
     echo json_encode(Array('status'=>"ok", "message" => "Jumlah baris sukses diimpor : " . $successInsert ."<br/> Gagal: " . $failedInsert));
+  }
+
+
+  public function export($id){
+    $data['item_list']    = $this->builtbyprime->explicit('SELECT LEVEL,TBL_ITEM_TASK.* FROM TBL_ITEM_TASK WHERE ID_PROJECT = '.$id.' START WITH ID_PARENT = 0 CONNECT BY PRIOR ID = ID_PARENT ORDER SIBLINGS BY ID');
+    $data['project']      = $this->builtbyprime->get('TBL_PROJECT', array('id' => $id), TRUE);
+    $data['id']           = $id;
+
+    $t = $this->genMulDimArr($data['item_list']);
+    $kosong = array();
+    $rows = $this->flatten($t, $data['project']['BUDGET'], $kosong);
+
+    print_r($rows);
+
+    // $this->load->library('excel');
+
+    // $objPHPExcel = new PHPExcel();
+    // // Set document properties
+    // $objPHPExcel->getProperties()->setCreator($this->session->userdata('USERNAME'))
+    //   ->setLastModifiedBy($this->session->userdata('USERNAME'))
+    //   ->setTitle("RAB " . $data['project']['NAME'])
+    //   ->setSubject("RAB " . $data['project']['NAME']);
+
+    // $objPHPExcel->setActiveSheetIndex(0)
+    //   ->setCellValue('A1', 'No')
+    //   ->setCellValue('B1', 'Uraian')
+    //   ->setCellValue('C1', 'Spesifikasi')
+    //   ->setCellValue('D1', 'No Gambar')
+    //   ->setCellValue('E1', 'No RKS')
+    //   ->setCellValue('F1', 'Satuan')
+    //   ->setCellValue('G1', 'Volume')
+    //   ->setCellValue('H1', 'Harga Satuan')
+    //   ->setCellValue('I1', 'Bobot')
+    //   ->setCellValue('J1', 'Jumlah');
+
+
+
+
+    // // Redirect output to a client’s web browser (Excel5)
+    // header('Content-Type: application/vnd.ms-excel');
+    // header('Content-Disposition: attachment;filename="RAB_'.$data['project']['NAME'].'.xls"');
+    // header('Cache-Control: max-age=0');
+    // // If you're serving to IE 9, then the following may be needed
+    // header('Cache-Control: max-age=1');
+    // // If you're serving to IE over SSL, then the following may be needed
+    // header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+    // header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+    // header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+    // header ('Pragma: public'); // HTTP/1.0
+    // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+    // $objWriter->save('php://output');
+    // exit;
+  }
+
+  public function flatten_export($arr, $budget, $outArr){
+
+    foreach($arr as $item){ 
+      array_push($outArr, $item);
+      $this->flatten($item['SUB'], $budget, $outArr);
+    
+      // $style = ($item['LEVEL'] == 1 || $item['LEVEL'] == 2) ? 'style="font-weight:bold;"' : '';
+      // $html .= '<tr '. $style . '>';
+      // $html .= '<td>' . $item['NUMBER'] . '</td>';
+      // $html .= '<td>' . (($item['LEVEL'] == 1) ? strtoupper($item['NAME']) : $item['NAME']) . '</td>';
+      // $html .= '<td>' . (($isLast) ? $item['SPECIFICATION'] : '' ) . '</td>';
+      // $html .= '<td class="dt-cols-center">' . (($isLast) ? $item['UNIT'] : '' ) . '</td>';
+      // $html .= '<td class="dt-cols-right">' . (($isLast) ? $item['VOLUME'] : '') . '</td>';
+      // $html .= '<td class="dt-cols-right">' . (($isLast) ? number_format($item['UNIT_PRICE'], 0,',','.') : '' ) . '</td>';
+      // $html .= '<td class="dt-cols-right">' . (($isLast) ? round((($item['UNIT_PRICE'] * $item['VOLUME']) / $budget ) * 100, 3) : '' ) . '</td>';
+      // $html .= '<td class="dt-cols-right">' . (($isLast) ? number_format($item['UNIT_PRICE'] * $item['VOLUME'], 0,',','.') : '' ) . '</td>';
+      // $html .= '<td class="dt-cols-center">';
+      // $html .=    '<a data-toggle="tooltip" title="Edit" class="tooltips edit-row" object="'. $item['ID'] .'"><i class="fa fa-pencil"></i></a> &nbsp;&nbsp;';
+      // $html .=    '<a data-toggle="tooltip" title="Hapus" class="tooltips delete-row" object="'. $item['ID'] .'"><i class="fa fa-trash-o"></i></a>';
+      // $html .=  '</td>';
+      // $html .= '</tr>';
+      // $html .= $this->flatten($item['SUB'], $budget);
+    }
+
+    return $outArr;
   }
 
 }

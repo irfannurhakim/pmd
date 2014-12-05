@@ -56,20 +56,28 @@ class Project extends CI_Controller {
     $data['project'] = $this->builtbyprime->get('TBL_PROJECT', array('id' => $id), TRUE);
     $data['document'] = $this->builtbyprime->get('TBL_PROJECT_DOCUMENT', array('id_project' => $id));
     $data['supervisor'] = $this->builtbyprime->get('TBL_SUPERVISOR_PROJECT', array('id_project' => $id));
-    $data['notice'] = $this->builtbyprime->explicit("SELECT type_history, notice_type FROM TBL_PROJECT_NOTICE_HISTORY where id_project = '".$id."' AND status = 1 ORDER BY notice_type");
     $data['user'] = $this->builtbyprime->get('TBL_USER');
+    $data['notices'] = $this->builtbyprime->explicit("SELECT * FROM TBL_MASTER_NOTICE ORDER BY NAME");
+    $data['notice'] = $this->builtbyprime->explicit("SELECT type_history, notice_type FROM TBL_PROJECT_NOTICE_HISTORY where id_project = '".$id."' AND status = 1 ORDER BY notice_type");
 
 
     $Carbon = new Carbon\Carbon;
 
-    $a = date('d-M-y', strtotime($data['project']['START_DATE']));
     $a = $Carbon::createFromFormat('d-M-y', $data['project']['START_DATE']);
     $b = $Carbon::now();
+    $c = $Carbon::createFromFormat('d-M-y', $data['project']['FINISH_DATE']); 
 
-    
-    $data['weekNumber'] = ceil(($b->diffInDays($a) + 1)/7);
-    $data['startWeek'] = $a->copy()->addWeeks($data['weekNumber'] - 1)->format('d/m/Y');
+    $isStarted = ($b->gte($a));
+    $isFinish = ($b->gte($c));
+
+    $data['weekNumber'] = ($isStarted) ? ceil(($b->diffInDays($a) + 1)/7) : 0;
+    $data['countDown'] = ($isStarted) ? 0 : $b->diffInDays($a);
+    $data['startWeek'] = $a->copy()->addWeeks($data['weekNumber'] - 1)->format('d/m/Y') ;
     $data['endWeek'] = $a->copy()->addWeeks($data['weekNumber'])->subDay()->format('d/m/Y');
+    $data['isStarted'] = $isStarted;
+    $data['statusLabel'] = ($isStarted) ? (($isFinish) ? 'PROYEK SELESAI' : 'BERLANGSUNG') : 'BELUM DIMULAI'; 
+    $data['buttonStatusType'] = ($isStarted) ? (($isFinish) ? 'btn-success' : 'btn-primary') : 'btn-info'; 
+
 
     $this->load->view('project/detail', $data);
 	}

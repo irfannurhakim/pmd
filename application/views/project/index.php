@@ -1,3 +1,4 @@
+<?php if(($this->session->userdata('ID_USER_TYPE') == 1) || ($this->session->userdata('ID_USER_TYPE') == 6)){ ?>
 <div class="media-options">
   <div class="pull-right">
     <div class="btn-toolbar">
@@ -8,6 +9,7 @@
   </div>
 </div>
 <hr/>
+<?php } ?>
 <!---
 //list of projects -->
 <div class="container-dt">

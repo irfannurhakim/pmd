@@ -16,7 +16,7 @@
         <script src="<?= base_url();?>public/js/jquery.form.min.js"></script>
         <script src="<?= base_url();?>public/js/jquery.dataTables.min.js"></script>
         <script src="<?= base_url();?>public/js/dataTables.bootstrap.js"></script>
-        <script src="<?= base_url();?>public/js/dataTables.responsive.js"></script>
+        <script src="<?= base_url();?>public/js/dataTables.responsive.min.js"></script>
         <script src="<?= base_url();?>public/js/jquery.dataTables.reload.ajax.min.js"></script>
         <script src="<?= base_url();?>public/js/bootstrap-timepicker.min.js"></script>
         <script src="<?= base_url();?>public/js/jquery.priceFormat.min.js"></script>
@@ -28,17 +28,21 @@
         <script src="<?= base_url();?>public/js/jquery.mousewheel.js"></script>
         <script src="<?= base_url();?>public/js/jquery.tagsinput.min.js"></script>
         <script src="<?= base_url();?>public/js/toggles.min.js"></script>
-        <script src="<?= base_url();?>public/js/bootstrap-timepicker.min.js"></script>
-        <script src="<?= base_url();?>public/js/jquery.maskedinput.min.js"></script>
-        <script src="<?= base_url();?>public/js/select2.min.js"></script>
-        <script src="<?= base_url();?>public/js/colorpicker.js"></script>
-        <script src="<?= base_url();?>public/js/dropzone.min.js"></script> 
 
+        <script src="<?= base_url();?>public/js/flot/jquery.flot.min.js"></script>
+        <script src="<?= base_url();?>public/js/flot/jquery.flot.resize.min.js"></script>
+        <script src="<?= base_url();?>public/js/flot/jquery.flot.spline.min.js"></script>
+        <script src="<?= base_url();?>public/js/jquery.sparkline.min.js"></script>
+        <script src="<?= base_url();?>public/js/morris.min.js"></script>
+        <script src="<?= base_url();?>public/js/raphael-2.1.0.min.js"></script>
+
+        <!-- <script type="text/javascript" src="<?=base_url();?>public/js/dataTables.fixedHeader.js"></script> -->
+        <script type="text/javascript" src="<?=base_url();?>public/js/dataTables.fixedColumns.min.js"></script>
 
         <script src="<?= base_url();?>public/js/custom.js"></script>
 
         <!-- custom script -->
-        <script src="<?= base_url();?>public/js/director.js"></script>
+        <script src="<?= base_url();?>public/js/director.min.js"></script>
         <script type="text/javascript">
 
           var APP_TITLE = "Project Management Dashboard";

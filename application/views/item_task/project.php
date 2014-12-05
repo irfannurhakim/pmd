@@ -1,3 +1,9 @@
+<?php
+  $btnImport = ''; 
+  if(($this->session->userdata('ID_USER_TYPE') == 1) || ($this->session->userdata('ID_USER_TYPE') == 6)){ 
+    $btnImport = '<button class="btn btn-default btn-sm import-data" type="button" data-toggle="modal" data-target=".modal-import"><i class="fa fa-download mr5"></i> Impor </button>';
+  }
+?>
 <div class="media-options">
   <div class="pull-left">
    <h5><?=$project['NAME'];?></h5>  
@@ -9,9 +15,13 @@
       </div>  
 
       <div class="btn-group">
+        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/item/periode/<?=$project['ID'];?>'; return false;"><i class="fa fa-clock-o mr5"></i> Perencanaan</button>
+      </div>
+
+      <div class="btn-group">
         <button class="btn btn-default btn-sm add-data" type="button" data-toggle="modal" data-target=".modal-add-item"><i class="fa fa-plus mr5"></i> Tambah </button>
-        <button class="btn btn-default btn-sm import-data" type="button" data-toggle="modal" data-target=".modal-import"><i class="fa fa-download mr5"></i> Impor </button>
-        <button class="btn btn-default btn-sm export-data" type="button" data-toggle="modal" data-target=".modal-export"><i class="fa fa-upload mr5"></i> Ekspor </button>
+        <?=$btnImport;?>
+        <a href="<?=base_url();?>item_task/export/<?=$project['ID'];?>" target="_blank" class="btn btn-default btn-sm export-data"><i class="fa fa-upload mr5"></i> Ekspor </a>
       </div>
     </div>
   </div>
@@ -30,7 +40,7 @@
         <th class="text-center" width="60px">Harga Satuan (Rp)</th>
         <th class="text-center" width="50px">Bobot (%)</th>
         <th class="text-center" width="80px">Jumlah (Rp)</th>
-        <th width="60px"></th>
+        <th width="50px"></th>
       </tr>
     </thead>
 
@@ -161,7 +171,7 @@
                   <input type="hidden" name="id-project" id="id-project" value="<?=$project['ID'];?>" />
                 </div><!-- panel-body -->
                 <div class="panel-footer">
-                    <button class="btn btn-primary mr5" type="submit">Proses</button>
+                    <button class="btn btn-primary mr5" type="submit" id="btn-process-import">Proses</button>
                     <button type="reset" class="btn btn-default">Reset</button>
                 </div><!-- panel-footer -->
               </div><!-- panel-default -->
@@ -293,19 +303,17 @@
 
           jQuery.gritter.add({
             title: 'Info',
-            text: 'Impor data berhasil.',
+            text: a.message,
             class_name: 'growl-info',
             image: false,
             sticky: false,
             time: ''
           });
-
-          //setTimeout(function(){location.reload()}, 2000);
-
+          setTimeout(function(){location.reload()}, 2000);
         } else {
           jQuery.gritter.add({
             title: 'Upss..',
-            text: a.message,
+            text: 'Terjadi Kesalahan',
             class_name: 'growl-danger',
             image: false,
             sticky: false,
@@ -322,6 +330,11 @@
           sticky: false,
           time: ''
         });
+
+        $('#btn-process-import').html('Proses');
+      },
+      uploadProgress: function(e,position,total,percentComplete){
+        $('#btn-process-import').html('Sedang Memproses... ' + percentComplete + " %");
       }
     });
 
@@ -331,8 +344,6 @@
       centsSeparator: ',',
       centsLimit: 0
     });
-
-
   });
 </script>
 

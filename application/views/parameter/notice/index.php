@@ -15,7 +15,7 @@
       <tr>
         <th width="200px">Nama</th>
         <th>Deskripsi</th>
-        <th width="50px"></th>
+        <th width="25px"></th>
       </tr>
     </thead>
 
@@ -172,7 +172,7 @@
           if(a.status == 'ok'){
           }
 
-          users();
+          notices();
         })
         .fail(function(e){
           alert(e);

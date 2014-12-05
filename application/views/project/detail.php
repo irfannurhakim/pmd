@@ -1,6 +1,16 @@
+<?php
+  $btnDelete = ''; 
+  $disabled = 'disabled';
+  if(($this->session->userdata('ID_USER_TYPE') == 1) || ($this->session->userdata('ID_USER_TYPE') == 6)){ 
+    $btnDelete = '<button class="btn btn-default btn-sm" type="button" object="'.$project['ID'].'"><i class="fa fa-trash-o mr5"></i> Hapus</button>';
+    $disabled = '';
+  }
+
+?>
+
 <div class="media-options">
   <div class="pull-left">
-   <h5><?=$project['NAME'];?></h5>  
+   <h5><?=$project['NAME'];?> </h5>  
   </div>
   <div class="pull-right">
     <div class="btn-toolbar">
@@ -8,11 +18,11 @@
         <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/projects';return false;"><i class="fa fa-arrow-left mr5"></i> Daftar Proyek</button>    
       </div>  
       <div class="btn-group">
-        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/item/project/<?=$project['ID'];?>'; return false;"><i class="fa fa-list-ul mr5"></i> Item Pekerjaan</button>
-        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/item/periode/<?=$project['ID'];?>'; return false;"><i class="fa fa-clock-o mr5"></i> Rencana Pekerjaan</button>
+        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/item/project/<?=$project['ID'];?>'; return false;"><i class="fa fa-list-ul mr5"></i> Item</button>
+        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/item/periode/<?=$project['ID'];?>'; return false;"><i class="fa fa-clock-o mr5"></i> Perencanaan</button>
       </div>
       <div class="btn-group">
-          <button class="btn btn-default btn-sm" type="button"><i class="fa fa-trash-o mr5"></i> Hapus</button>
+        <?=$btnDelete;?>
       </div>
     </div>
   </div>
@@ -23,10 +33,16 @@
     <div class="panel panel-default">
       <div class="panel-body">
         <div class="text-center">
+        <?php if($isStarted){ ?>
           <p>Saat ini,</p>
           <h4>Minggu ke-<?=$weekNumber;?></h4>
           <p>Tgl <?=$startWeek . ' - ' . $endWeek;?></p>
+        <?php } else { ?>
+          <p>Proyek Dimulai</p>
+          <h4><?=$countDown;?> Hari Lagi</h4>
+        <?php } ?>
         </div>
+        <button class="btn <?=$buttonStatusType;?> btn-bordered btn-block" ><?=$statusLabel;?></button>
       </div><!-- panel-body -->
     </div>
   
@@ -82,13 +98,13 @@
           <div class="form-group">
             <label class="col-sm-4 control-label">Nomor Kontrak</label>
             <div class="col-sm-8">
-              <input class="form-control" name="contract-no" value="<?=$project['CONTRACT_NO'];?>" >
+              <input class="form-control" name="contract-no" value="<?=$project['CONTRACT_NO'];?>"  <?=$disabled;?> />
             </div>
           </div><!-- form-group -->
           <div class="form-group">
             <label class="col-sm-4 control-label">Kontraktor / Pelaksana</label>
             <div class="col-sm-8">
-              <select id="select-id-contractor" data-placeholder="Pilih kontraktor" class="width300" name="id-contractor">
+              <select id="select-id-contractor" data-placeholder="Pilih kontraktor" class="width300" name="id-contractor" <?=$disabled;?> >
                 <?php foreach ($user as $row) { ?>
                 <?php if($row['ID_USER_TYPE'] == 4){ ?>
                     <option value="<?php echo $row['ID'];?>"><?php echo $row['AFFILIATION'] . " - " . $row['NAME'];?></option>
@@ -100,7 +116,7 @@
           <div class="form-group">
             <label class="col-sm-4 control-label">Pengawas</label>
             <div class="col-sm-8">
-              <select id="select-id-supervisor" data-placeholder="Pilih pengawas" multiple class="width300" name="id-supervisor[]">
+              <select id="select-id-supervisor" data-placeholder="Pilih pengawas" multiple class="width300" name="id-supervisor[]" <?=$disabled;?> >
                 <?php foreach ($user as $row) { ?>
                 <?php if($row['ID_USER_TYPE'] == 3){ ?>
                     <option value="<?php echo $row['ID'];?>"><?php echo $row['NAME'];?></option>
@@ -112,22 +128,22 @@
           <div class="form-group">
             <label class="col-sm-4 control-label">Waktu Pelaksanaan</label>
               <div class="col-sm-3">
-                  <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="start-date" name="start-date" value="<?=date_format(date_create($project['START_DATE']), 'd/m/Y');?>"/>
+                  <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="start-date" name="start-date" value="<?=date_format(date_create($project['START_DATE']), 'd/m/Y');?>" <?=$disabled;?> />
               </div>
               <label class="col-sm-2 control-label" >Selesai</label>
               <div class="col-sm-3">
-                  <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="end-date" name="end-date" value="<?=date_format(date_create($project['FINISH_DATE']), 'd/m/Y');?>"/>
+                  <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="end-date" name="end-date" value="<?=date_format(date_create($project['FINISH_DATE']), 'd/m/Y');?>" <?=$disabled;?> />
               </div>
           </div><!-- form-group -->
           <div class="form-group">
             <label class="col-sm-4 control-label">Nilai Proyek</label>
             <div class="col-sm-8">
-              <input class="form-control" name="project-budget" value="<?=$project['BUDGET'];?>" >
+              <input class="form-control" name="project-budget" value="<?=$project['BUDGET'];?>" <?=$disabled;?> />
             </div>
           </div><!-- form-group -->
         </div>
         <div class="panel-footer">
-            <button class="btn btn-primary mr5" type="submit">Simpan Perubahan</button>
+            <button class="btn btn-primary mr5" type="submit" <?=$disabled;?> >Simpan Perubahan</button>
         </div><!-- panel-footer -->
       </div>
     </form>
@@ -162,49 +178,23 @@
       <div class="panel panel-default">
         <div class="panel-body nopadding">
            <form class="form-bordered" id="form-add-notice" method="POST" action="<?=base_url();?>project/update_notice/<?=$project['ID'];?>">
+              <?php foreach ($notices as $a) { 
+                $checked = '';
+                foreach ($notice as $b) {
+                  if($b['NOTICE_TYPE'] == $a['ID'] && $b['TYPE_HISTORY'] == 1){
+                    $checked = 'checked="checked"';
+                  }                  
+                }
+              ?>
               <div class="form-group">
                   <div class="col-sm-12 control-label">
                      <div class="ckbox ckbox-danger">
-                        <?php
-                          $noticeOne ='';
-                          $noticeTwo ='';
-                          $noticeThree = '';
-
-                          foreach ($notice as $key => $value) {
-                            if($value['NOTICE_TYPE'] == 1 && $value['TYPE_HISTORY'] == 1){
-                              $noticeOne = 'checked="checked"';
-                            }
-
-                            if($value['NOTICE_TYPE'] == 2 && $value['TYPE_HISTORY'] == 1){
-                              $noticeTwo = 'checked="checked"';
-                            }
-
-                            if($value['NOTICE_TYPE'] == 3 && $value['TYPE_HISTORY'] == 1){
-                              $noticeThree = 'checked="checked"';
-                            }
-                          }
-                        ?>
-                        <input type="checkbox" id="notice-one" name="notice-one" class="notice-choice" value="1" <?=$noticeOne;?> />
-                        <label for="notice-one">Surat Peringatan 1</label>
+                        <input type="checkbox" id="notice-<?=$a['ID'];?>" name="notice-<?=$a['ID'];?>" class="notice-choice" value="<?=$a['ID'];?>" <?=$checked;?> />
+                        <label for="notice-<?=$a['ID'];?>"><?=$a['NAME'];?></label>
                     </div>
                   </div>
               </div>
-              <div class="form-group">
-                  <div class="col-sm-12 control-label">
-                     <div class="ckbox ckbox-danger">
-                        <input type="checkbox" id="notice-two" name="notice-two" class="notice-choice" value="2" <?=$noticeTwo;?>/>
-                        <label for="notice-two">Surat Peringatan 2</label>
-                    </div>
-                  </div>
-              </div>
-              <div class="form-group">
-                  <div class="col-sm-12 control-label">
-                     <div class="ckbox ckbox-danger">
-                        <input type="checkbox" id="notice-three" name="notice-three" class="notice-choice" value="3" <?=$noticeThree;?>/>
-                        <label for="notice-three">Surat Peringatan 3</label>
-                    </div>
-                  </div>
-              </div>
+              <?php } ;?>
             </form>
         </div>
       </div>
