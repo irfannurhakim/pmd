@@ -132,100 +132,38 @@
                                   <div class="col-md-6">
                                     <h5 class="md-title">Top 5 Kontraktor 2014</h5>
                                     <div class="list-group people-group">
+                                        <?php foreach ($contractors as $contractor) { ?>                                         
                                         <a href="#" class="list-group-item">
                                             <div class="media">
                                                 <div class="pull-left">
                                                     <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user1.png" alt="...">
                                                 </div>
                                                 <div class="media-body">
-                                                    <h4 class="media-heading">PT. Adhi Karya Persada</h4>
-                                                    <small>Rp. 23.239.330.000 (11 Proyek)</small>
+                                                    <h4 class="media-heading"><?=$contractor['NAME'];?></h4>
+                                                    <small>Rp. <?=$contractor['JML_NILAI_PROYEK'] . ' (' . $contractor['JML_PROYEK']. ' Proyek)';?></small>
                                                 </div>
                                             </div><!-- media -->
                                         </a><!-- list-group -->
-                                        <a href="#" class="list-group-item">
-                                            <div class="media">
-                                                <div class="pull-left">
-                                                    <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user2.png" alt="...">
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading">PT. Anugrah Bintang Persada</h4>
-                                                    <small>Rp. 19.002.039.500 (7 Proyek)</small>
-                                                </div>
-                                            </div><!-- media -->
-                                        </a><!-- list-group -->
-                                        <a href="#" class="list-group-item">
-                                            <div class="media">
-                                                <div class="pull-left">
-                                                    <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user3.png" alt="...">
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading">CV. Kurnia Semesta Lestari</h4>
-                                                    <small>Rp. 1.980.4932.233 (7 Proyek)</small>
-                                                </div>
-                                            </div><!-- media -->
-                                        </a><!-- list-group -->
-                                        <a href="#" class="list-group-item">
-                                            <div class="media">
-                                                <div class="pull-left">
-                                                    <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user4.png" alt="...">
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading">PT. Agrikultur Akua Indonesia</h4>
-                                                    <small>Rp. 980.002.000 (5 Proyek)</small>
-                                                </div>
-                                            </div><!-- media -->
-                                        </a><!-- list-group -->
+                                        <?php } ;?>
                                     </div><!-- list-group -->
                                   </div>
 
                                   <div class="col-md-6">
                                     <h5 class="md-title">Top 5 Pengawas 2014</h5>
                                      <div class="list-group people-group">
+                                        <?php foreach ($supervisors as $supervisor) { ?>                                         
                                         <a href="#" class="list-group-item">
                                             <div class="media">
                                                 <div class="pull-left">
                                                     <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user1.png" alt="...">
                                                 </div>
                                                 <div class="media-body">
-                                                    <h4 class="media-heading">Weno Carasbong</h4>
-                                                    <small>7 Proyek Diawasi</small>
+                                                    <h4 class="media-heading"><?=$supervisor['NAME'];?></h4>
+                                                    <small><?=$supervisor['JML_PROYEK'];?> Proyek Diawasi</small>
                                                 </div>
                                             </div><!-- media -->
                                         </a><!-- list-group -->
-                                        <a href="#" class="list-group-item">
-                                            <div class="media">
-                                                <div class="pull-left">
-                                                    <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user2.png" alt="...">
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading">Renov Leonga</h4>
-                                                    <small>7 Proyek Diawasi</small>
-                                                </div>
-                                            </div><!-- media -->
-                                        </a><!-- list-group -->
-                                        <a href="#" class="list-group-item">
-                                            <div class="media">
-                                                <div class="pull-left">
-                                                    <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user3.png" alt="...">
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading">Zaham Sindilmaca</h4>
-                                                    <small>7 Proyek Diawasi</small>
-                                                </div>
-                                            </div><!-- media -->
-                                        </a><!-- list-group -->
-                                        <a href="#" class="list-group-item">
-                                            <div class="media">
-                                                <div class="pull-left">
-                                                    <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user4.png" alt="...">
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading">Nusja Nawancali</h4>
-                                                    <small>6 Proyek Diawasi</small>
-                                                </div>
-                                            </div><!-- media -->
-                                        </a><!-- list-group -->
+                                        <?php  } ?>
                                     </div><!-- list-group -->
                                   </div>
                                 </div>
