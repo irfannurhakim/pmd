@@ -45,8 +45,11 @@ class Project extends CI_Controller {
       $res = $this->builtbyprime->explicit("INSERT INTO TBL_PROJECT (id, name, start_date, finish_date, budget, id_vendor, contract_no, created_date, modified_date, created_by, modified_by) VALUES ('".$data['h']."','".$data['a']."',TO_DATE('".$data['b']."','dd/mm/yyyy'),TO_DATE('".$data['c']."','dd/mm/yyyy'),'".$data['d']."','".$data['e']."','".$data['i']."',SYSDATE, SYSDATE, '".$data['f']."','".$data['f']."')");      
     }
 
+    $idSupervisor = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_SUPERVISOR_PROJECT");
+
     foreach ($this->input->post('id-supervisor') as $value) {
-      $this->builtbyprime->insert('TBL_SUPERVISOR_PROJECT', array('id_user'=> $value, 'id_project' => $data['h']));
+      $this->builtbyprime->insert('TBL_SUPERVISOR_PROJECT', array('id' => $idSupervisor[0]['MAX'], 'id_user'=> $value, 'id_project' => $data['h']));
+      $idSupervisor[0]['MAX']++;
     }
     
     echo json_encode($res);

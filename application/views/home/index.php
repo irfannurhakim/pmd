@@ -124,46 +124,22 @@
                                 <div class="pull-right">
                                     <a href="#" class="tooltips mr5" data-toggle="modal" title="Settings" id="btn-setting-sorting" data-target=".bs-example-modal"><span class="fa fa-cog"></span></a>
                                 </div><!-- panel-btns -->
-                                <h3 class="panel-title">Statistik Umum</h3>
+                                <h3 class="panel-title">Statistik Umum <span id="tahun-berjalan"><?=date('Y');?></span></h3>
                             </div>
 
                             <div class="panel-body">
                                 <div class="row">
                                   <div class="col-md-6">
-                                    <h5 class="md-title">Top 5 Kontraktor 2014</h5>
-                                    <div class="list-group people-group">
-                                        <?php foreach ($contractors as $contractor) { ?>                                         
-                                        <a href="#" class="list-group-item">
-                                            <div class="media">
-                                                <div class="pull-left">
-                                                    <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user1.png" alt="...">
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading"><?=$contractor['NAME'];?></h4>
-                                                    <small>Rp. <?=$contractor['JML_NILAI_PROYEK'] . ' (' . $contractor['JML_PROYEK']. ' Proyek)';?></small>
-                                                </div>
-                                            </div><!-- media -->
-                                        </a><!-- list-group -->
-                                        <?php } ;?>
+                                    <h5 class="md-title">Top 5 Kontraktor</h5>
+                                    <div class="list-group people-group" id="list-contractors">
+                                        
                                     </div><!-- list-group -->
                                   </div>
 
                                   <div class="col-md-6">
-                                    <h5 class="md-title">Top 5 Pengawas 2014</h5>
-                                     <div class="list-group people-group">
-                                        <?php foreach ($supervisors as $supervisor) { ?>                                         
-                                        <a href="#" class="list-group-item">
-                                            <div class="media">
-                                                <div class="pull-left">
-                                                    <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/user1.png" alt="...">
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading"><?=$supervisor['NAME'];?></h4>
-                                                    <small><?=$supervisor['JML_PROYEK'];?> Proyek Diawasi</small>
-                                                </div>
-                                            </div><!-- media -->
-                                        </a><!-- list-group -->
-                                        <?php  } ?>
+                                    <h5 class="md-title">Top 5 Pengawas</h5>
+                                     <div class="list-group people-group" id="list-supervisors">
+                                       
                                     </div><!-- list-group -->
                                   </div>
                                 </div>
@@ -214,7 +190,7 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-md-12">
-            <form class="form-horizontal" id="form-sorting-setting" method="POST" action="<?= base_url();?>notice/add">
+            <form class="form-horizontal" id="form-sorting-setting" action="#">
               <div class="panel panel-default">
                 <div class="panel-body">
                   <div class="errorForm"></div>
@@ -223,13 +199,13 @@
                       <label class="col-sm-6 control-label">Urutkan Kontraktor Berdasarkan</label>
                       <div class="col-sm-6">
                         <select id="select-sorting-kontraktor" data-placeholder="Pilih tipe user" class="col-sm-6" name="sort-kontraktor">
-                            <option value="1">Nilai Proyek</option>
+                            <option value="0">Nilai Proyek</option>
                             <option value="1">Jumlah Proyek</option>
                         </select>
                       </div>
                   </div><!-- form-group -->
 
-                  <div class="form-group">
+<!--                   <div class="form-group">
                       <label class="col-sm-6 control-label">Urutkan Pengawas Berdasarkan</label>
                       <div class="col-sm-6">
                         <select id="select-sorting-pengawas" data-placeholder="Pilih tipe user"  class="col-sm-6" name="sort-pengawas">
@@ -237,11 +213,21 @@
                             <option value="1">Jumlah Proyek</option>
                         </select>
                       </div>
+                  </div> -->
+
+                  <div class="form-group">
+                      <label class="col-sm-6 control-label">Berdasarkan Tahun</label>
+                      <div class="col-sm-6">
+                        <select id="select-sorting-year" data-placeholder="Pilih tipe user"  class="col-sm-6" name="sort-pengawas">
+                            <option value="2014">2014</option>
+                            <option value="2015">2015</option>
+                        </select>
+                      </div>
                   </div><!-- form-group -->
 
                 </div><!-- panel-body -->
                 <div class="panel-footer">
-                    <button class="btn btn-primary mr5" type="submit">Submit</button>
+                    <button class="btn btn-primary mr5" type="submit" id="btn-submit-setting">Submit</button>
                     <button type="reset" class="btn btn-default">Reset</button>
                 </div><!-- panel-footer -->
               </div><!-- panel-default -->
@@ -259,11 +245,76 @@
   $(document).ready(function(){
     drawChart();
 
-    jQuery('#select-sorting-pengawas, #select-sorting-kontraktor').select2({
+    jQuery('#select-sorting-pengawas, #select-sorting-kontraktor, #select-sorting-year').select2({
       minimumResultsForSearch: -1
     });
 
+    loadTopStat(0, 2014);
+
+    $('#btn-submit-setting').click(function(){
+      var sortType = $('#select-sorting-kontraktor').val();
+      var year = $('#select-sorting-year').val();
+
+      loadTopStat(sortType, year);
+
+      $('#modal-sorting-setting').modal('hide');
+      return false;
+    });
   });
+
+  function loadTopStat(sortType, year){
+    $.ajax({
+      url: '<?=base_url();?>home/topstat/' + sortType + '/' + year,
+      dataType: 'json'
+    })
+    .done(function(res){
+      if(res.status == 'ok'){
+        var contractors = res.contractors;
+        var supervisors = res.supervisors;
+        var a = '',
+            b = '';
+        for (var i = 0; i < contractors.length; i++) {
+          a += '<a href="#" class="list-group-item">'
+              + '<div class="media">'
+              +    '<div class="pull-left">'
+              +        '<img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/profile.png" alt="...">'
+              +    '</div>'
+              +    '<div class="media-body">'
+              +        '<h4 class="media-heading">'+ contractors[i]['NAME']+'</h4>'
+              +        '<small>Rp. <span class="format-money">'+ contractors[i]['JML_NILAI_PROYEK']+'</span> ('+contractors[i]['JML_PROYEK']+' Proyek)</small>'
+              +    '</div>'
+            + '</div>'
+          + '</a>';
+        }
+
+        for (var i = 0; i < supervisors.length; i++) {
+          b += '<a href="#" class="list-group-item">'
+              + '<div class="media">'
+              +    '<div class="pull-left">'
+              +        '<img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/profile.png" alt="...">'
+              +    '</div>'
+              +    '<div class="media-body">'
+              +        '<h4 class="media-heading">'+ supervisors[i]['NAME']+'</h4>'
+              +        '<small>'+supervisors[i]['JML_PROYEK']+' Proyek</small>'
+              +    '</div>'
+            + '</div>'
+          + '</a>';
+        } 
+
+        $('#list-contractors').html(a);
+        $('#list-supervisors').html(b);
+        $('#tahun-berjalan').text(year);
+        $(".format-money").priceFormat({
+          prefix: '',
+          thousandsSeparator: '.',
+          centsSeparator: ',',
+          centsLimit: 0
+        });
+      }
+    })
+    .fail(function(){
+    });
+  }
 
   function drawChart() {
     var data = google.visualization.arrayToDataTable([
