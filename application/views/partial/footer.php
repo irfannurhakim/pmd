@@ -60,7 +60,8 @@
               '/users' : users,
               // '/my-profile' : myProfile,
               '/quick_access' : quickAccess,
-              '/notices' : notices
+              '/notices' : notices,
+              '/realisasi/:id' : itemRealization
             }
             
             var router = Router(routes).configure({
@@ -239,6 +240,23 @@
             });
           } 
 
+          function itemRealization(id){
+            var idElement = '#item-realization';
+            $.ajax({
+              url: '<?php echo base_url();?>quick_access/realization/' + id,
+              beforeSend: function(){
+                activateMenu('quick-access');
+              }
+            })
+            .done(function(response, textStatus, jqhr){
+              initView(idElement,APP_TITLE + ' - Realisasi Pekerjaan');
+              $(idElement).html(response);
+            }) 
+            .fail(function(e){
+
+            });
+          } 
+
           function notfound(){
             var idElement = '#error-404';
             initView(idElement,APP_TITLE + ' - 404');
@@ -251,7 +269,6 @@
 
     
         </script>
-
         <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['gauge']}]}"></script>
 
     </body>

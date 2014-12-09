@@ -27,10 +27,14 @@
 
     <tbody class="selectable">
       <?php foreach ($projects as $row) { 
-        $sisaWaktu = ($row['DUE'] > 0) ? ceil($row['DUE']/7) : floor($row['DUE']/7);
-        $sisaWaktuSpan = ($sisaWaktu >= 0) ? '<span class="label label-default">'.$sisaWaktu.' Minggu</span>' : '<span class="label label-danger">'.$sisaWaktu.' Minggu</span>';
-
-        $deviation = ($row['DEVIATION'] < 20) ? '<span class="badge">'.$row['DEVIATION'] .' %</span>' : '<span class="badge badge-danger">'.$row['DEVIATION'] .' %</span>';
+        if($row['FROM_START'] >= 0){
+          $sisaWaktuSpan = '<span class="label label-default">Belum Mulai</span>';
+          $deviation = '<span class="badge">0 %</span>';
+        } else {
+          $sisaWaktu = ($row['DUE'] > 0) ? ceil($row['DUE']/7) : floor($row['DUE']/7);
+          $sisaWaktuSpan = ($sisaWaktu >= 0) ? (($sisaWaktu < 2) ? '<span class="label label-warning">'.$sisaWaktu.' Minggu</span>' : '<span class="label label-primary">'.$sisaWaktu.' Minggu</span>') : '<span class="label label-success">Selesai</span>';
+          $deviation = ($row['DEVIATION'] < 20) ? '<span class="badge">'.$row['DEVIATION'] .' %</span>' : '<span class="badge badge-danger">'.$row['DEVIATION'] .' %</span>';
+        }
 
       ?>
       <tr object="<?=$row['ID'];?>">
@@ -151,7 +155,7 @@
   $(document).ready(function(){
 
     jQuery('#table-list-projects').DataTable({
-      "responsive": true
+      "responsive": false
     });
 
     jQuery('#table-list-projects tbody').on( 'click', 'tr', function () {
@@ -180,9 +184,7 @@
       centsSeparator: ',',
       centsLimit: 0
     });
-
   });
-
 </script>
 
 

@@ -29,5 +29,6 @@
     <div class="page-content" id="quick-access"></div>
     <div class="page-content" id="error-404"></div>
     <div class="page-content" id="notice-list"></div>
+    <div class="page-content" id="item-realization"></div>
   </div><!-- contentpanel -->
 </div>

@@ -271,7 +271,10 @@ class Item_task extends CI_Controller {
       'a' => $this->input->post('supervisor-volume'),
       'b' => $this->input->post('vendor-volume'),
       'c' => $this->input->post('id-item-task'),
-      'd' => $this->session->userdata('USERNAME')
+      'd' => $this->session->userdata('USERNAME'),
+      'e' => $this->input->post('bobot-item'),
+      'f' => $this->input->post('planning-item'),
+      'g' => $this->input->post('realization-before')
     );
 
     $return = false;
@@ -283,6 +286,15 @@ class Item_task extends CI_Controller {
     } else if($this->session->userdata('ID_USER_TYPE') == 1 || $this->session->userdata('ID_USER_TYPE') == 2){
       $return = $this->builtbyprime->explicit("UPDATE TBL_ITEM_TASK SET SUPERVISOR_PROGRESS_VOLUME = '" . $data['a'] . "', VENDOR_PROGRESS_VOLUME = '" . $data['b'] . "', MODIFIED_BY = '".$data['d']."', MODIFIED_DATE = SYSDATE WHERE ID = " . $data['c']);
     }
+
+
+    if($data['a']){
+      $id = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_ITEM_TASK_TIME");
+      $percentage = (($data['a'] - $data['g']) / $data['f']) * $data['e'];
+      $resHistoryu = $this->builtbyprime->explicit("INSERT INTO TBL_ITEM_TASK_TIME (id, id_project, id_item_task, percentage, start_week, end_week, no_week, created_by, modified_by) VALUES (".$id[0]['MAX'].",".$this->input->post('id-project').",".$this->input->post('id-item-task').",".round($percentage, 4).", TO_DATE('".$this->input->post('start-week')."','dd/mm/yyyy'), TO_DATE('".$this->input->post('end-week')."','dd/mm/yyyy'), ".$this->input->post('week-number').", '".$this->session->userdata('USERNAME')."', '".$this->session->userdata('USERNAME')."')");
+    }
+
+
 
     echo json_encode(Array('status' => 'ok', 'message' => $return));
   }
@@ -560,5 +572,6 @@ class Item_task extends CI_Controller {
 
     return $outArr;
   }
+
 
 }

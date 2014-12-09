@@ -130,7 +130,7 @@
   $(document).ready(function(){
 
     jQuery('#table-list-users').DataTable({
-      "responsive": true
+      "responsive": false
     });
 
     // Show aciton upon row hover
