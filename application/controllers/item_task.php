@@ -25,7 +25,7 @@ class Item_task extends CI_Controller {
       'd' => $this->input->post('specification'),
       'e' => $this->input->post('volume'),
       'f' => $this->input->post('unit'),
-      'g' => $this->input->post('unit_price'),
+      'g' => str_replace(".","", $this->input->post('unit_price')),
       'h' => $this->session->userdata('USERNAME'),
     );
 

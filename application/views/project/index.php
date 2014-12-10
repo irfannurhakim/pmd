@@ -20,8 +20,8 @@
         <th>Kontraktor</th>
         <th width="60px" class="dt-cols-center">Sisa Waktu</th>
         <th width="60px" class="dt-cols-center">Selesai (%)</th>
-        <th width="60px" class="dt-cols-center">Deviasi (%)</th>
-        <!-- <th></th> -->
+<!--         <th width="60px" class="dt-cols-center">Deviasi (%)</th>
+ -->        <!-- <th></th> -->
       </tr>
     </thead>
 
@@ -42,8 +42,8 @@
           <td><?=$row['VENDOR_NAME'];?></td>
           <td class="dt-cols-right"><?=$sisaWaktuSpan;?></td>
           <td class="dt-cols-right"><span class="badge"><?=$row['PROGRESS'];?> %</span></td>
-          <td class="dt-cols-right"><?=$deviation;?></td>
-      </tr>
+<!--           <td class="dt-cols-right"><?=$deviation;?></td>
+ -->      </tr>
       <?php } ?>
     </tbody>
   </table>

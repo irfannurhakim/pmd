@@ -14,7 +14,7 @@ class Project extends CI_Controller {
       $userCondition = " = '" . $this->session->userdata('ID') . "'";  
     }
 
-    $sql = "SELECT P.ID, P.NAME, U.AFFILIATION VENDOR_NAME, (P.START_DATE -  TO_DATE('".$now."', 'yyyy/mm/dd')) FROM_START, (P.FINISH_DATE - TO_DATE('".$now."', 'yyyy/mm/dd')) DUE, 0 AS PROGRESS, 0 AS DEVIATION FROM TBL_PROJECT P, TBL_USER U WHERE P.ID_VENDOR = U.ID AND P.ID IN (SELECT ID_PROJECT FROM TBL_SUPERVISOR_PROJECT WHERE ID_USER ".$userCondition.")";
+    $sql = "SELECT P.ID, P.NAME, U.AFFILIATION VENDOR_NAME, (P.START_DATE -  TO_DATE('".$now."', 'yyyy/mm/dd')) FROM_START, (P.FINISH_DATE - TO_DATE('".$now."', 'yyyy/mm/dd')) DUE, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = P.ID GROUP BY ID_PROJECT),0) PROGRESS, 0 AS DEVIATION FROM TBL_PROJECT P, TBL_USER U WHERE P.ID_VENDOR = U.ID AND P.ID IN (SELECT ID_PROJECT FROM TBL_SUPERVISOR_PROJECT WHERE ID_USER ".$userCondition.")";
 
     $data['projects'] = $this->builtbyprime->explicit($sql);
     $data['user'] = $this->builtbyprime->get('TBL_USER');
@@ -63,12 +63,15 @@ class Project extends CI_Controller {
     $data['notices'] = $this->builtbyprime->explicit("SELECT * FROM TBL_MASTER_NOTICE ORDER BY NAME");
     $data['notice'] = $this->builtbyprime->explicit("SELECT type_history, notice_type FROM TBL_PROJECT_NOTICE_HISTORY where id_project = '".$id."' AND status = 1 ORDER BY notice_type");
 
-
     $Carbon = new Carbon\Carbon;
 
     $a = $Carbon::createFromFormat('d-M-y', $data['project']['START_DATE']);
     $b = $Carbon::now();
     $c = $Carbon::createFromFormat('d-M-y', $data['project']['FINISH_DATE']); 
+    
+    $totalDays = $c->diffInDays($a);
+    $usedDays = $b->diffInDays($a);
+    $remainingDays = 100 - (($usedDays/$totalDays) * 100);
 
     $isStarted = ($b->gte($a));
     $isFinished = ($b->gte($c));
@@ -81,6 +84,8 @@ class Project extends CI_Controller {
     $data['isFinished'] = $isFinished;
     $data['statusLabel'] = ($isStarted) ? (($isFinished) ? 'PROYEK SELESAI' : 'BERLANGSUNG') : 'BELUM DIMULAI'; 
     $data['buttonStatusType'] = ($isStarted) ? (($isFinished) ? 'btn-success' : 'btn-primary') : 'btn-info'; 
+    $data['remainingDays'] = round($remainingDays,2);
+    $data['info'] = $this->builtbyprime->explicit("SELECT nvl((SELECT SUM(WEIGHT_PLANNING) FROM TBL_PROJECT_PLANNING_DETAIL WHERE WEEK_NUMBER = '".$data['weekNumber']."' AND ID_PROJECT_PLANNING = (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$id."')),0) TOTAL_PLANNING, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$id."' GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE FROM DUAL");
 
 
     $this->load->view('project/detail', $data);

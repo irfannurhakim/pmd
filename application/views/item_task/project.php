@@ -183,7 +183,6 @@
   </div>
 </div>
 
-<script type="text/javascript" src="<?=base_url();?>public/js/dataTables.fixedHeader.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
 
@@ -237,6 +236,7 @@
     });
     // Submit add item
     $('#form-add-item').ajaxForm({
+      clearForm: true,
       success: function(a,b,c,d){
         $('#modal-add-item').modal('hide');
         $('.modal-backdrop').hide();

@@ -15,7 +15,7 @@
   <div class="col-md-12">
     <div class="row row-stat">
       <div class="col-md-4">
-          <div class="panel panel-default">
+          <div class="panel panel-dark noborder">
               <div class="panel-heading noborder">
                   <div class="panel-btns">
                       <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
@@ -42,7 +42,7 @@
       </div>
 
       <div class="col-md-4">
-          <div class="panel panel-default">
+          <div class="panel panel-dark noborder">
               <div class="panel-heading noborder">
                   <div class="panel-btns">
                       <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
@@ -69,7 +69,7 @@
       </div>
 
       <div class="col-md-4">
-          <div class="panel panel-default">
+          <div class="panel panel-dark noborder">
               <div class="panel-heading noborder">
                   <div class="panel-btns">
                       <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
@@ -96,7 +96,7 @@
       </div>                       
     </div>
 
-    <table class="table table-bordered responsive table-hover tbl-item-list" id="tbl-realisasi">
+    <table class="table table-bordered table-hover tbl-item-list responsive" id="tbl-realisasi">
       <thead>
         <tr>
           <th width="50px" rowspan="2" class="dt-cols-center">No</th>
@@ -277,6 +277,8 @@
     });
 
     jQuery('.tbl-item-list tbody').on( 'click', 'tr', function () {
+      $('#modal-add-realisasi').modal('show');
+
       var id = $(this).attr('object');
       var vol = $(this).attr('planningvolume');
       var bi = $(this).attr('bobot');
@@ -292,20 +294,18 @@
       $("input[name='unreal-volume']").val(unreal);
 
       loadComment(id);
-      $('#modal-add-realisasi').modal('show');
     });
 
     $('#form-add-realization').ajaxForm({
       clearForm: true,
       dataType: 'json',
       beforeSubmit: function(a,b,c){
-        console.log($("input[name='unreal-volume']").val());
-        if(($("input[name='supervisor-volume']").val() > $("input[name='planning-volume']").val()) || ($("input[name='vendor-volume']").val() > $("input[name='planning-volume']").val()) ){
+        if(($("input[name='supervisor-volume']").val()*1 > $("input[name='planning-item']").val()*1) || ($("input[name='vendor-volume']").val()*1 > $("input[name='planning-item']").val()*1)){
           alert('Nilai Realisasi tidak boleh LEBIH dari Volume Perencanaan!');
           return false;
         }
 
-        if(($("input[name='supervisor-volume']").val() <= $("input[name='realization-before']").val()) || ($("input[name='vendor-volume']").val() <= $("input[name='realization-before']").val()) ){
+        if(($("input[name='supervisor-volume']").val()*1 <= $("input[name='realization-before']").val()*1) || ($("input[name='vendor-volume']").val()*1 <= $("input[name='realization-before']").val()*1)){
           alert('Nilai Realisasi tidak boleh KURANG dari volume yang telah Teralisasi!');
           return false;
         }      

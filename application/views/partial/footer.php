@@ -16,7 +16,7 @@
         <script src="<?= base_url();?>public/js/jquery.form.min.js"></script>
         <script src="<?= base_url();?>public/js/jquery.dataTables.min.js"></script>
         <script src="<?= base_url();?>public/js/dataTables.bootstrap.js"></script>
-        <script src="<?= base_url();?>public/js/dataTables.responsive.min.js"></script>
+        <script src="<?= base_url();?>public/js/dataTables.responsive.js"></script>
         <script src="<?= base_url();?>public/js/jquery.dataTables.reload.ajax.min.js"></script>
         <script src="<?= base_url();?>public/js/bootstrap-timepicker.min.js"></script>
         <script src="<?= base_url();?>public/js/jquery.priceFormat.min.js"></script>

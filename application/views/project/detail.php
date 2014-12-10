@@ -54,28 +54,28 @@
           <h3 class="panel-title">Statistik Proyek</h3>
         </div> -->
           <div class="panel-body">
-            <h5>Rencana (50%)</h5>
+            <h5>Rencana (<?=$info[0]['TOTAL_PLANNING'];?>%)</h5>
             <div class="progress">
-              <div style="width: 50%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="50" role="progressbar" class="progress-bar progress-bar-success">
-                  <span class="sr-only">50% Complete (success)</span>
+              <div style="width: <?=$info[0]['TOTAL_PLANNING'];?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="50" role="progressbar" class="progress-bar progress-bar-success">
+                  <span class="sr-only"><?=$info[0]['TOTAL_PLANNING'];?>% Complete (success)</span>
               </div>
             </div>
-            <h5>Pekerjaan Selesai (40%)</h5>
+            <h5>Realisasi (<?=$info[0]['TOTAL_PERCENTAGE'];?>%)</h5>
             <div class="progress">
-              <div style="width: 40%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-success">
-                  <span class="sr-only">40% Complete (success)</span>
+              <div style="width: <?=$info[0]['TOTAL_PERCENTAGE'];?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-success">
+                  <span class="sr-only"><?=$info[0]['TOTAL_PERCENTAGE'];?>% Complete (success)</span>
               </div>
             </div>
-            <h5>Sisa Waktu (60%)</h5>
+            <h5>Sisa Waktu (<?=$remainingDays;?>%)</h5>
             <div class="progress">
-              <div style="width: 60%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="60" role="progressbar" class="progress-bar progress-bar-success">
-                  <span class="sr-only">40% Complete (success)</span>
+              <div style="width: <?=$remainingDays;?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="60" role="progressbar" class="progress-bar progress-bar-success">
+                  <span class="sr-only"><?=$remainingDays;?>% Complete (success)</span>
               </div>
             </div>
-            <h5>Deviasi (-10%)</h5>
+            <h5>Deviasi (<?=$info[0]['TOTAL_PERCENTAGE']-$info[0]['TOTAL_PLANNING'];?>%)</h5>
             <div class="progress">
-              <div style="width: 10%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="10" role="progressbar" class="progress-bar progress-bar-warning">
-                  <span class="sr-only">40% Complete (success)</span>
+              <div style="width: <?=abs($info[0]['TOTAL_PLANNING']-$info[0]['TOTAL_PERCENTAGE']);?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="10" role="progressbar" class="progress-bar progress-bar-warning">
+                  <span class="sr-only"><?=$info[0]['TOTAL_PLANNING']-$info[0]['TOTAL_PERCENTAGE'];?>% Complete (success)</span>
               </div>
             </div>         
           </div>     
