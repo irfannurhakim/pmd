@@ -224,7 +224,7 @@ class Item_task extends CI_Controller {
     $week        = floor(($datediff/(60*60*24))/7);
 
     $idplanning = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_PROJECT_PLANNING");
-    $this->builtbyprime->insert('TBL_PROJECT_PLANNING',array('ID'=>$idplanning[0]['MAX'],'NAME'=>$project['NAME'],'ID_PROJECT'=>$id));
+    $this->builtbyprime->insert('TBL_PROJECT_PLANNING',array('ID'=>$idplanning[0]['MAX'],'NAME'=>$project['NAME'],'ID_PROJECT'=>$id,'CREATED_BY'=>$this->session->userdata('USERNAME'),'MODIFIED_BY'=>$this->session->userdata('USERNAME')));
     $idprojectplanning = $this->builtbyprime->explicit("SELECT MAX(ID) MAX FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$id."' ");  
     
     for($i=1;$i<=$week;$i++)
@@ -264,6 +264,8 @@ class Item_task extends CI_Controller {
         }
       }
     }
+
+
   }
 
   public function update_realization(){
@@ -287,14 +289,11 @@ class Item_task extends CI_Controller {
       $return = $this->builtbyprime->explicit("UPDATE TBL_ITEM_TASK SET SUPERVISOR_PROGRESS_VOLUME = '" . $data['a'] . "', VENDOR_PROGRESS_VOLUME = '" . $data['b'] . "', MODIFIED_BY = '".$data['d']."', MODIFIED_DATE = SYSDATE WHERE ID = " . $data['c']);
     }
 
-
     if($data['a']){
       $id = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_ITEM_TASK_TIME");
       $percentage = (($data['a'] - $data['g']) / $data['f']) * $data['e'];
       $resHistoryu = $this->builtbyprime->explicit("INSERT INTO TBL_ITEM_TASK_TIME (id, id_project, id_item_task, percentage, start_week, end_week, no_week, created_by, modified_by) VALUES (".$id[0]['MAX'].",".$this->input->post('id-project').",".$this->input->post('id-item-task').",".round($percentage, 4).", TO_DATE('".$this->input->post('start-week')."','dd/mm/yyyy'), TO_DATE('".$this->input->post('end-week')."','dd/mm/yyyy'), ".$this->input->post('week-number').", '".$this->session->userdata('USERNAME')."', '".$this->session->userdata('USERNAME')."')");
     }
-
-
 
     echo json_encode(Array('status' => 'ok', 'message' => $return));
   }

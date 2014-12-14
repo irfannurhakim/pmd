@@ -38,6 +38,7 @@
 
         <!-- <script type="text/javascript" src="<?=base_url();?>public/js/dataTables.fixedHeader.js"></script> -->
         <script type="text/javascript" src="<?=base_url();?>public/js/dataTables.fixedColumns.min.js"></script>
+        <script type="text/javascript" src="<?=base_url();?>public/js/owl.carousel.min.js"></script>
 
         <script src="<?= base_url();?>public/js/custom.js"></script>
 

@@ -161,15 +161,6 @@
           </div>
           <div class="panel-body">
             <div class="activity-list">  
-                <div class="media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object img-circle" src="<?=base_url();?>public/images/photos/user1.png" alt="" />
-                    </a>
-                    <div class="media-body">
-                        <strong>Ray Sin</strong> started following <strong>Eileen Sideways</strong>. <br />
-                        <small class="text-muted">Yesterday at 3:30pm</small>
-                    </div>
-                </div><!-- media -->
                 
             </div><!-- activity-list -->
             <hr/>
@@ -401,6 +392,39 @@
       } else {
         $(ctx).attr('checked', true);
       }      
+    }
+
+    $.ajax({
+      url: "<?=base_url();?>project/load_log/<?=$project['ID'];?>",
+      dataType: 'json'
+    })
+    .done(function(res){
+      if(res.status == 'ok'){
+        var html = '';
+        
+        for(var i=0;i<res.data.length;i++){
+          html += '<div class="media">'
+                    + '<a class="pull-left" href="#">'
+                    +   '<img class="media-object img-circle" src="<?=base_url();?>public/images/photos/user1.png" alt="" />'
+                    + '</a>'
+                    + '<div class="media-body">'
+                    +   '<strong>'+res.data[i].USERNAME+'</strong> <br />'+ decodeHtml(res.data[i].DESCRIPTION) + '<br />'
+                    +   '<small class="text-muted">' + res.data[i].CREATED + '</small>'
+                    + '</div>'
+                + '</div>';
+        }
+        console.log(html);
+        $('.activity-list').append(html);
+      }
+    })
+    .fail(function(){
+
+    });
+
+    function decodeHtml(html) {
+      var txt = document.createElement("textarea");
+      txt.innerHTML = html;
+      return txt.value;
     }
   });
     

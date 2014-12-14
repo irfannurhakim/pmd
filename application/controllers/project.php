@@ -85,7 +85,7 @@ class Project extends CI_Controller {
     $data['statusLabel'] = ($isStarted) ? (($isFinished) ? 'PROYEK SELESAI' : 'BERLANGSUNG') : 'BELUM DIMULAI'; 
     $data['buttonStatusType'] = ($isStarted) ? (($isFinished) ? 'btn-success' : 'btn-primary') : 'btn-info'; 
     $data['remainingDays'] = round($remainingDays,2);
-    $data['info'] = $this->builtbyprime->explicit("SELECT nvl((SELECT SUM(WEIGHT_PLANNING) FROM TBL_PROJECT_PLANNING_DETAIL WHERE WEEK_NUMBER = '".$data['weekNumber']."' AND ID_PROJECT_PLANNING = (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$id."')),0) TOTAL_PLANNING, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$id."' GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE FROM DUAL");
+    $data['info'] = $this->builtbyprime->explicit("SELECT nvl((SELECT SUM(WEIGHT_PLANNING) FROM TBL_PROJECT_PLANNING_DETAIL WHERE WEEK_NUMBER <= '".$data['weekNumber']."' AND ID_PROJECT_PLANNING = (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$id."')),0) TOTAL_PLANNING, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$id."' GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE FROM DUAL");
 
 
     $this->load->view('project/detail', $data);
@@ -136,4 +136,11 @@ class Project extends CI_Controller {
     }
 
   }
+
+  function load_log($id){
+    $res = $this->builtbyprime->explicit("SELECT ID, USERNAME, DESCRIPTION, TO_CHAR(CAST(CREATED_DATE AS DATE), 'DD/MM/YYYY HH:MI:SS') CREATED FROM TBL_LOG_PROJECT WHERE OBJECT_ID = '".$id."' ORDER BY ID DESC");
+
+    echo json_encode(Array('status' => 'ok', 'data' => $res));
+  }
+
 }

@@ -8,115 +8,49 @@
                   <div class="col-md-3"></div>
                 </div>
                 <div class="mb30"></div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="panel panel-default">
-                            <div class="panel-body padding15">
-                                <h5 class="md-title mt0 mb10">Pembangunan Ruang Kelas SDN Coblong 5</h5>
-                                <div id="basicFlotLegend" class="flotLegend"></div>
-                                <div id="basicflot" class="flotChart"></div>
-                            </div><!-- panel-body -->
-                            <div class="panel-footer">
-                                <div class="row">
-                                  <div class="col-md-6">
-                                    <div>
-                                      <div id="gauge1"></div>
-                                    </div><!-- tinystat -->
-                                  </div><!-- col-md-7 -->
-                                  <div class="col-md-6">
-                                    <span class="sublabel">Rencana</span>
-                                    <div class="progress progress-xs progress-metro">
-                                      <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"></div>
-                                    </div><!-- progress -->
-                                    
-                                    <span class="sublabel">Realisasi</span>
-                                    <div class="progress progress-xs progress-metro">
-                                      <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 32%"></div>
-                                    </div><!-- progress -->
-                                    
-                                    <span class="sublabel">Sisa Waktu</span>
-                                    <div class="progress progress-xs progress-metro">
-                                      <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 82%"></div>
-                                    </div><!-- progress -->
-                                    
-                                  </div><!-- col-md-5 -->
-                                </div><!-- row -->
-                            </div><!-- panel-footer -->
-                        </div><!-- panel -->
-                    </div>
-                    
-                    <div class="col-md-4">
-                        <div class="panel panel-default">
-                            <div class="panel-body padding15">
-                                <h5 class="md-title mt0 mb10">Site Visitors</h5>
-                                <div id="basicFlotLegend2" class="flotLegend"></div>
-                                <div id="basicflot2" class="flotChart"></div>
-                            </div><!-- panel-body -->
-                            <div class="panel-footer">
-                                <div class="row">
-                                  <div class="col-md-6">
-                                    <div>
-                                      <div id="gauge2"></div>
-                                    </div><!-- tinystat -->
-                                  </div><!-- col-md-7 -->
-                                  <div class="col-md-6">
-                                    <span class="sublabel">Rencana</span>
-                                    <div class="progress progress-xs progress-metro">
-                                      <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"></div>
-                                    </div><!-- progress -->
-                                    
-                                    <span class="sublabel">Realisasi</span>
-                                    <div class="progress progress-xs progress-metro">
-                                      <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 32%"></div>
-                                    </div><!-- progress -->
-                                    
-                                    <span class="sublabel">Sisa Waktu</span>
-                                    <div class="progress progress-xs progress-metro">
-                                      <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 82%"></div>
-                                    </div><!-- progress -->
-                                    
-                                  </div><!-- col-md-5 -->
-                                </div><!-- row -->
-                            </div><!-- panel-footer -->
-                        </div><!-- panel -->
-                    </div>
-                    
-                    <div class="col-md-4">
-                        <div class="panel panel-default">
-                            <div class="panel-body padding15">
-                                <h5 class="md-title mt0 mb10">Site Impressions</h5>
-                                <div id="basicFlotLegend3" class="flotLegend"></div>
-                                <div id="basicflot3" class="flotChart"></div>
-                            </div><!-- panel-body -->
-                            <div class="panel-footer">
-                                <div class="row">
-                                  <div class="col-md-6">
-                                    <div>
-                                      <div id="gauge3"></div>
-                                    </div><!-- tinystat -->
-                                  </div><!-- col-md-7 -->
-                                  <div class="col-md-6">
-                                    <span class="sublabel">Rencana</span>
-                                    <div class="progress progress-xs progress-metro">
-                                      <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"></div>
-                                    </div><!-- progress -->
-                                    
-                                    <span class="sublabel">Realisasi</span>
-                                    <div class="progress progress-xs progress-metro">
-                                      <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 32%"></div>
-                                    </div><!-- progress -->
-                                    
-                                    <span class="sublabel">Sisa Waktu</span>
-                                    <div class="progress progress-xs progress-metro">
-                                      <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 82%"></div>
-                                    </div><!-- progress -->
-                                    
-                                  </div><!-- col-md-5 -->
-                                </div><!-- row -->
-                            </div><!-- panel-footer -->
-                        </div><!-- panel -->
-                    </div>
+                <div class="" id="carousel-graph">
+                    <?php foreach ($projects as $project) { ?>
+                      <div class="col-md-12">
+                          <div class="panel panel-default">
+                              <div class="panel-body padding15">
+                                  <div class="title-section">
+                                    <h5 class="md-title mt0 mb10"><a href="<?=base_url();?>#/project/view/<?=$project['ID'];?>"><?= $project['NAME'];?></a></h5>
+                                  </div>
+                                  <div id="legend-curvas-<?=$project['ID'];?>" class="flotLegend"></div>
+                                  <div id="curvas-<?=$project['ID'];?>" class="flotChart"></div>
+                              </div><!-- panel-body -->
+                              <div class="panel-footer">
+                                  <div class="row">
+                                    <div class="col-md-6">
+                                      <div>
+                                        <div id="gauge_<?=$project['ID'];?>"></div>
+                                      </div><!-- tinystat -->
+                                    </div><!-- col-md-7 -->
+                                    <div class="col-md-6">
+                                      <span class="sublabel">Rencana (<?=$project['TOTAL_PLANNING'];?> %)</span>
+                                      <div class="progress progress-xs progress-metro">
+                                        <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="<?=$project['TOTAL_PLANNING'];?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$project['TOTAL_PLANNING'];?>%"></div>
+                                      </div><!-- progress -->
+                                      
+                                      <span class="sublabel">Realisasi (<?=$project['TOTAL_PERCENTAGE'];?> %)</span>
+                                      <div class="progress progress-xs progress-metro">
+                                        <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="<?=$project['TOTAL_PERCENTAGE'];?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$project['TOTAL_PERCENTAGE'];?>%"></div>
+                                      </div><!-- progress -->
+                                      
+                                      <span class="sublabel">Sisa Waktu (<?=$project['REMAINING_DAYS'];?> %)</span>
+                                      <div class="progress progress-xs progress-metro">
+                                        <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="<?=$project['REMAINING_DAYS'];?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$project['REMAINING_DAYS'];?>%"></div>
+                                      </div><!-- progress -->
+                                      
+                                    </div><!-- col-md-5 -->
+                                  </div><!-- row -->
+                              </div><!-- panel-footer -->
+                          </div><!-- panel -->
+                      </div>             
+                    <?php } ?>
                 </div><!-- row -->
+                <div class="mb30"></div>
+
                 <div class="row">
                     <div class="col-md-8">
                         <div class="panel panel-default">
@@ -260,6 +194,11 @@
       $('#modal-sorting-setting').modal('hide');
       return false;
     });
+
+    $('#carousel-graph').owlCarousel({
+      items: 3,
+      paginationNumbers: true
+    });
   });
 
   function loadTopStat(sortType, year){
@@ -316,22 +255,16 @@
     });
   }
 
+  function showTooltip(x, y, contents) {
+   jQuery('<div id="tooltip" class="tooltipflot">' + contents + '</div>').css( {
+     position: 'absolute',
+     display: 'none',
+     top: y + 5,
+     left: x + 5
+   }).appendTo("body").fadeIn(200);
+  }
+
   function drawChart() {
-    var data = google.visualization.arrayToDataTable([
-      ['Label', 'Value'],
-      ['Deviasi', 12]
-    ]);
-
-    var data2 = google.visualization.arrayToDataTable([
-      ['Label', 'Value'],
-      ['Deviasi', 5]
-    ]);
-
-    var data3 = google.visualization.arrayToDataTable([
-      ['Label', 'Value'],
-      ['Deviasi', 20]
-    ]);
-
     var options = {
       width: 400, height: 120,
       redFrom: 15, redTo: 100,
@@ -339,15 +272,102 @@
       minorTicks: 5
     };
 
-    var chart = new google.visualization.Gauge(document.getElementById('gauge1'));
-    var chart2 = new google.visualization.Gauge(document.getElementById('gauge2'));
-    var chart3 = new google.visualization.Gauge(document.getElementById('gauge3'));
+    <?php foreach ($projects as $project) { ?>
+     
+    var data_<?=$project['ID'];?> = google.visualization.arrayToDataTable([
+      ['Label', 'Value'],
+      ['Deviasi', <?=$project['TOTAL_PLANNING'] - $project['TOTAL_PERCENTAGE'];?>]
+    ]);
 
-    chart.draw(data, options);
-    chart2.draw(data2, options);
-    chart3.draw(data3, options);
+    var chart_<?=$project['ID'];?> = new google.visualization.Gauge(document.getElementById("gauge_<?=$project['ID'];?>"));
+
+    chart_<?=$project['ID'];?>.draw(data_<?=$project['ID'];?>, options);
+    
+    var dataPlan_<?=$project['ID'];?> = <?=$project['PLAN'];?>;
+    var dataReal_<?=$project['ID'];?> = <?=$project['REAL'];?>;
+
+    var plot = jQuery.plot(jQuery("#curvas-<?=$project['ID'];?>"),
+    [{
+      data: dataPlan_<?=$project['ID'];?>,
+      label: "Rencana",
+      color: null,
+    },
+    {
+      data: dataReal_<?=$project['ID'];?>,
+      label: "Realisasi",
+      color: null,
+    }],
+    {
+      series: {
+        lines: {
+          show: true
+        },
+        splines: {
+          show: true,
+          tension: 0.1,
+          lineWidth: 1,
+          fill: 0.0
+        },
+        shadowSize: 0
+      },
+      points: {
+        show: true,
+      },
+      legend: {
+        container: "#legend-curvas-<?=$project['ID'];?>", 
+        noColumns: 0
+      },
+      grid: {
+        hoverable: true,
+        clickable: true,
+        borderColor: '#ddd',
+        borderWidth: 0,
+        labelMargin: 5,
+        backgroundColor: '#fff'
+      },
+      yaxis: {
+        min: 0,
+        max: 100,
+        color: '#eee'
+      },
+      xaxis: {
+        color: '#eee',
+        min: 0
+      }
+    });
+    
+    // var previousPoint = null;
+    // jQuery("#curvas-<?=$project['ID'];?>").bind("plothover", function (event, pos, item) {
+    //   jQuery("#x").text(pos.x.toFixed(2));
+    //   jQuery("#y").text(pos.y.toFixed(2));
+        
+    //   if(item) {
+    //     if (previousPoint != item.dataIndex) {
+    //       previousPoint = item.dataIndex;
+        
+    //       jQuery("#tooltip").remove();
+    //       var x = item.datapoint[0].toFixed(2),
+    //       y = item.datapoint[1].toFixed(2);
+              
+    //       showTooltip(item.pageX, item.pageY,
+    //       item.series.label + " of " + x + " = " + y);
+    //     }
+        
+    //   } else {
+    //     jQuery("#tooltip").remove();
+    //     previousPoint = null;            
+    //   }  
+    
+    // });
+      
+    // jQuery("#basicflot").bind("plotclick", function (event, pos, item) {
+    //   if (item) {
+    //     plot.highlight(item.series, item.datapoint);
+    //   }
+    // });    
+
+    <?php } ?>
+
+
   }
-
-
-
 </script>

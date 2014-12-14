@@ -122,14 +122,14 @@
             $vol = ($item['VOLUME'] > 0) ? round((($item['SUPERVISOR_PROGRESS_VOLUME'] / $item['VOLUME']) * $bobot), 4) : 0;
         ?>
         <tr object="<?=$item['ID_ITEM_TASK'];?>" planningvolume="<?=round($item['VOLUME'], 4);?>" realizationbefore="<?=round($item['SUPERVISOR_PROGRESS_VOLUME'], 4);?>" bobot="<?=$bobot;?>">
-          <td><?=$i;?></td>                            
-          <td><?=$item['NAME'];?></td>
+          <td ><?=$i;?></td>                            
+          <td ><?=$item['NAME'];?></td>
           <td class="dt-cols-right"><?=$bobot;?></td>
           <td class="dt-cols-right"><?=round($item['VOLUME'], 4);?></td>
           <td class="dt-cols-right"><?=round($item['SUPERVISOR_PROGRESS_VOLUME'], 4);?></td>
           <td class="dt-cols-right"><?=round($item['VENDOR_PROGRESS_VOLUME'], 4);?></td>
           <td class="dt-cols-right"><?=round($item['WEIGHT_PLANNING'], 4);?></td>
-          <td class="dt-cols-right"><?=$vol;?></td>
+          <td class="dt-cols-right"><?=(round($item['VOLUME'], 4) == round($item['SUPERVISOR_PROGRESS_VOLUME'], 4)) ? '<span class="label label-success">'.$vol.'</span>' : $vol ;?></td>
           <td class="dt-cols-center">
                 <i class="fa fa-comments"></i>
                 <span class="badge" id="total-comment-<?=$item['ID_ITEM_TASK'];?>"><?=($item['COMMENTS']) ? $item['COMMENTS'] : 0;?></span>
@@ -261,9 +261,10 @@
       dataType: "json",
       success: function(res){
         if(res.status == 'ok'){
-          $('#total-progress').html(res.data[0].TOTAL_PERCENTAGE);
-          $('#total-current-week').html(res.data[0].TOTAL_PERCENTAGE_NOW);
-          $('#total-previous-week').html(res.data[0].TOTAL_PERCENTAGE_BEFORE);
+          $('#total-progress').html(res.data[0].TOTAL_PERCENTAGE * 1);
+          $('#total-current-week').html(res.data[0].TOTAL_PERCENTAGE_NOW * 1);
+          $('#total-previous-week').html(res.data[0].TOTAL_PERCENTAGE_BEFORE * 1);
+          $('#total-taskdone').html(res.data[0].TOTAL_TASK_DONE * 1);
         }
       }
     })  

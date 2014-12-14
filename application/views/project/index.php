@@ -41,7 +41,7 @@
           <td><?=$row['NAME'];?></td>
           <td><?=$row['VENDOR_NAME'];?></td>
           <td class="dt-cols-right"><?=$sisaWaktuSpan;?></td>
-          <td class="dt-cols-right"><span class="badge"><?=$row['PROGRESS'];?> %</span></td>
+          <td class="dt-cols-right"><span class="badge"><?=round($row['PROGRESS'],4);?> %</span></td>
 <!--           <td class="dt-cols-right"><?=$deviation;?></td>
  -->      </tr>
       <?php } ?>

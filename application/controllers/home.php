@@ -9,8 +9,51 @@ class Home extends CI_Controller {
 		} 
 	}
 
-	public function index(){   
-		$this->load->view('home/index');	
+	public function index(){ 
+
+    $data['projects'] = $this->builtbyprime->explicit("SELECT P.ID, P.NAME, P.START_DATE, P.FINISH_DATE, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = P.ID GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE FROM TBL_PROJECT P WHERE P.FINISH_DATE >= SYSDATE AND P.START_DATE <= SYSDATE ORDER BY P.ID DESC");
+    
+    $Carbon = new Carbon\Carbon;
+
+    $b = $Carbon::now();
+
+    for ($i=0; $i < count($data['projects']); $i++) {   
+      $a = $Carbon::createFromFormat('d-M-y', $data['projects'][$i]['START_DATE']);  
+      $c = $Carbon::createFromFormat('d-M-y', $data['projects'][$i]['FINISH_DATE']); 
+    
+      $totalDays = $c->diffInDays($a);
+      $usedDays = $b->diffInDays($a);
+      $remainingDays = 100 - (($usedDays/$totalDays) * 100);
+      $weekNumber = ceil(($b->diffInDays($a) + 1)/7);
+
+      $data['projects'][$i]['REMAINING_DAYS'] = round($remainingDays, 4);
+      $arrPlan = $this->builtbyprime->explicit("SELECT nvl((SELECT SUM(WEIGHT_PLANNING) FROM TBL_PROJECT_PLANNING_DETAIL WHERE WEEK_NUMBER <= ".$weekNumber." AND ID_PROJECT_PLANNING = (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$data['projects'][$i]['ID']."')),0) TOTAL_PLANNING FROM DUAL");
+      $data['projects'][$i]['TOTAL_PLANNING'] = $arrPlan[0]['TOTAL_PLANNING'];
+
+      $dataPlaning = $this->builtbyprime->explicit("SELECT PPD.WEEK_NUMBER, SUM(PPD.WEIGHT_PLANNING) TOTAL FROM DEMON.TBL_PROJECT_PLANNING_DETAIL PPD WHERE PPD.ID_PROJECT_PLANNING IN (SELECT MAX(ID) FROM DEMON.TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$data['projects'][$i]['ID']."') GROUP BY PPD.WEEK_NUMBER ORDER BY PPD.WEEK_NUMBER");
+      
+      $dataRealization = $this->builtbyprime->explicit("SELECT NO_WEEK WEEK_NUMBER, SUM(PERCENTAGE) TOTAL FROM DEMON.TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$data['projects'][$i]['ID']."' GROUP BY NO_WEEK ORDER BY NO_WEEK");
+
+
+      $arrPlan = Array([0,0]);
+      $arrReal = Array([0,0]);
+      $totPlan = 0;
+      $totReal = 0;
+      foreach ($dataPlaning as $week) { 
+        $totPlan += $week['TOTAL'];
+        array_push($arrPlan, [intval($week['WEEK_NUMBER']), $totPlan]);
+      }
+
+      foreach ($dataRealization as $week) {
+        $totReal += $week['TOTAL'];
+        array_push($arrReal, [intval($week['WEEK_NUMBER']), $totReal]);     
+      }      
+
+      $data['projects'][$i]['PLAN'] = json_encode($arrPlan);
+      $data['projects'][$i]['REAL'] = json_encode($arrReal);
+    }
+
+		$this->load->view('home/index', $data);	
 	}
 
 	public function add(){
@@ -43,6 +86,46 @@ class Home extends CI_Controller {
 
     echo json_encode(array('status' => 'ok', 'contractors' => $contractors, 'supervisors' => $supervisors));
   }
+
+  public function data_curva(){
+    $projects = $this->builtbyprime->explicit("SELECT P.ID FROM TBL_PROJECT P WHERE P.FINISH_DATE >= SYSDATE AND P.START_DATE <= SYSDATE ORDER BY P.ID");
+    $projArray = Array();
+
+    foreach ($projects as $project) {
+      
+      $dataPlaning = $this->builtbyprime->explicit("SELECT PPD.WEEK_NUMBER, SUM(PPD.WEIGHT_PLANNING) TOTAL FROM DEMON.TBL_PROJECT_PLANNING_DETAIL PPD WHERE PPD.ID_PROJECT_PLANNING IN (SELECT MAX(ID) FROM DEMON.TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$project['ID']."') GROUP BY PPD.WEEK_NUMBER ORDER BY PPD.WEEK_NUMBER");
+      
+      $dataRealization = $this->builtbyprime->explicit("SELECT NO_WEEK WEEK_NUMBER, SUM(PERCENTAGE) TOTAL FROM DEMON.TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$project['ID']."' GROUP BY NO_WEEK ORDER BY NO_WEEK");
+
+
+      $arrPlan = Array([0,0]);
+      $arrReal = Array([0,0]);
+      $totPlan = 0;
+      $totReal = 0;
+      foreach ($dataPlaning as $week) { 
+        $totPlan += $week['TOTAL'];
+        array_push($arrPlan, [intval($week['WEEK_NUMBER']), $totPlan]);
+      }
+
+      foreach ($dataRealization as $week) {
+        $totReal += $week['TOTAL'];
+        array_push($arrReal, [intval($week['WEEK_NUMBER']), $totPlan]);     
+      }      
+
+      $projArray[$project['ID']]['PLAN'] = $arrPlan;
+      $projArray[$project['ID']]['REAL'] = $arrReal;
+    }
+
+    echo json_encode(Array('status' => 'ok', 'data' => $projArray));
+    //json_encode(Array('status' => 'ok', 'data' => Array('planning' => $dataPlaning, 'realization' => $dataRealization)));
+    //echo json_encode(Array(Array(2,3), Array(4,5)));
+  }
+
+
+
+
+
+// SELECT ID_PROJECT, NO_WEEK, SUM(PERCENTAGE) FROM DEMON.TBL_ITEM_TASK_TIME GROUP BY ID_PROJECT, NO_WEEK
 
 
 }

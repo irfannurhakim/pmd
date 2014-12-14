@@ -16,7 +16,8 @@
         <link href="<?= base_url();?>public/css/bootstrap-timepicker.min.css" rel="stylesheet">
         <link href="<?= base_url();?>public/css/jquery.gritter.css" rel="stylesheet">
         <link href="<?= base_url();?>public/css/prettyPhoto.css" rel="stylesheet">
-
+        <link href="<?= base_url();?>public/css/owl.carousel.css" rel="stylesheet">
+        <link href="<?= base_url();?>public/css/owl.theme.css" rel="stylesheet">
 
         <!-- CUSTOM CSS HERE -->
         <style type="text/css">
@@ -70,6 +71,13 @@
           }
           table.table-bordered th:last-child, table.table-bordered td:last-child {
             border-right-width: 1px!important;
+          }
+          .row-green{
+            background-color:#5cb85c;
+            color:#fff;
+          }
+          .title-section{
+            min-height: 40px;
           }
         </style>
 
