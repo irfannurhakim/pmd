@@ -129,13 +129,27 @@
           <td class="dt-cols-right"><?=round($item['SUPERVISOR_PROGRESS_VOLUME'], 4);?></td>
           <td class="dt-cols-right"><?=round($item['VENDOR_PROGRESS_VOLUME'], 4);?></td>
           <td class="dt-cols-right"><?=round($item['WEIGHT_PLANNING'], 4);?></td>
-          <td class="dt-cols-right"><?=(round($item['VOLUME'], 4) == round($item['SUPERVISOR_PROGRESS_VOLUME'], 4)) ? '<span class="label label-success">'.$vol.'</span>' : $vol ;?></td>
+<!--           <td class="dt-cols-right"><?=(round($item['VOLUME'], 4) == round($item['SUPERVISOR_PROGRESS_VOLUME'], 4)) ? '<span class="label label-success">'.$vol.'</span>' : $vol ;?></td>-->
+          <td class="dt-cols-right"><?=$vol;?></td>
           <td class="dt-cols-center">
                 <i class="fa fa-comments"></i>
                 <span class="badge" id="total-comment-<?=$item['ID_ITEM_TASK'];?>"><?=($item['COMMENTS']) ? $item['COMMENTS'] : 0;?></span>
           </td>
         </tr>
         <?php $i++; } ?>
+
+        <tfoot>
+            <tr>
+                <th colspan="2" style="text-align:right">Total:</th>
+                <th class="dt-cols-right"></th>
+                <th class="dt-cols-right"></th>
+                <th class="dt-cols-right"></th>
+                <th class="dt-cols-right"></th>
+                <th class="dt-cols-right"></th>
+                <th class="dt-cols-right"></th>
+                <th></th>
+            </tr>
+        </tfoot>
       </tbody>
     </table>    
   </div>
@@ -274,7 +288,80 @@
     jQuery("#tbl-realisasi").DataTable({
       paging : false,
       ordering: false,
-      responsive: false
+      responsive: false,
+      footerCallback: function ( row, data, start, end, display ) {
+          var api = this.api(), data;
+          var total = 0;
+          var totalBobot = 0;
+          // Remove the formatting to get integer data for summation
+          var intVal = function ( i ) {
+              return typeof i === 'string' ? i.replace(/[.]/g, '')*1 : typeof i === 'number' ? i : 0;
+          };
+
+          var floatVal = function ( i ) {
+              return typeof i === 'string' ? parseFloat(i*1) : typeof i === 'number' ? parseFloat(i) : 0;
+          };
+
+          if(data.length > 1){
+            // Total over all pages
+            tBobot = api
+                .column( 2 )
+                .data()
+                .reduce( function (a, b) {
+                    return floatVal(a) + floatVal(b);
+                });
+            tVRencana = api
+                .column( 3 )
+                .data()
+                .reduce( function (a, b) {
+                    return floatVal(a) + floatVal(b);
+                });
+            tVRealP = api
+                .column( 4 )
+                .data()
+                .reduce( function (a, b) {
+                    return floatVal(a) + floatVal(b);
+                });          
+            tVRealS = api
+                .column( 5 )
+                .data()
+                .reduce( function (a, b) {
+                    return floatVal(a) + floatVal(b);
+                });
+            tBRencana = api
+                .column( 6 )
+                .data()
+                .reduce( function (a, b) {
+                    return floatVal(a) + floatVal(b);
+                });
+            tBRealisasi = api
+                .column( 7 )
+                .data()
+                .reduce( function (a, b) {
+                    return floatVal(a) + floatVal(b);
+                });
+          } 
+          
+          // Update footer
+          $( api.column( 2 ).footer() ).html(
+              Math.round(tBobot * 100) / 100
+          );
+          $( api.column( 3 ).footer() ).html(
+              Math.round(tVRencana * 100) / 100
+          );
+          $( api.column( 4 ).footer() ).html(
+              Math.round(tVRealP * 100) / 100
+          );
+          $( api.column( 5 ).footer() ).html(
+              Math.round(tVRealS * 100) / 100
+          );
+          $( api.column( 6 ).footer() ).html(
+              Math.round(tBRencana * 100) / 100
+          );
+          $( api.column( 7 ).footer() ).html(
+              Math.round(tBRealisasi * 100) / 100
+          );
+      }
     });
 
     jQuery('.tbl-item-list tbody').on( 'click', 'tr', function () {

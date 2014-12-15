@@ -30,9 +30,9 @@ class Home extends CI_Controller {
       $arrPlan = $this->builtbyprime->explicit("SELECT nvl((SELECT SUM(WEIGHT_PLANNING) FROM TBL_PROJECT_PLANNING_DETAIL WHERE WEEK_NUMBER <= ".$weekNumber." AND ID_PROJECT_PLANNING = (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$data['projects'][$i]['ID']."')),0) TOTAL_PLANNING FROM DUAL");
       $data['projects'][$i]['TOTAL_PLANNING'] = $arrPlan[0]['TOTAL_PLANNING'];
 
-      $dataPlaning = $this->builtbyprime->explicit("SELECT PPD.WEEK_NUMBER, SUM(PPD.WEIGHT_PLANNING) TOTAL FROM DEMON.TBL_PROJECT_PLANNING_DETAIL PPD WHERE PPD.ID_PROJECT_PLANNING IN (SELECT MAX(ID) FROM DEMON.TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$data['projects'][$i]['ID']."') GROUP BY PPD.WEEK_NUMBER ORDER BY PPD.WEEK_NUMBER");
+      $dataPlaning = $this->builtbyprime->explicit("SELECT PPD.WEEK_NUMBER, SUM(PPD.WEIGHT_PLANNING) TOTAL FROM TBL_PROJECT_PLANNING_DETAIL PPD WHERE PPD.ID_PROJECT_PLANNING IN (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$data['projects'][$i]['ID']."') GROUP BY PPD.WEEK_NUMBER ORDER BY PPD.WEEK_NUMBER");
       
-      $dataRealization = $this->builtbyprime->explicit("SELECT NO_WEEK WEEK_NUMBER, SUM(PERCENTAGE) TOTAL FROM DEMON.TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$data['projects'][$i]['ID']."' GROUP BY NO_WEEK ORDER BY NO_WEEK");
+      $dataRealization = $this->builtbyprime->explicit("SELECT NO_WEEK WEEK_NUMBER, SUM(PERCENTAGE) TOTAL FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$data['projects'][$i]['ID']."' GROUP BY NO_WEEK ORDER BY NO_WEEK");
 
 
       $arrPlan = Array([0,0]);
@@ -84,7 +84,9 @@ class Home extends CI_Controller {
     $contractors = $this->builtbyprime->explicit("SELECT * FROM (SELECT v.affiliation name, p.id_vendor, COUNT(p.id_vendor) jml_proyek, SUM(p.budget) jml_nilai_proyek FROM TBL_PROJECT p, TBL_USER v WHERE v.id = p.id_vendor and EXTRACT(YEAR FROM p.START_DATE) = '".$tahun."' GROUP BY p.id_vendor, v.affiliation ORDER BY ".$sortby." DESC) WHERE ROWNUM <= 5");
     $supervisors = $this->builtbyprime->explicit("SELECT * FROM (SELECT U.NAME, U.AFFILIATION, S.ID_USER, COUNT(S.ID_USER) JML_PROYEK FROM TBL_SUPERVISOR_PROJECT S, TBL_USER U, TBL_PROJECT P WHERE U.ID = S.ID_USER AND P.ID = S.ID_PROJECT AND EXTRACT(YEAR FROM P.START_DATE) = '".$tahun."' GROUP BY U.NAME, S.ID_USER, U.AFFILIATION ORDER BY JML_PROYEK DESC) WHERE ROWNUM <= 5");
 
-    echo json_encode(array('status' => 'ok', 'contractors' => $contractors, 'supervisors' => $supervisors));
+    $project = $this->builtbyprime->explicit("SELECT COUNT(ID) COUNT_TOTAL_PROJECT, SUM(BUDGET) SUM_TOTAL_BUDGET FROM TBL_PROJECT WHERE EXTRACT(YEAR FROM START_DATE) = '".$tahun."'");
+
+    echo json_encode(array('status' => 'ok', 'contractors' => $contractors, 'supervisors' => $supervisors, 'project' => $project));
   }
 
   public function data_curva(){
@@ -93,9 +95,9 @@ class Home extends CI_Controller {
 
     foreach ($projects as $project) {
       
-      $dataPlaning = $this->builtbyprime->explicit("SELECT PPD.WEEK_NUMBER, SUM(PPD.WEIGHT_PLANNING) TOTAL FROM DEMON.TBL_PROJECT_PLANNING_DETAIL PPD WHERE PPD.ID_PROJECT_PLANNING IN (SELECT MAX(ID) FROM DEMON.TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$project['ID']."') GROUP BY PPD.WEEK_NUMBER ORDER BY PPD.WEEK_NUMBER");
+      $dataPlaning = $this->builtbyprime->explicit("SELECT PPD.WEEK_NUMBER, SUM(PPD.WEIGHT_PLANNING) TOTAL FROM TBL_PROJECT_PLANNING_DETAIL PPD WHERE PPD.ID_PROJECT_PLANNING IN (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$project['ID']."') GROUP BY PPD.WEEK_NUMBER ORDER BY PPD.WEEK_NUMBER");
       
-      $dataRealization = $this->builtbyprime->explicit("SELECT NO_WEEK WEEK_NUMBER, SUM(PERCENTAGE) TOTAL FROM DEMON.TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$project['ID']."' GROUP BY NO_WEEK ORDER BY NO_WEEK");
+      $dataRealization = $this->builtbyprime->explicit("SELECT NO_WEEK WEEK_NUMBER, SUM(PERCENTAGE) TOTAL FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$project['ID']."' GROUP BY NO_WEEK ORDER BY NO_WEEK");
 
 
       $arrPlan = Array([0,0]);

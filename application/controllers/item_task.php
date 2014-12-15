@@ -193,7 +193,7 @@ class Item_task extends CI_Controller {
       $html .= '<tr '. $style . '>';
       $html .= '<td>' . $item['NUMBER'] . '</td>';
       $html .= '<td>' . (($item['LEVEL'] == 1) ? strtoupper($item['NAME']) : $item['NAME']) . '</td>';
-      $html .= '<td class="dt-cols-right">' . (($isLast) ? round((($item['UNIT_PRICE'] * $item['VOLUME']) / $budget ) * 100, 3) : '' ) . '</td>';
+      $html .= '<td class="dt-cols-right">' . (($isLast) ? round((($item['UNIT_PRICE'] * $item['VOLUME']) / $budget ) * 100, 4) : '' ) . '</td>';
 
       for($i=1;$i<=$week;$i++){
         $value = null;
@@ -423,7 +423,7 @@ class Item_task extends CI_Controller {
 
     $planning = Array(
       'id' => $maxPlanId,
-      'name' => 'plan',
+      'name' => 'Initial Planning',
       'id_project' => $data['id_project'],
       'created_by' => $this->session->userdata('USERNAME'),
       'modified_by' => $this->session->userdata('USERNAME')

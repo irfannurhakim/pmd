@@ -58,7 +58,7 @@
                                 <div class="pull-right">
                                     <a href="#" class="tooltips mr5" data-toggle="modal" title="Settings" id="btn-setting-sorting" data-target=".bs-example-modal"><span class="fa fa-cog"></span></a>
                                 </div><!-- panel-btns -->
-                                <h3 class="panel-title">Statistik Umum <span id="tahun-berjalan"><?=date('Y');?></span></h3>
+                                <h3 class="panel-title">Statistik Umum <span class="tahun-berjalan"><?=date('Y');?></span></h3>
                             </div>
 
                             <div class="panel-body">
@@ -87,25 +87,27 @@
                               <div class="panel-btns">
                                   <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
                               </div><!-- panel-btns -->
+                              <div class="panel-icon"><i class="fa fa-shopping-cart"></i></div>
                               <div class="media-body">
-                                  <h5 class="md-title nomargin">Total Nilai Proyek Tahun 2014</h5>
-                                  <h1 class="mt5">Rp. 124,35 M</h1>
+                                  <h5 class="md-title nomargin">Total Nilai Proyek Tahun <span class="tahun-berjalan"><?=date('Y');?></h5>
+                                  <h1 class="mt5"><span id="total-nilai-proyek">0</span></h1>
                               </div><!-- media-body -->
                               <hr>
+                              <div class="panel-icon"><i class="fa fa-bank"></i></div>
                               <div class="media-body">
-                                  <h5 class="md-title nomargin">Jumlah Proyek 2014</h5>
-                                  <h1 class="mt5">24</h1>
+                                  <h5 class="md-title nomargin">Jumlah Proyek <span class="tahun-berjalan"><?=date('Y');?></h5>
+                                  <h1 class="mt5"><span id="total-jumlah-proyek">0</span></h1>
                               </div><!-- media-body -->
                               <hr>
 
                               <div class="clearfix mt20">
                                   <div class="pull-left">
                                       <h5 class="md-title nomargin">Selesai</h5>
-                                      <h4 class="nomargin">21</h4>
+                                      <h4 class="nomargin"><span id="total-proyek-selesai">0</span></h4>
                                   </div>
                                   <div class="pull-right">
                                       <h5 class="md-title nomargin">Berlangsung</h5>
-                                      <h4 class="nomargin">4</h4>
+                                      <h4 class="nomargin"><span id="total-proyek-belangsung">0</span></h4>
                                   </div>
                               </div>
                               
@@ -183,7 +185,7 @@
       minimumResultsForSearch: -1
     });
 
-    loadTopStat(0, 2014);
+    loadTopStat(0, <?=date('Y');?>);
 
     $('#btn-submit-setting').click(function(){
       var sortType = $('#select-sorting-kontraktor').val();
@@ -210,6 +212,7 @@
       if(res.status == 'ok'){
         var contractors = res.contractors;
         var supervisors = res.supervisors;
+        var projects = res.project;
         var a = '',
             b = '';
         for (var i = 0; i < contractors.length; i++) {
@@ -242,17 +245,36 @@
 
         $('#list-contractors').html(a);
         $('#list-supervisors').html(b);
-        $('#tahun-berjalan').text(year);
+        $('.tahun-berjalan').text(year);
         $(".format-money").priceFormat({
           prefix: '',
           thousandsSeparator: '.',
           centsSeparator: ',',
           centsLimit: 0
         });
+        $('#total-nilai-proyek').text(formatNumber(projects[0].SUM_TOTAL_BUDGET * 1));
+        $('#total-jumlah-proyek').text(projects[0].COUNT_TOTAL_PROJECT);
+        $('#total-proyek-belangsung').text(<?=count($projects);?>);
+        $('#total-proyek-selesai').text(projects[0].COUNT_TOTAL_PROJECT - <?=count($projects);?> * 1);
       }
     })
     .fail(function(){
     });
+  }
+
+  var ranges = [
+    { divider: 1e15 , suffix: ' RT' },
+    { divider: 1e12 , suffix: ' T' },
+    { divider: 1e9 , suffix: ' M' }
+  ];
+
+  function formatNumber(n) {
+    for (var i = 0; i < ranges.length; i++) {
+      if (n >= ranges[i].divider) {
+        return (n / ranges[i].divider).toFixed(3) + ranges[i].suffix;
+      }
+    }
+    return n.toFixed(3);
   }
 
   function showTooltip(x, y, contents) {

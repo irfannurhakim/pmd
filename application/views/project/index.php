@@ -27,7 +27,7 @@
 
     <tbody class="selectable">
       <?php foreach ($projects as $row) { 
-        if($row['FROM_START'] >= 0){
+        if($row['FROM_START'] > 0){
           $sisaWaktuSpan = '<span class="label label-default">Belum Mulai</span>';
           $deviation = '<span class="badge">0 %</span>';
         } else {
@@ -155,7 +155,8 @@
   $(document).ready(function(){
 
     jQuery('#table-list-projects').DataTable({
-      "responsive": false
+      "responsive": false,
+      "order": [[ 2, "asc" ]]
     });
 
     jQuery('#table-list-projects tbody').on( 'click', 'tr', function () {
