@@ -31,7 +31,8 @@ class Authentication extends CI_Controller {
 				'AFFILIATION' => 'Developer',
 				'STATUS' => 1,
         'EMAIL' => 'irfan@aegis.co.id',
-        'ID_USER_TYPE' => 1
+        'ID_USER_TYPE' => 1,
+        'PROFILE_IMAGE_URL' => 'public/images/photos/profile.png'
 			);
 
 			$this->session->set_userdata($user);

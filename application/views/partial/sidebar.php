@@ -1,11 +1,11 @@
 <div class="leftpanel">
     <div class="media profile-left">
-        <a class="pull-left profile-thumb" href="profile.html">
-            <img class="img-circle" src="<?= base_url();?>public/images/photos/profile.png" alt="">
+        <a class="pull-left profile-thumb" href="#" data-toggle="modal" data-target=".modal-profile">
+            <img class="img-circle my-profile-picture" src="<?= base_url() . $this->session->userdata('PROFILE_IMAGE_URL');?>" alt="" width="60px">
         </a>
         <div class="media-body">
-            <h4 class="media-heading"><?= @$this->session->userdata('NAME');?></h4>
-            <small class="text-muted"><?= @$this->session->userdata('AFFILIATION');?></small>
+            <h4 class="media-heading my-profile-name"><?= @$this->session->userdata('NAME');?></h4>
+            <small class="text-muted my-profile-affiliation"><?= @$this->session->userdata('AFFILIATION');?></small>
         </div>
     </div><!-- media -->
     

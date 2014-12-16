@@ -222,10 +222,9 @@
                               <i class="fa fa-caret-down"></i>
                             </button>
                             <ul class="dropdown-menu pull-right" role="menu">
-                              <li><a href="#"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
-                              <li><a href="#"><i class="glyphicon glyphicon-star"></i> Activity Log</a></li>
-                              <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Account Settings</a></li>
-                              <li><a href="#"><i class="glyphicon glyphicon-question-sign"></i> Help</a></li>
+                              <li><a href="#" data-toggle="modal" data-target=".modal-profile"><i class="glyphicon glyphicon-user"></i> Profil</a></li>
+                              <li><a href="#" data-toggle="modal" data-target=".modal-change-password"><i class="fa fa-key"></i> Ubah Password</a></li>
+                              <li><a href="<?=base_url();?>#/help"><i class="glyphicon glyphicon-question-sign"></i> Bantuan</a></li>
                               <li class="divider"></li>
                               <li><a href="<?= base_url();?>logout"><i class="glyphicon glyphicon-log-out"></i>Sign Out</a></li>
                             </ul>
@@ -236,6 +235,121 @@
                 </div><!-- header-right -->
                 
             </div><!-- headerwrapper -->
+
+            <div class="modal fade modal-profile" tabindex="-1" role="dialog" id="modal-profile" >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+                    <h4 class="modal-title">Profil Pengguna</h4>
+                  </div>
+                  <div class="modal-body">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <form class="form-horizontal" id="form-update-profile" method="POST" action="<?= base_url();?>profile/update">
+                          <div class="panel panel-default">
+                            <div class="panel-heading">
+                              <p>( <span class="asterisk">*</span> ) Menandakan wajib diisi.</p>
+                            </div>
+                            <div class="panel-body">
+                              <div class="errorForm"></div>
+
+                              <div class="form-group">
+                                  <label class="col-sm-4 control-label">Foto Profil</label>
+                                  <div class="col-sm-8">  
+                                      <img alt="..." src="<?=base_url() . $this->session->userdata('PROFILE_IMAGE_URL');?>" class="img-circle img-online form-control my-profile-picture" style="width:90px!important;">
+                                      <input type="file" name="profile-picture" class="form-control" id="field-update-profile-picture"/>
+                                  </div>
+                              </div><!-- form-group -->
+                         
+                              <div class="form-group">
+                                  <label class="col-sm-4 control-label">Nama<span class="asterisk">*</span></label>
+                                  <div class="col-sm-8">
+                                      <input type="text" name="name" class="form-control" required title="Kolom Nama wajib diisi!" value="<?=$this->session->userdata('NAME');?>" />
+                                  </div>
+                              </div><!-- form-group -->
+
+                              <div class="form-group">
+                                  <label class="col-sm-4 control-label">Email<span class="asterisk">*</span></label>
+                                  <div class="col-sm-8">
+                                      <input type="text" name="email" class="form-control" required title="Kolom Email wajib diisi!" value="<?=$this->session->userdata('EMAIL');?>" />
+                                  </div>
+                              </div><!-- form-group -->
+
+                              <div class="form-group">
+                                  <label class="col-sm-4 control-label">Afiliasi<span class="asterisk">*</span></label>
+                                  <div class="col-sm-8">
+                                      <input type="text" name="affiliation" class="form-control" required title="Kolom Afiliasi wajib diisi!" value="<?=$this->session->userdata('AFFILIATION');?>" />
+                                  </div>
+                              </div><!-- form-group -->
+
+                            </div><!-- panel-body -->
+                            <div class="panel-footer">
+                                <button class="btn btn-primary mr5" type="submit" id="btn-update-profile">Simpan</button>
+                                <button  aria-hidden="true" data-dismiss="modal" type="button" class="btn btn-default">Cancel</button>
+                            </div><!-- panel-footer -->
+                          </div><!-- panel-default -->
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade modal-change-password" tabindex="-1" role="dialog" id="modal-change-password" >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+                    <h4 class="modal-title">Ubah Password</h4>
+                  </div>
+                  <div class="modal-body">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <form class="form-horizontal" id="form-change-password" method="POST" action="<?= base_url();?>profile/update_password">
+                          <div class="panel panel-default">
+                            <div class="panel-heading">
+                              <p>( <span class="asterisk">*</span> ) Menandakan wajib diisi.</p>
+                            </div>
+                            <div class="panel-body">
+                              <div class="errorForm"></div>
+                         
+                              <div class="form-group">
+                                  <label class="col-sm-4 control-label">Password Lama<span class="asterisk">*</span></label>
+                                  <div class="col-sm-8">
+                                      <input type="password" name="my-old-password" class="form-control" required title="Kolom Password Lama wajib diisi!" />
+                                  </div>
+                              </div><!-- form-group -->
+
+                              <div class="form-group">
+                                  <label class="col-sm-4 control-label">Password Baru<span class="asterisk">*</span></label>
+                                  <div class="col-sm-8">
+                                      <input type="password" name="my-new-password" class="form-control" required title="Kolom Password Baru wajib diisi!" />
+                                  </div>
+                              </div><!-- form-group -->
+
+<!--                               <div class="form-group">
+                                  <label class="col-sm-4 control-label">Ulangi Password<span class="asterisk">*</span></label>
+                                  <div class="col-sm-8">
+                                      <input type="password" name="confirm-new-password" class="form-control" required title="Kolom Ulangi Password wajib diisi!" />
+                                  </div>
+                              </div>
+ -->
+                            </div><!-- panel-body -->
+                            <div class="panel-footer">
+                                <button class="btn btn-primary mr5" type="submit" id="btn-update-profile">Simpan</button>
+                                <button  aria-hidden="true" data-dismiss="modal" type="button" class="btn btn-default">Cancel</button>
+                            </div><!-- panel-footer -->
+                          </div><!-- panel-default -->
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
         </header>
 
         <section>

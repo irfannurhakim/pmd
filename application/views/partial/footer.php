@@ -1,6 +1,6 @@
             </div>
         </section>       
-
+        
         <script src="<?= base_url();?>public/js/jquery-1.11.1.min.js"></script>
         <script src="<?= base_url();?>public/js/jquery-migrate-1.2.1.min.js"></script>
         <script src="<?= base_url();?>public/js/jquery-ui-1.10.3.min.js"></script>
@@ -268,8 +268,113 @@
             selector: '[data-toggle=tooltip]'
           });
 
-    
+          $('#form-update-profile').ajaxForm({
+            dataType: 'json',
+            success: function(a,b,c,d){
+              if(a.error){
+                jQuery.gritter.add({
+                  title: 'Upss..',
+                  text: a.error,
+                  class_name: 'growl-danger',
+                  image: false,
+                  sticky: false,
+                  time: ''
+                });
+              } else {
+                if(a.status == 'ok'){
+                  jQuery.gritter.add({
+                    title: 'Info',
+                    text: 'Simpan perubahan berhasil.',
+                    class_name: 'growl-info',
+                    image: false,
+                    sticky: false,
+                    time: ''
+                  });
+
+                  if(a.data.profile_image_url){
+                    $('.my-profile-picture').attr('src', '<?=base_url();?>' + a.data.profile_image_url);
+                  }
+
+                  $('.my-profile-name').html(a.data.name);
+                  $('.my-profile-affiliation').html(a.data.affiliation);
+                  $('#field-update-profile-picture').val('');
+                } else {
+                  jQuery.gritter.add({
+                    title: 'Upss..',
+                    text: 'Terjadi kesalahan! Refresh kembali browsernya...',
+                    class_name: 'growl-danger',
+                    image: false,
+                    sticky: false,
+                    time: ''
+                  });
+                }
+              }
+
+              $('#btn-update-profile').html('Submit');
+            },
+            error: function(e){
+              jQuery.gritter.add({
+                title: 'Upss..',
+                text: 'Terjadi kesalahan! Refresh kembali browsernya...',
+                class_name: 'growl-danger',
+                image: false,
+                sticky: false,
+                time: ''
+              });
+            },
+            uploadProgress: function(e,position,total,percentComplete){
+              $('#btn-update-profile').html('Menyimpan... ' + percentComplete + " %");
+            }
+          });
+
+          $('#form-change-password').ajaxForm({
+            clearForm: true,
+            dataType: 'json',
+            success: function(a,b,c,d){
+              if(a.error){
+                jQuery.gritter.add({
+                  title: 'Upss..',
+                  text: a.error,
+                  class_name: 'growl-danger',
+                  image: false,
+                  sticky: false,
+                  time: ''
+                });
+              } else {
+                if(a.status == 'ok'){
+                  jQuery.gritter.add({
+                    title: 'Info',
+                    text: 'Simpan perubahan berhasil.',
+                    class_name: 'growl-info',
+                    image: false,
+                    sticky: false,
+                    time: ''
+                  });
+                } else {
+                  jQuery.gritter.add({
+                    title: 'Upss..',
+                    text: a.message,
+                    class_name: 'growl-danger',
+                    image: false,
+                    sticky: false,
+                    time: ''
+                  });
+                }
+              }
+            },
+            error: function(e){
+              jQuery.gritter.add({
+                title: 'Upss..',
+                text: 'Terjadi kesalahan! Refresh kembali browsernya...',
+                class_name: 'growl-danger',
+                image: false,
+                sticky: false,
+                time: ''
+              });
+            }
+          });
         </script>
+
         <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['gauge']}]}"></script>
 
     </body>

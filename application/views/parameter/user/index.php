@@ -53,10 +53,6 @@
             <form class="form-horizontal" id="form-add-user" method="POST" action="<?= base_url();?>user/add">
               <div class="panel panel-default">
                 <div class="panel-heading">
-                    <div class="panel-btns">
-                        <a href="#" class="panel-minimize tooltips" data-toggle="tooltip" title="Minimize Panel"><i class="fa fa-minus"></i></a>
-                        <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
-                    </div><!-- panel-btns -->
                     <p>( <span class="asterisk">*</span> ) Menandakan wajib diisi. <span class="info-exception" style="display:none;">Silahkan isi kolom password apabila <strong>INGIN</strong> mengubah password.</span></p>
                 </div>
                 <div class="panel-body">
