@@ -57,12 +57,11 @@
               '/project/view/:id' : projectDetail,
               '/item/project/:id' : itemProject,
               '/item/periode/:id' : itemPeriode,
-             // '/items/view/:id' : itemDetail,
               '/users' : users,
-              // '/my-profile' : myProfile,
               '/quick_access' : quickAccess,
               '/notices' : notices,
-              '/realisasi/:id' : itemRealization
+              '/realisasi/:id' : itemRealization,
+              '/help' : help
             }
             
             var router = Router(routes).configure({
@@ -257,6 +256,23 @@
 
             });
           } 
+
+          function help(){
+            var idElement = '#page-help';
+            $.ajax({
+              url: '<?php echo base_url();?>home/help',
+              beforeSend: function(){
+                activateMenu('help');
+              }
+            })
+            .done(function(response, textStatus, jqhr){
+              initView(idElement,APP_TITLE + ' - Bantuan');
+              $(idElement).html(response);
+            }) 
+            .fail(function(e){
+
+            });
+          }
 
           function notfound(){
             var idElement = '#error-404';

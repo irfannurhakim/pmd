@@ -119,15 +119,9 @@ class Home extends CI_Controller {
     }
 
     echo json_encode(Array('status' => 'ok', 'data' => $projArray));
-    //json_encode(Array('status' => 'ok', 'data' => Array('planning' => $dataPlaning, 'realization' => $dataRealization)));
-    //echo json_encode(Array(Array(2,3), Array(4,5)));
   }
 
-
-
-
-
-// SELECT ID_PROJECT, NO_WEEK, SUM(PERCENTAGE) FROM DEMON.TBL_ITEM_TASK_TIME GROUP BY ID_PROJECT, NO_WEEK
-
-
+  public function help(){
+    $this->load->view('help/index');
+  }
 }

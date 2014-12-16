@@ -7,7 +7,7 @@
         <meta name="author" content="">
 
         <title>Project Management Dashboard</title>
-
+        <link rel="icon" type="image/ico" href="<?=base_url();?>public/images/favicon.ico">
         <link href="<?= base_url();?>public/css/style.default.css" rel="stylesheet">
         <link href="<?= base_url();?>public/css/morris.css" rel="stylesheet">
         <link href="<?= base_url();?>public/css/select2.css" rel="stylesheet">

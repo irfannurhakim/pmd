@@ -30,5 +30,6 @@
     <div class="page-content" id="error-404"></div>
     <div class="page-content" id="notice-list"></div>
     <div class="page-content" id="item-realization"></div>
+    <div class="page-content" id="page-help"></div>
   </div><!-- contentpanel -->
 </div>
