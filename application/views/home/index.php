@@ -49,71 +49,80 @@
                       </div>             
                     <?php } ?>
                 </div><!-- row -->
-                <div class="mb30"></div>
+                <div class="mb20"></div>
 
                 <div class="row">
-                    <div class="col-md-8">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="pull-right">
-                                    <a href="#" class="tooltips mr5" data-toggle="modal" title="Settings" id="btn-setting-sorting" data-target=".bs-example-modal"><span class="fa fa-cog"></span></a>
-                                </div><!-- panel-btns -->
-                                <h3 class="panel-title">Statistik Umum <span class="tahun-berjalan"><?=date('Y');?></span></h3>
-                            </div>
-
-                            <div class="panel-body">
-                                <div class="row">
-                                  <div class="col-md-6">
-                                    <h5 class="md-title">Top 5 Kontraktor</h5>
-                                    <div class="list-group people-group" id="list-contractors">
-                                        
-                                    </div><!-- list-group -->
-                                  </div>
-
-                                  <div class="col-md-6">
-                                    <h5 class="md-title">Top 5 Pengawas</h5>
-                                     <div class="list-group people-group" id="list-supervisors">
-                                       
-                                    </div><!-- list-group -->
-                                  </div>
-                                </div>
-                            </div>
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <div class="pull-right">
+                            <a href="#" class="tooltips mr5" data-toggle="modal" title="Settings" id="btn-setting-sorting" data-target=".bs-example-modal"><span class="fa fa-cog"></span></a>
+                          </div><!-- panel-btns -->
+                          <h3 class="panel-title">Statistik Umum <span class="tahun-berjalan"><?=date('Y');?></span></h3>
                         </div>
-                    </div><!-- col-md-4 -->
 
-                    <div class="col-md-4">
-                      <div class="panel panel-success-alt noborder">
-                          <div class="panel-heading noborder">
-                              <div class="panel-btns">
-                                  <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
-                              </div><!-- panel-btns -->
-                              <div class="panel-icon"><i class="fa fa-shopping-cart"></i></div>
-                              <div class="media-body">
-                                  <h5 class="md-title nomargin">Total Nilai Proyek Tahun <span class="tahun-berjalan"><?=date('Y');?></h5>
-                                  <h1 class="mt5"><span id="total-nilai-proyek">0</span></h1>
-                              </div><!-- media-body -->
-                              <hr>
-                              <div class="panel-icon"><i class="fa fa-bank"></i></div>
-                              <div class="media-body">
-                                  <h5 class="md-title nomargin">Jumlah Proyek <span class="tahun-berjalan"><?=date('Y');?></h5>
-                                  <h1 class="mt5"><span id="total-jumlah-proyek">0</span></h1>
-                              </div><!-- media-body -->
-                              <hr>
+                        <div class="panel-body">
+                          <div class="row">
+                            <div class="col-md-4">
+                              <h5 class="md-title">Top 5 Kontraktor</h5>
+                              <div class="list-group people-group" id="list-contractors">
+                                      
+                              </div><!-- list-group -->
+                            </div>
 
-                              <div class="clearfix mt20">
-                                  <div class="pull-left">
+                            <div class="col-md-4">
+                              <h5 class="md-title">Top 5 Pengawas</h5>
+                                <div class="list-group people-group" id="list-supervisors">
+                                </div><!-- list-group -->
+                            </div>
+
+                            <div class="col-md-4">
+                              <div class="panel panel-dark noborder">
+                                <div class="panel-heading noborder">
+                                  <div class="panel-btns">
+                                    <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
+                                  </div><!-- panel-btns -->
+                                  <div class="panel-icon"><i class="fa fa-shopping-cart"></i></div>
+                                  <div class="media-body">
+                                    <h5 class="md-title nomargin">Total Nilai Proyek Tahun <span class="tahun-berjalan"><?=date('Y');?></h5>
+                                    <h1 class="mt5"><span id="total-nilai-proyek">0</span></h1>
+                                  </div><!-- media-body -->
+                                  <hr>
+                                  <div class="panel-icon"><i class="fa fa-suitcase"></i></div>
+                                  <div class="media-body">
+                                    <h5 class="md-title nomargin">Jumlah Proyek <span class="tahun-berjalan"><?=date('Y');?></h5>
+                                    <h1 class="mt5"><span id="total-jumlah-proyek">0</span></h1>
+                                  </div><!-- media-body -->
+                                  <div class="clearfix mt20">
+                                    <div class="pull-left">
                                       <h5 class="md-title nomargin">Selesai</h5>
                                       <h4 class="nomargin"><span id="total-proyek-selesai">0</span></h4>
-                                  </div>
-                                  <div class="pull-right">
+                                    </div>
+                                    <div class="pull-right">
                                       <h5 class="md-title nomargin">Berlangsung</h5>
                                       <h4 class="nomargin"><span id="total-proyek-belangsung">0</span></h4>
+                                    </div>
                                   </div>
-                              </div>
-                              
-                          </div><!-- panel-body -->
-                      </div><!-- panel -->          
+                                  <hr>
+                                  <div class="panel-icon"><i class="fa fa-users"></i></div>
+                                  <div class="media-body">
+                                    <h5 class="md-title nomargin">Jumlah Kontraktor</h5>
+                                    <h1 class="mt5"><span id="total-jumlah-kontraktor">0</span></h1>
+                                  </div><!-- media-body -->
+                                  <hr/>
+                                  <div class="panel-icon"><i class="fa fa-pencil-square-o"></i></div>
+                                  <div class="media-body">
+                                    <h5 class="md-title nomargin">Jumlah Pengawas</h5>
+                                    <h1 class="mt5"><span id="total-jumlah-pengawas">0</span></h1>
+                                  </div><!-- media-body -->
+                              </div><!-- panel -->      
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                  </div> 
                 </div><!-- row -->
 
 <div class="modal fade bs-example-modal" tabindex="-1" role="dialog" id="modal-sorting-setting" >
@@ -213,6 +222,7 @@
         var contractors = res.contractors;
         var supervisors = res.supervisors;
         var projects = res.project;
+        var others = res.others;
         var a = '',
             b = '';
         for (var i = 0; i < contractors.length; i++) {
@@ -256,6 +266,8 @@
         $('#total-jumlah-proyek').text(projects[0].COUNT_TOTAL_PROJECT);
         $('#total-proyek-belangsung').text(<?=count($projects);?>);
         $('#total-proyek-selesai').text(projects[0].COUNT_TOTAL_PROJECT - <?=count($projects);?> * 1);
+        $('#total-jumlah-kontraktor').text(others[0].COUNT_CONTRACTOR);
+        $('#total-jumlah-pengawas').text(others[0].COUNT_SUPERVISOR);
       }
     })
     .fail(function(){
