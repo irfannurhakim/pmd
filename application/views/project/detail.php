@@ -175,8 +175,8 @@
             <div class="activity-list">  
                 
             </div><!-- activity-list -->
-            <hr/>
-            <button class="btn btn-white btn-block">Show More</button>
+            <!-- <hr/>
+            <button class="btn btn-white btn-block">Show More</button> -->
           </div>
         </div>
         
@@ -324,6 +324,7 @@
 
     // edit project
     $('#form-edit-project').ajaxForm({
+      dataType: 'json',
       success: function(a,b,c,d){
         if(a.status == 'ok'){
           jQuery.gritter.add({

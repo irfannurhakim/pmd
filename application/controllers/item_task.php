@@ -380,10 +380,10 @@ class Item_task extends CI_Controller {
     echo json_encode($res);
   }
 
-  /**
+  /*
   Fungsi untuk mengiport file excel
   Terima file, parsing, dan input ke database.
-  **/
+  */
   public function import(){
 
     $data = Array(
