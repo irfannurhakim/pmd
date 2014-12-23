@@ -380,6 +380,10 @@ class Item_task extends CI_Controller {
     echo json_encode($res);
   }
 
+  /**
+  Fungsi untuk mengiport file excel
+  Terima file, parsing, dan input ke database.
+  **/
   public function import(){
 
     $data = Array(
@@ -393,6 +397,9 @@ class Item_task extends CI_Controller {
     $config['encrypt_name'] = true;
 
     $this->load->library('upload', $config);
+
+    if(!file_exists($config['upload_path']))
+      mkdir($config['upload_path'], 0777);
 
     if (!$this->upload->do_upload('import-file')){
       echo json_encode(array('error' => $this->upload->display_errors('<span>', '</span>')));
@@ -410,7 +417,6 @@ class Item_task extends CI_Controller {
     $objPHPExcel = $objReader->load($inputFileName);
 
     $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-
   
     $tmpId = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_ITEM_TASK");
     $maxId = $tmpId[0]['MAX'];
@@ -439,6 +445,8 @@ class Item_task extends CI_Controller {
 
     foreach ($sheetData as $key => $value) {
       if($key != 1){
+        if($value['A'] == 'eof') break;
+
         $id = (string) $value['A'];
         $arrIdParents[$id] = $maxId; 
 

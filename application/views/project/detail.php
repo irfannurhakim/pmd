@@ -2,7 +2,7 @@
   $btnDelete = ''; 
   $disabled = 'disabled';
   if(($this->session->userdata('ID_USER_TYPE') == 1) || ($this->session->userdata('ID_USER_TYPE') == 6)){ 
-    $btnDelete = '<button class="btn btn-default btn-sm" type="button" object="'.$project['ID'].'"><i class="fa fa-trash-o mr5"></i> Hapus</button>';
+    $btnDelete = '<button class="btn btn-default btn-sm" type="button" id="button-delete-project" object="'.$project['ID'].'"><i class="fa fa-trash-o mr5"></i> Hapus</button>';
     $disabled = '';
   }
 ?>
@@ -99,11 +99,23 @@
               </div> -->
               <input type="hidden" name="id-project" value="<?=$project['ID'];?>" />
               <div class="form-group">
+                <label class="col-sm-4 control-label">Nama Proyek</label>
+                <div class="col-sm-8">
+                  <input class="form-control" name="name" value="<?=$project['NAME'];?>"  <?=$disabled;?> />
+                </div>
+              </div><!-- form-group -->
+              <div class="form-group">
                 <label class="col-sm-4 control-label">Nomor Kontrak</label>
                 <div class="col-sm-8">
                   <input class="form-control" name="contract-no" value="<?=$project['CONTRACT_NO'];?>"  <?=$disabled;?> />
                 </div>
               </div><!-- form-group -->
+              <div class="form-group">
+                  <label class="col-sm-4 control-label">Deskripsi</label>
+                  <div class="col-sm-8">
+                      <textarea name="description" class="form-control" rows="5" ><?=$project['DESCRIPTION'];?></textarea>
+                  </div>
+              </div> <!-- form-group -->
               <div class="form-group">
                 <label class="col-sm-4 control-label">Kontraktor / Pelaksana</label>
                 <div class="col-sm-8">
@@ -139,7 +151,7 @@
                   </div>
               </div><!-- form-group -->
               <div class="form-group">
-                <label class="col-sm-4 control-label">Nilai Proyek</label>
+                <label class="col-sm-4 control-label">Nilai Proyek Tanpa PPN</label>
                 <div class="col-sm-8">
                   <input class="form-control" name="project-budget" value="<?=$project['BUDGET'];?>" <?=$disabled;?> />
                 </div>
@@ -313,7 +325,7 @@
     // edit project
     $('#form-edit-project').ajaxForm({
       success: function(a,b,c,d){
-        if(a){
+        if(a.status == 'ok'){
           jQuery.gritter.add({
             title: 'Info',
             text: 'Simpan perubahan berhasil.',
@@ -332,16 +344,16 @@
             time: ''
           });
         }
-      }
-    });
-
-    $('#form-add-notice').ajaxForm({
-      dataType: 'json',
-      success: function(a,b,c,d){
-
       },
-      error: function(e){
-
+      error: function(){
+        jQuery.gritter.add({
+          title: 'Upss..',
+          text: 'Terjadi Kesalahan, silahkan refresh halaman ini.',
+          class_name: 'growl-danger',
+          image: false,
+          sticky: false,
+          time: ''
+        });
       }
     });
 
@@ -413,7 +425,7 @@
                     + '</div>'
                 + '</div>';
         }
-        console.log(html);
+
         $('.activity-list').append(html);
       }
     })
@@ -426,6 +438,41 @@
       txt.innerHTML = html;
       return txt.value;
     }
+
+     $('#button-delete-project').click(function(){
+      var id = $(this).attr('object');
+      
+      if (confirm('Apakah anda yakin menghapus Proyek ini ?')) { 
+        $.ajax({
+          url: '<?php echo base_url();?>project/remove/' + id,
+          dataType: 'json'
+        })
+        .done(function(response, textStatus, jqhr){
+          if(response.status == 'ok'){
+            window.location.replace("<?=base_url();?>#/projects");
+          } else {
+            jQuery.gritter.add({
+              title: 'Upss..',
+              text: 'Terjadi Kesalahan, silahkan refresh halaman ini.',
+              class_name: 'growl-danger',
+              image: false,
+              sticky: false,
+              time: ''
+            });
+          }
+        })
+        .fail(function(){
+          jQuery.gritter.add({
+            title: 'Upss..',
+            text: 'Terjadi Kesalahan, silahkan refresh halaman ini.',
+            class_name: 'growl-danger',
+            image: false,
+            sticky: false,
+            time: ''
+          });
+        });
+      }
+    });
   });
     
 </script>

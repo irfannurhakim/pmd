@@ -285,7 +285,7 @@
           dataType: 'json'
         })
         .done(function(response, textStatus, jqhr){
-          items();
+          location.reload();
         })
         .fail(function(){
 
@@ -319,12 +319,14 @@
             sticky: false,
             time: ''
           });
+
+          $('#btn-process-import').html('Proses');
         }
       },
       error: function(e){
         jQuery.gritter.add({
           title: 'Upss..',
-          text: e,
+          text: 'Terjadi Kesalahan!<br/>Pastikan format file excel sudah benar.',
           class_name: 'growl-danger',
           image: false,
           sticky: false,
