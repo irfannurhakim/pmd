@@ -18,8 +18,7 @@
             </div><!-- tab-pane -->
           
             <div class="tab-pane" id="profile">
-                <h4 class="nomargin">Pandua Admin Proyek</h4>
-                <p>Profile content goes here</p>
+                <iframe id="viewer1" src="<?=base_url();?>public/pdfjs/web/viewer.html?file=<?=base_url();?>public/guide/manual_admin_proyek.pdf" width='100%' height='700'  allowfullscreen webkitallowfullscreen></iframe>                 
             </div><!-- tab-pane -->
           
             <div class="tab-pane" id="about">
