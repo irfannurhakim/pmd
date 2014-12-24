@@ -31,5 +31,9 @@
     <div class="page-content" id="notice-list"></div>
     <div class="page-content" id="item-realization"></div>
     <div class="page-content" id="page-help"></div>
+    <div class="page-content" id="weekly-report"></div>
+    <div class="page-content" id="weekly-report-detail"></div>
+    <div class="page-content" id="statistik"></div>
+    <div class="page-content" id="statistik-detail"></div>
   </div><!-- contentpanel -->
 </div>
