@@ -21,7 +21,7 @@
       <div class="btn-group">
         <button class="btn btn-default btn-sm add-data" type="button" data-toggle="modal" data-target=".modal-add-item"><i class="fa fa-plus mr5"></i> Tambah </button>
         <?=$btnImport;?>
-        <a href="<?=base_url();?>item_task/export/<?=$project['ID'];?>" target="_blank" class="btn btn-default btn-sm export-data"><i class="fa fa-upload mr5"></i> Ekspor </a>
+        <a href="<?=base_url();?>item_task/export/<?=$project['ID'];?>" target="_blank" class="btn btn-default btn-sm export-data"><i class="fa fa-upload mr5"></i> Download </a>
       </div>
     </div>
   </div>
