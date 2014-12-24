@@ -139,7 +139,7 @@
                   <input type="hidden" name="is-edit" value="0" />
                 </div><!-- panel-body -->
                 <div class="panel-footer">
-                    <button class="btn btn-primary mr5" type="submit">Submit</button>
+                    <button class="btn btn-primary mr5" type="submit" id="btn-save-project">Simpan</button>
                     <button type="reset" class="btn btn-default">Reset</button>
                 </div><!-- panel-footer -->
               </div><!-- panel-default -->
@@ -172,10 +172,26 @@
 
     // Submit add project
     $('#form-add-project').ajaxForm({
+      dataType: 'json',
+      beforeSubmit: function(){
+        $('#btn-save-project').html('Menyimpan...');
+      },
       success: function(a,b,c,d){
-        $('#modal-add-project').modal('hide');
-        $('.modal-backdrop').hide();
-        projects();
+        if(a.status == 'ok'){
+          $('#modal-add-project').modal('hide');
+          $('.modal-backdrop').hide();
+          projects();
+        } else {
+          jQuery.gritter.add({
+            title: 'Upss..',
+            text: a.error,
+            class_name: 'growl-danger',
+            image: false,
+            sticky: false,
+            time: ''
+          });
+          $('#btn-save-project').html('Simpan');
+        }
       }
     });
 

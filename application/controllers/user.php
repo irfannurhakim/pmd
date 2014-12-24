@@ -66,12 +66,13 @@ class User extends CI_Controller {
 	}
 
 	public function remove($id){
-    $data = $this->builtbyprime->delete('TBL_USER', array('id'=>$id));
+    $this->builtbyprime->explicit("DELETE FROM TBL_SUPERVISOR_PROJECT WHERE id_user = ".$id."");
+    $data = $this->builtbyprime->explicit("DELETE FROM TBL_USER WHERE id = ".$id."");
 
     if($data){
-      echo json_encode(array('status'=>0, 'data' => $data));
+      echo json_encode(array('status'=> 'ok', 'data' => $data));
     } else {
-      echo json_encode(array('status'=>1));
+      echo json_encode(array('status'=> 'not ok'));
     }
 	}
 
