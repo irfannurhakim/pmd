@@ -13,6 +13,13 @@ class Home extends CI_Controller {
 
     $data['projects'] = $this->builtbyprime->explicit("SELECT P.ID, P.NAME, P.START_DATE, P.FINISH_DATE, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = P.ID GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE FROM TBL_PROJECT P WHERE P.FINISH_DATE >= SYSDATE AND P.START_DATE <= SYSDATE ORDER BY P.ID DESC");
     
+
+    if(count($data['projects']) < 1){
+      $this->load->view('home/no_project');
+      exit();
+    }
+
+
     $Carbon = new Carbon\Carbon;
 
     $b = $Carbon::now();
