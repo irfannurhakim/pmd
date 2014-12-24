@@ -61,7 +61,11 @@
               '/quick_access' : quickAccess,
               '/notices' : notices,
               '/realisasi/:id' : itemRealization,
-              '/help' : help
+              '/help' : help,
+              '/weekly_report' : weeklyReport,
+              '/weekly_report/detail/:id' : weeklyReportDetail,
+              '/statistik' : statistik,
+              '/statistik/detail/:id' : statistikDetail,
             }
             
             var router = Router(routes).configure({
@@ -267,6 +271,74 @@
             })
             .done(function(response, textStatus, jqhr){
               initView(idElement,APP_TITLE + ' - Bantuan');
+              $(idElement).html(response);
+            }) 
+            .fail(function(e){
+
+            });
+          }
+
+          function weeklyReport(){
+            var idElement = '#weekly-report';
+            $.ajax({
+              url: '<?php echo base_url();?>reports/index',
+              beforeSend: function(){
+                activateMenu('reports, #weekly-report');
+              }
+            })
+            .done(function(response, textStatus, jqhr){
+              initView(idElement,APP_TITLE + ' - Laporan Mingguan');
+              $(idElement).html(response);
+            }) 
+            .fail(function(e){
+
+            });
+          }
+
+           function weeklyReportDetail(id){
+            var idElement = '#weekly-report-detail';
+            $.ajax({
+              url: '<?php echo base_url();?>reports/weekly_report/' + id,
+              beforeSend: function(){
+                activateMenu('reports, #weekly-report');
+              }
+            })
+            .done(function(response, textStatus, jqhr){
+              initView(idElement,APP_TITLE + ' - Laporan Mingguan');
+              $(idElement).html(response);
+            }) 
+            .fail(function(e){
+
+            });
+          }
+
+          function statistik(){
+            var idElement = '#statistik';
+            $.ajax({
+              url: '<?php echo base_url();?>statistik/index',
+              beforeSend: function(){
+                activateMenu('reports, #statistik');
+              }
+            })
+            .done(function(response, textStatus, jqhr){
+              initView(idElement,APP_TITLE + ' - Statistik');
+              $(idElement).html(response);
+            }) 
+            .fail(function(e){
+
+            });
+          }
+
+           function statistikDetail(id){
+            var idElement = '#statistik-detail';
+            $.ajax({
+              url: '<?php echo base_url();?>statistik/statistik_detail/' + id,
+              beforeSend: function(){
+                activateMenu('reports, #statistik');
+              }
+            })
+            .done(function(response, textStatus, jqhr){
+              initView(idElement,APP_TITLE + ' - Statistik Detail');
               $(idElement).html(response);
             }) 
             .fail(function(e){
