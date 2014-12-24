@@ -17,10 +17,10 @@
       <?php } ?>
         <li id="menu-quick-access" class="activable"><a href="#/quick_access"><i class="fa fa-magic"></i> <span>Akses Cepat</span></a></li>
         <li id="menu-projects" class="activable"><a href="#/projects"><i class="fa fa-suitcase"></i> <span>Proyek</span></a></li>
-        <li id="menu-reports" class="parent activable"><a href="#"><i class="fa fa-dashboard"></i> <span>Laporan</span></a>
+        <li id="menu-reports" class="parent activable"><a href="#"><i class="fa fa-bar-chart-o"></i> <span>Laporan</span></a>
           <ul class="children">
-            <li class="activable" id="menu-weekly-reports"><a href="<?=base_url();?>#/weekly_report"> Laporan Mingguan</a></li>
-            <li class="activable" id="menu-weekly-reports"><a href="<?=base_url();?>#/statistik"> Statistik</a></li>
+            <li class="activable" id="menu-weekly"><a href="<?=base_url();?>#/weekly_report"> Laporan Mingguan</a></li>
+            <li class="activable" id="menu-statistics"><a href="<?=base_url();?>#/statistik"> Statistik</a></li>
           </ul>
         </li> 
       <?php 

@@ -39,7 +39,7 @@
 <script type="text/javascript">
   $(document).ready(function(){
 
-    jQuery('#table-list-reports').DataTable({
+    jQuery('#table-list-statistik').DataTable({
       "responsive": false,
       "order": [[ 2, "asc" ]]
     });
