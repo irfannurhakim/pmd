@@ -223,7 +223,7 @@
                   <div class="row">
                     <div class="col-md-2">
                       <div class="text-center">
-                          <img class="img-circle img-offline" src="<?=base_url();?>public/images/photos/profile.png" alt="..." width="45px">
+                          <img class="img-circle img-offline" src="<?=base_url(). $this->session->userdata('PROFILE_IMAGE_URL');?>" alt="..." width="45px">
                           <span><?=$this->session->userdata('NAME');?></span>
                       </div>
                     </div>
@@ -498,7 +498,7 @@
 
             html += '<div class="media">' +
                       '<a class="pull-left" href="#">' + 
-                          '<img class="media-object img-circle" src="<?=base_url();?>public/images/photos/profile.png" alt="" />' + 
+                          '<img class="media-object img-circle" src="<?=base_url();?>'+res.data[i].PROFILE_IMAGE_URL+'" alt="" />' + 
                       '</a>' +
                       '<div class="media-body">' +
                           '<strong>' + res.data[i].NAME + '</strong><br />' +

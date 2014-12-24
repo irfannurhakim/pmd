@@ -34,11 +34,12 @@ class Project extends CI_Controller {
       'e' => $this->input->post('id-contractor'),
       'f' => $this->session->userdata('USERNAME'),
       'h' => ($this->input->post('id-project')) ? $this->input->post('id-project') : $idProject[0]['MAX'],
-      'i' => $this->input->post('contract-no')
+      'i' => $this->input->post('contract-no'),
+      'j' => $this->input->post('description')
     );
 
     if($this->input->post('id-project')){
-      $res = $this->builtbyprime->explicit("UPDATE TBL_PROJECT SET start_date = TO_DATE('".$data['b']."','dd/mm/yyyy'), finish_date = TO_DATE('".$data['c']."','dd/mm/yyyy'), budget = '".$data['d']."', id_vendor = '".$data['e']."', contract_no= '".$data['i']."', modified_by = '".$data['f']."', modified_date = SYSDATE WHERE id = '".$this->input->post('id-project')."'");
+      $res = $this->builtbyprime->explicit("UPDATE TBL_PROJECT SET start_date = TO_DATE('".$data['b']."','dd/mm/yyyy'), finish_date = TO_DATE('".$data['c']."','dd/mm/yyyy'), budget = '".$data['d']."', id_vendor = '".$data['e']."', contract_no= '".$data['i']."', modified_by = '".$data['f']."', modified_date = SYSDATE, name = '".$data['a']."', description = '".$data['j']."' WHERE id = '".$this->input->post('id-project')."'");
 
       $this->builtbyprime->delete('TBL_SUPERVISOR_PROJECT', array('id_project' => $this->input->post('id-project')));
     } else {
@@ -52,7 +53,11 @@ class Project extends CI_Controller {
       $idSupervisor[0]['MAX']++;
     }
     
-    echo json_encode($res);
+    if($res){
+      echo json_encode(array('status' => 'ok', 'data' => $data));
+    } else {
+      echo json_encode(array('status' => 'not ok'));
+    }
 	}
 
 	public function view($id){
@@ -91,8 +96,17 @@ class Project extends CI_Controller {
     $this->load->view('project/detail', $data);
 	}
 
-	public function remove(){
+	public function remove($id){
+    //delete tbl_project
+    //$this->builtbyprime->delete('TBL_ITEM_TASK', array('id_project' => $id));
+    
+    $res = $this->builtbyprime->delete('TBL_PROJECT', array('id' => $id));
 
+    if($res){
+      echo json_encode(array('status' => 'ok'));
+    } else {
+      echo json_encode(array('status' => 'not ok'));
+    }
 	}
 
 	public function edit(){

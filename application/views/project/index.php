@@ -126,7 +126,7 @@
                   </div>
 
                   <div class="form-group">
-                      <label class="col-sm-4 control-label">Nilai Kontrak<span class="asterisk">*</span></label>
+                      <label class="col-sm-4 control-label">Nilai Kontrak Tanpa PPN<span class="asterisk">*</span></label>
                       <div class="col-sm-5">
                           <input type="text" name="project-budget" class="form-control" required title="Kolom Nilai Proyek wajib diisi!" value="0" />
                       </div>

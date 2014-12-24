@@ -108,7 +108,7 @@
                     <div class="pull-right">
                    
                        
-                        <div class="btn-group btn-group-list btn-group-notification">
+                        <!-- <div class="btn-group btn-group-list btn-group-notification">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                               <i class="fa fa-bell-o"></i>
                               <span class="badge">5</span>
@@ -156,10 +156,10 @@
                                 <div class="dropdown-footer text-center">
                                     <a href="#" class="link">See All Notifications</a>
                                 </div>
-                            </div><!-- dropdown-menu -->
-                        </div><!-- btn-group -->
+                            </div>
+                        </div> -->
                         
-                        <div class="btn-group btn-group-list btn-group-messages">
+                        <!-- <div class="btn-group btn-group-list btn-group-messages">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-envelope-o"></i>
                                 <span class="badge">2</span>
@@ -214,8 +214,8 @@
                                 <div class="dropdown-footer text-center">
                                     <a href="#" class="link">See All Messages</a>
                                 </div>
-                            </div><!-- dropdown-menu -->
-                        </div><!-- btn-group -->
+                            </div>
+                        </div> -->
                         
                         <div class="btn-group btn-group-option">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
