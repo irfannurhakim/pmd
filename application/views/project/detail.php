@@ -48,39 +48,60 @@
             <button class="btn <?=$buttonStatusType;?> btn-bordered btn-block" ><?=$statusLabel;?></button>
           </div><!-- panel-body -->
         </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body nopadding">
+            <?php 
+              $proyekChecked = '';
+              if($project['IS_FINISHED'] == 1){
+                $proyekChecked = 'checked="checked"';
+              } 
+            ?>
+              <form class="form-bordered" >
+              <div class="form-group">
+                  <div class="col-sm-12 control-label">
+                    <div class="ckbox ckbox-success">
+                      <input type="checkbox" value="1" class="project-finished" name="project-finished" id="project-finished" <?=$proyekChecked;?> />
+                      <label for="project-finished">Proyek Selesai?</label>
+                    </div>
+                  </div>
+              </div>
+              </form>
+          </div>
+        </div>
       
         <div class="panel panel-default">
-    <!--     <div class="panel-heading">
-          <h3 class="panel-title">Statistik Proyek</h3>
-        </div> -->
           <div class="panel-body">
-            <h5>Rencana (<?=$info[0]['TOTAL_PLANNING'];?>%)</h5>
+            <h5>Rencana (<?=round($info[0]['TOTAL_PLANNING'], 3);?>%)</h5>
             <div class="progress">
               <div style="width: <?=$info[0]['TOTAL_PLANNING'];?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="50" role="progressbar" class="progress-bar progress-bar-success">
                   <span class="sr-only"><?=$info[0]['TOTAL_PLANNING'];?>% Complete (success)</span>
               </div>
             </div>
-            <h5>Realisasi (<?=$info[0]['TOTAL_PERCENTAGE'];?>%)</h5>
+            <h5>Realisasi (<?=round($info[0]['TOTAL_PERCENTAGE'], 3);?>%)</h5>
             <div class="progress">
               <div style="width: <?=$info[0]['TOTAL_PERCENTAGE'];?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-success">
                   <span class="sr-only"><?=$info[0]['TOTAL_PERCENTAGE'];?>% Complete (success)</span>
               </div>
             </div>
-            <h5>Sisa Waktu (<?=$remainingDays;?>%)</h5>
+            <h5>Sisa Waktu (<?=round($remainingDays, 3);?>%)</h5>
             <div class="progress">
               <div style="width: <?=$remainingDays;?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="60" role="progressbar" class="progress-bar progress-bar-success">
                   <span class="sr-only"><?=$remainingDays;?>% Complete (success)</span>
               </div>
             </div>
-            <h5>Deviasi (<?=$info[0]['TOTAL_PERCENTAGE']-$info[0]['TOTAL_PLANNING'];?>%)</h5>
+            <h5>Deviasi (<?=round($info[0]['TOTAL_PERCENTAGE']-$info[0]['TOTAL_PLANNING'], 3);?>%)</h5>
             <div class="progress">
-              <div style="width: <?=abs($info[0]['TOTAL_PLANNING']-$info[0]['TOTAL_PERCENTAGE']);?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="10" role="progressbar" class="progress-bar progress-bar-warning">
+            <?php 
+              $deviation = $info[0]['TOTAL_PERCENTAGE'] - $info[0]['TOTAL_PLANNING'];
+              $progressBarColor = ($deviation < -10) ? 'progress-bar-danger' : (($deviation > 0 ) ? 'progress-bar-success' : 'progress-bar-warning');
+            ?>
+              <div style="width: <?=abs($info[0]['TOTAL_PLANNING']-$info[0]['TOTAL_PERCENTAGE']);?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="10" role="progressbar" class="progress-bar <?=$progressBarColor;?>">
                   <span class="sr-only"><?=$info[0]['TOTAL_PLANNING']-$info[0]['TOTAL_PERCENTAGE'];?>% Complete (success)</span>
               </div>
             </div>         
           </div>     
         </div>
-
       </div>
 
       <div class="col-md-8">
@@ -150,6 +171,12 @@
                       <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="end-date" name="end-date" value="<?=date_format(date_create($project['FINISH_DATE']), 'd/m/Y');?>" <?=$disabled;?> />
                   </div>
               </div><!-- form-group -->
+              <div class="form-group">
+                  <label class="col-sm-4 control-label">Tanggal SPK</label>
+                  <div class="col-sm-3">
+                      <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="spk-date" name="spk-date" value="<?=date_format(date_create($project['SPK_DATE']), 'd/m/Y');?>" <?=$disabled;?>/>
+                  </div>
+              </div>
               <div class="form-group">
                 <label class="col-sm-4 control-label">Nilai Proyek Tanpa PPN</label>
                 <div class="col-sm-8">
@@ -358,6 +385,7 @@
       }
     });
 
+    /** checkbox surat peringatan */
     $('.notice-choice').change(function(){
       var isChecked = $(this).is(':checked');
       var name = $(this).next().html();
@@ -400,12 +428,56 @@
     });
 
     function toggleCheck(isChecked, ctx){
-      if(isChecked, ctx){
-        $(ctx).attr('checked', false);
+      if(isChecked){
+        $(ctx).removeAttr('checked');
       } else {
-        $(ctx).attr('checked', true);
+        $(ctx).attr('checked', 'checked');
       }      
     }
+
+    /* checkbox surat selesai */
+    $('.project-finished').change(function(){
+      var isChecked = $(this).is(':checked');
+      var name = $(this).next().html();
+      var value = $(this).val();
+      var self = this;
+
+      var c = confirm("Apakah anda yakin untuk mengubah status proyek ini?");
+      if(c){
+        $.ajax({
+          url: "<?=base_url();?>project/set_finish/<?=$project['ID'];?>",
+          type: 'POST',
+          dataType: 'json',
+          data: {
+            'name': name,
+            'is-checked' : (isChecked) ? 1 : 0,
+            'value' : value
+          }
+        })
+        .done(function(a){
+          if(a.status == 'ok'){
+            jQuery.gritter.add({
+              title: 'Info',
+              text: 'Simpan perubahan berhasil.',
+              class_name: 'growl-info',
+              image: false,
+              sticky: false,
+              time: ''
+            });
+            location.reload();
+          } else {
+            toggleCheck(isChecked, self);
+          }
+        })
+        .fail(function(){
+          toggleCheck(isChecked, self);
+        })
+      } else {
+        toggleCheck(isChecked, self);
+      }
+      return false;
+    });
+
 
     $.ajax({
       url: "<?=base_url();?>project/load_log/<?=$project['ID'];?>",
@@ -440,9 +512,8 @@
       return txt.value;
     }
 
-     $('#button-delete-project').click(function(){
+    $('#button-delete-project').click(function(){
       var id = $(this).attr('object');
-      
       if (confirm('Apakah anda yakin menghapus Proyek ini ?')) { 
         $.ajax({
           url: '<?php echo base_url();?>project/remove/' + id,
@@ -450,6 +521,14 @@
         })
         .done(function(response, textStatus, jqhr){
           if(response.status == 'ok'){
+            jQuery.gritter.add({
+              title: 'Info',
+              text: 'Hapus proyek berhasil, Halaman akan dialihkan...',
+              class_name: 'growl-info',
+              image: false,
+              sticky: false,
+              time: ''
+            });
             window.location.replace("<?=base_url();?>#/projects");
           } else {
             jQuery.gritter.add({
@@ -473,6 +552,8 @@
           });
         });
       }
+
+      return false;
     });
   });
     

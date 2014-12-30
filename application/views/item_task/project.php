@@ -1,7 +1,9 @@
 <?php
   $btnImport = ''; 
+  $btnDeleteAll = '';
   if(($this->session->userdata('ID_USER_TYPE') == 1) || ($this->session->userdata('ID_USER_TYPE') == 6)){ 
-    $btnImport = '<button class="btn btn-default btn-sm import-data" type="button" data-toggle="modal" data-target=".modal-import"><i class="fa fa-download mr5"></i> Impor </button>';
+    $btnImport = '<button class="btn btn-default btn-sm import-data" type="button" data-toggle="modal" data-target=".modal-import" title="Impor"><i class="fa fa-download"></i></button>';
+    $btnDeleteAll = '<button class="btn btn-default btn-sm btn-delete-all" type="button" title="Hapus Semua" object="'.$project['ID'].'"><i class="fa fa-trash-o"></i></button>';
   }
 ?>
 <div class="media-options">
@@ -19,9 +21,10 @@
       </div>
 
       <div class="btn-group">
-        <button class="btn btn-default btn-sm add-data" type="button" data-toggle="modal" data-target=".modal-add-item"><i class="fa fa-plus mr5"></i> Tambah </button>
+        <button class="btn btn-default btn-sm add-data" type="button" data-toggle="modal" data-target=".modal-add-item" title="Tambah Item"><i class="fa fa-plus"></i><!-- Tambah --></button>
+        <?=$btnDeleteAll;?>
         <?=$btnImport;?>
-        <a href="<?=base_url();?>item_task/export/<?=$project['ID'];?>" target="_blank" class="btn btn-default btn-sm export-data"><i class="fa fa-upload mr5"></i> Download </a>
+        <a href="<?=base_url();?>item_task/export/<?=$project['ID'];?>" target="_blank" class="btn btn-default btn-sm export-data" title="Download" ><i class="fa fa-upload"></i><!-- Download --></a>
       </div>
     </div>
   </div>
@@ -293,9 +296,30 @@
       }
     });
 
+    $('.btn-delete-all').click(function(){
+      var id = $(this).attr('object');
+      
+      if (confirm('Apakah anda yakin menghapus seluruh item pada proyek ini ?')) { 
+        $.ajax({
+          url: '<?php echo base_url();?>item_task/remove_all/' + id,
+          dataType: 'json'
+        })
+        .done(function(response, textStatus, jqhr){
+          location.reload();
+        })
+        .fail(function(){
+
+        });
+      }
+    });
+
     $('#form-import').ajaxForm({
       clearForm: true,
       dataType: 'json',
+      beforeSend: function(){
+        $('#btn-process-import').html('Sedang Memproses... ');
+        $('#btn-process-import').attr('disabled','disabled');
+      },
       success: function(a,b,c,d){
         if(a.status == 'ok'){
           $('#modal-import').modal('hide');
@@ -313,7 +337,7 @@
         } else {
           jQuery.gritter.add({
             title: 'Upss..',
-            text: 'Terjadi Kesalahan',
+            text: a.message,
             class_name: 'growl-danger',
             image: false,
             sticky: false,
@@ -321,6 +345,7 @@
           });
 
           $('#btn-process-import').html('Proses');
+          $('#btn-process-import').removeAttr('disabled');
         }
       },
       error: function(e){
@@ -334,6 +359,7 @@
         });
 
         $('#btn-process-import').html('Proses');
+        $('#btn-process-import').removeAttr('disabled');
       },
       uploadProgress: function(e,position,total,percentComplete){
         $('#btn-process-import').html('Sedang Memproses... ' + percentComplete + " %");

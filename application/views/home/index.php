@@ -1,129 +1,129 @@
-                <div class="row">
-                  <div class="col-md-3"></div>
-                  <div class="col-md-6">
-                      <form class="form form-search" action="http://themepixels.com/demo/webpage/chain/search-results.html">
-                        <input type="search" class="form-control" placeholder="Cari">
-                      </form>
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+      <form class="form form-search">
+        <input type="search" class="form-control" placeholder="Cari">
+      </form>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+<div class="mb30"></div>
+<div class="" id="carousel-graph">
+    <?php foreach ($projects as $project) { ?>
+      <div class="col-md-12">
+          <div class="panel panel-default">
+              <div class="panel-body padding15">
+                  <div class="title-section">
+                    <h5 class="md-title mt0 mb10"><a href="<?=base_url();?>#/project/view/<?=$project['ID'];?>"><?= $project['NAME'];?></a></h5>
                   </div>
-                  <div class="col-md-3"></div>
-                </div>
-                <div class="mb30"></div>
-                <div class="" id="carousel-graph">
-                    <?php foreach ($projects as $project) { ?>
-                      <div class="col-md-12">
-                          <div class="panel panel-default">
-                              <div class="panel-body padding15">
-                                  <div class="title-section">
-                                    <h5 class="md-title mt0 mb10"><a href="<?=base_url();?>#/project/view/<?=$project['ID'];?>"><?= $project['NAME'];?></a></h5>
-                                  </div>
-                                  <div id="legend-curvas-<?=$project['ID'];?>" class="flotLegend"></div>
-                                  <div id="curvas-<?=$project['ID'];?>" class="flotChart"></div>
-                              </div><!-- panel-body -->
-                              <div class="panel-footer">
-                                  <div class="row">
-                                    <div class="col-md-6">
-                                      <div>
-                                        <div id="gauge_<?=$project['ID'];?>"></div>
-                                      </div><!-- tinystat -->
-                                    </div><!-- col-md-7 -->
-                                    <div class="col-md-6">
-                                      <span class="sublabel">Rencana (<?=$project['TOTAL_PLANNING'];?> %)</span>
-                                      <div class="progress progress-xs progress-metro">
-                                        <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="<?=$project['TOTAL_PLANNING'];?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$project['TOTAL_PLANNING'];?>%"></div>
-                                      </div><!-- progress -->
-                                      
-                                      <span class="sublabel">Realisasi (<?=$project['TOTAL_PERCENTAGE'];?> %)</span>
-                                      <div class="progress progress-xs progress-metro">
-                                        <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="<?=$project['TOTAL_PERCENTAGE'];?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$project['TOTAL_PERCENTAGE'];?>%"></div>
-                                      </div><!-- progress -->
-                                      
-                                      <span class="sublabel">Sisa Waktu (<?=$project['REMAINING_DAYS'];?> %)</span>
-                                      <div class="progress progress-xs progress-metro">
-                                        <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="<?=$project['REMAINING_DAYS'];?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$project['REMAINING_DAYS'];?>%"></div>
-                                      </div><!-- progress -->
-                                      
-                                    </div><!-- col-md-5 -->
-                                  </div><!-- row -->
-                              </div><!-- panel-footer -->
-                          </div><!-- panel -->
-                      </div>             
-                    <?php } ?>
-                </div><!-- row -->
-                <div class="mb20"></div>
+                  <div id="legend-curvas-<?=$project['ID'];?>" class="flotLegend"></div>
+                  <div id="curvas-<?=$project['ID'];?>" class="flotChart"></div>
+              </div><!-- panel-body -->
+              <div class="panel-footer">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div>
+                        <div id="gauge_<?=$project['ID'];?>"></div>
+                      </div><!-- tinystat -->
+                    </div><!-- col-md-7 -->
+                    <div class="col-md-6">
+                      <span class="sublabel">Rencana (<?=round($project['TOTAL_PLANNING'], 3);?> %)</span>
+                      <div class="progress progress-xs progress-metro">
+                        <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="<?=$project['TOTAL_PLANNING'];?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$project['TOTAL_PLANNING'];?>%"></div>
+                      </div><!-- progress -->
+                      
+                      <span class="sublabel">Realisasi (<?=round($project['TOTAL_PERCENTAGE'], 3);?> %)</span>
+                      <div class="progress progress-xs progress-metro">
+                        <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="<?=$project['TOTAL_PERCENTAGE'];?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$project['TOTAL_PERCENTAGE'];?>%"></div>
+                      </div><!-- progress -->
+                      
+                      <span class="sublabel">Sisa Waktu (<?=round($project['REMAINING_DAYS'], 3);?> %)</span>
+                      <div class="progress progress-xs progress-metro">
+                        <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="<?=$project['REMAINING_DAYS'];?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$project['REMAINING_DAYS'];?>%"></div>
+                      </div><!-- progress -->
+                      
+                    </div><!-- col-md-5 -->
+                  </div><!-- row -->
+              </div><!-- panel-footer -->
+          </div><!-- panel -->
+      </div>             
+    <?php } ?>
+</div><!-- row -->
+<div class="mb20"></div>
 
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="row">
-                      <div class="panel panel-default">
-                        <div class="panel-heading">
-                          <div class="pull-right">
-                            <a href="#" class="tooltips mr5" data-toggle="modal" title="Settings" id="btn-setting-sorting" data-target=".bs-example-modal"><span class="fa fa-cog"></span></a>
-                          </div><!-- panel-btns -->
-                          <h3 class="panel-title">Statistik Umum <span class="tahun-berjalan"><?=date('Y');?></span></h3>
-                        </div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="pull-right">
+            <a href="#" class="tooltips mr5" data-toggle="modal" title="Settings" id="btn-setting-sorting" data-target=".bs-example-modal"><span class="fa fa-cog"></span></a>
+          </div><!-- panel-btns -->
+          <h3 class="panel-title">Statistik Umum <span class="tahun-berjalan"><?=date('Y');?></span></h3>
+        </div>
 
-                        <div class="panel-body">
-                          <div class="row">
-                            <div class="col-md-4">
-                              <h5 class="md-title">Top 5 Kontraktor</h5>
-                              <div class="list-group people-group" id="list-contractors">
-                                      
-                              </div><!-- list-group -->
-                            </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-4">
+              <h5 class="md-title">Top 5 Kontraktor</h5>
+              <div class="list-group people-group" id="list-contractors">
+                      
+              </div><!-- list-group -->
+            </div>
 
-                            <div class="col-md-4">
-                              <h5 class="md-title">Top 5 Pengawas</h5>
-                                <div class="list-group people-group" id="list-supervisors">
-                                </div><!-- list-group -->
-                            </div>
+            <div class="col-md-4">
+              <h5 class="md-title">Top 5 Pengawas</h5>
+                <div class="list-group people-group" id="list-supervisors">
+                </div><!-- list-group -->
+            </div>
 
-                            <div class="col-md-4">
-                              <div class="panel panel-dark noborder">
-                                <div class="panel-heading noborder">
-                                  <div class="panel-btns">
-                                    <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
-                                  </div><!-- panel-btns -->
-                                  <div class="panel-icon"><i class="fa fa-shopping-cart"></i></div>
-                                  <div class="media-body">
-                                    <h5 class="md-title nomargin">Total Nilai Proyek Tahun <span class="tahun-berjalan"><?=date('Y');?></h5>
-                                    <h1 class="mt5"><span id="total-nilai-proyek">0</span></h1>
-                                  </div><!-- media-body -->
-                                  <hr>
-                                  <div class="panel-icon"><i class="fa fa-suitcase"></i></div>
-                                  <div class="media-body">
-                                    <h5 class="md-title nomargin">Jumlah Proyek <span class="tahun-berjalan"><?=date('Y');?></h5>
-                                    <h1 class="mt5"><span id="total-jumlah-proyek">0</span></h1>
-                                  </div><!-- media-body -->
-                                  <div class="clearfix mt20">
-                                    <div class="pull-left">
-                                      <h5 class="md-title nomargin">Selesai</h5>
-                                      <h4 class="nomargin"><span id="total-proyek-selesai">0</span></h4>
-                                    </div>
-                                    <div class="pull-right">
-                                      <h5 class="md-title nomargin">Berlangsung</h5>
-                                      <h4 class="nomargin"><span id="total-proyek-belangsung">0</span></h4>
-                                    </div>
-                                  </div>
-                                  <hr>
-                                  <div class="panel-icon"><i class="fa fa-users"></i></div>
-                                  <div class="media-body">
-                                    <h5 class="md-title nomargin">Jumlah Kontraktor</h5>
-                                    <h1 class="mt5"><span id="total-jumlah-kontraktor">0</span></h1>
-                                  </div><!-- media-body -->
-                                  <hr/>
-                                  <div class="panel-icon"><i class="fa fa-pencil-square-o"></i></div>
-                                  <div class="media-body">
-                                    <h5 class="md-title nomargin">Jumlah Pengawas</h5>
-                                    <h1 class="mt5"><span id="total-jumlah-pengawas">0</span></h1>
-                                  </div><!-- media-body -->
-                              </div><!-- panel -->      
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+            <div class="col-md-4">
+              <div class="panel panel-dark noborder">
+                <div class="panel-heading noborder">
+                  <div class="panel-btns">
+                    <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
+                  </div><!-- panel-btns -->
+                  <div class="panel-icon"><i class="fa fa-shopping-cart"></i></div>
+                  <div class="media-body">
+                    <h5 class="md-title nomargin">Total Nilai Proyek Tahun <span class="tahun-berjalan"><?=date('Y');?></h5>
+                    <h1 class="mt5"><span id="total-nilai-proyek">0</span></h1>
+                  </div><!-- media-body -->
+                  <hr>
+                  <div class="panel-icon"><i class="fa fa-suitcase"></i></div>
+                  <div class="media-body">
+                    <h5 class="md-title nomargin">Jumlah Proyek <span class="tahun-berjalan"><?=date('Y');?></h5>
+                    <h1 class="mt5"><span id="total-jumlah-proyek">0</span></h1>
+                  </div><!-- media-body -->
+                  <div class="clearfix mt20">
+                    <div class="pull-left">
+                      <h5 class="md-title nomargin">Selesai</h5>
+                      <h4 class="nomargin"><span id="total-proyek-selesai">0</span></h4>
                     </div>
-                  </div> 
-                </div><!-- row -->
+                    <div class="pull-right">
+                      <h5 class="md-title nomargin">Berlangsung</h5>
+                      <h4 class="nomargin"><span id="total-proyek-belangsung">0</span></h4>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="panel-icon"><i class="fa fa-users"></i></div>
+                  <div class="media-body">
+                    <h5 class="md-title nomargin">Jumlah Kontraktor</h5>
+                    <h1 class="mt5"><span id="total-jumlah-kontraktor">0</span></h1>
+                  </div><!-- media-body -->
+                  <hr/>
+                  <div class="panel-icon"><i class="fa fa-pencil-square-o"></i></div>
+                  <div class="media-body">
+                    <h5 class="md-title nomargin">Jumlah Pengawas</h5>
+                    <h1 class="mt5"><span id="total-jumlah-pengawas">0</span></h1>
+                  </div><!-- media-body -->
+              </div><!-- panel -->      
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+</div><!-- row -->
 
 <div class="modal fade bs-example-modal" tabindex="-1" role="dialog" id="modal-sorting-setting" >
   <div class="modal-dialog">
@@ -366,7 +366,8 @@
       },
       xaxis: {
         color: '#eee',
-        min: 0
+        min: 0,
+        minTickSize: 1
       }
     });
     

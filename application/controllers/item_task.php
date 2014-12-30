@@ -90,8 +90,21 @@ class Item_task extends CI_Controller {
     } else {
       echo json_encode(array('status' => 'error'));
     }
-
   }
+
+  public function remove_all($id){
+    $this->builtbyprime->explicit("DELETE FROM TBL_DISCUSSION WHERE ID_ITEM_TASK IN (SELECT ID FROM TBL_ITEM_TASK WHERE ID_PROJECT = '".$id."')");
+    $this->builtbyprime->explicit("DELETE FROM TBL_ITEM_TASK_TIME WHERE ID_ITEM_TASK IN (SELECT ID FROM TBL_ITEM_TASK WHERE ID_PROJECT = '".$id."')");
+    $remove = $this->builtbyprime->delete('TBL_ITEM_TASK', array('id_project' => $id));
+
+
+    if($remove){
+      echo json_encode(array('status' => 'ok'));
+    } else {
+      echo json_encode(array('status' => 'error'));
+    }
+  }
+
 
   public function project($id){ 
     $data['item_list']    = $this->builtbyprime->explicit('SELECT LEVEL,TBL_ITEM_TASK.* FROM TBL_ITEM_TASK WHERE ID_PROJECT = '.$id.' START WITH ID_PARENT = 0 CONNECT BY PRIOR ID = ID_PARENT ORDER SIBLINGS BY ID');
@@ -133,7 +146,7 @@ class Item_task extends CI_Controller {
       $html .= '<td>' . (($item['LEVEL'] == 1) ? strtoupper($item['NAME']) : $item['NAME']) . '</td>';
       $html .= '<td>' . (($isLast) ? $item['SPECIFICATION'] : '' ) . '</td>';
       $html .= '<td class="dt-cols-center">' . (($isLast) ? $item['UNIT'] : '' ) . '</td>';
-      $html .= '<td class="dt-cols-right">' . (($isLast) ? $item['VOLUME'] : '') . '</td>';
+      $html .= '<td class="dt-cols-right">' . (($isLast) ? round($item['VOLUME'],4) : '') . '</td>';
       $html .= '<td class="dt-cols-right">' . (($isLast) ? number_format($item['UNIT_PRICE'], 0,',','.') : '' ) . '</td>';
       $html .= '<td class="dt-cols-right">' . (($isLast) ? round((($item['UNIT_PRICE'] * $item['VOLUME']) / $budget ) * 100, 3) : '' ) . '</td>';
       $html .= '<td class="dt-cols-right">' . (($isLast) ? number_format($item['UNIT_PRICE'] * $item['VOLUME'], 0,',','.') : '' ) . '</td>';
@@ -276,7 +289,7 @@ class Item_task extends CI_Controller {
       'd' => $this->session->userdata('USERNAME'),
       'e' => $this->input->post('bobot-item'),
       'f' => $this->input->post('planning-item'),
-      'g' => $this->input->post('realization-before')
+      'g' => $this->input->post('realization-before') 
     );
 
     $return = false;
@@ -339,14 +352,6 @@ class Item_task extends CI_Controller {
     }
 
     echo json_encode(Array('status' => 'ok', 'data' => $data));
-  }
-
-  public function edit_comment(){
-
-  }
-
-  public function delete_comment(){
-
   }
 
   public function add_attachment(){
@@ -427,6 +432,16 @@ class Item_task extends CI_Controller {
     $tmpPlanId = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_PROJECT_PLANNING");
     $maxPlanId = $tmpPlanId[0]['MAX'];
 
+    /* Tentukan Jumlah Minggu berdasarkan end date - start date Untuk validasi */
+    $project = $this->builtbyprime->get('TBL_PROJECT', array('id' => $data['id_project']), TRUE);
+    $Carbon = new Carbon\Carbon;
+
+    $a = $Carbon::createFromFormat('d-M-y', $project['START_DATE']);
+    $b = $Carbon::createFromFormat('d-M-y', $project['FINISH_DATE']); 
+    $totalDays = $b->diffInDays($a);
+    $realNumberWeek = ceil($totalDays/7);  
+
+    /* data planning untuk di input ke TBL_PROJECT_PLANNING' */
     $planning = Array(
       'id' => $maxPlanId,
       'name' => 'Initial Planning',
@@ -434,15 +449,27 @@ class Item_task extends CI_Controller {
       'created_by' => $this->session->userdata('USERNAME'),
       'modified_by' => $this->session->userdata('USERNAME')
     );
-
     $this->builtbyprime->insert('TBL_PROJECT_PLANNING', $planning);
 
+    /* Inisialisasi utk data */
     $arrIdParents = Array(0 => 0);
-
     $successInsert = 0;
     $failedInsert = 0;
     $numberWeek = $sheetData[1]['I'] + 9;
 
+    /* jika jumlah week pada excel kurang dari 1 atau bukan berformat integer */
+    if($numberWeek < 1){
+      echo json_encode(array('status' => 'not ok', 'message' => 'Jumlah perencanaan minggu harus lebih 0!'));
+      exit();
+    }
+
+    /*jika jumlah alokasi tidak sama dengan jumalh minggu end date - start date proyek */
+    if($sheetData[1]['I'] != $realNumberWeek){
+      echo json_encode(array('status' => 'not ok', 'message' => 'Jumlah perencanan minggu tidak sama dengan jumlah alokasi waktu realisasi ('.$realNumberWeek.')!'));
+      exit();
+    }
+
+    /* iterasi untuk setiap row dan dimasukan ke database */
     foreach ($sheetData as $key => $value) {
       if($key != 1){
         if($value['A'] == 'eof') break;
@@ -498,20 +525,28 @@ class Item_task extends CI_Controller {
       }
     }
 
+    $this->builtbyprime->update('TBL_PROJECT', Array('id' => $data['id_project']), Array('file_planning_url' => $upload_data['file_name']));
+
     echo json_encode(Array('status'=>"ok", "message" => "Jumlah baris sukses diimpor : " . $successInsert ."<br/> Gagal: " . $failedInsert));
   }
 
 
   public function export($id){
-    $data['item_list']    = $this->builtbyprime->explicit('SELECT LEVEL,TBL_ITEM_TASK.* FROM TBL_ITEM_TASK WHERE ID_PROJECT = '.$id.' START WITH ID_PARENT = 0 CONNECT BY PRIOR ID = ID_PARENT ORDER SIBLINGS BY ID');
-    $data['project']      = $this->builtbyprime->get('TBL_PROJECT', array('id' => $id), TRUE);
-    $data['id']           = $id;
+    $this->load->helper('download');
 
-    $t = $this->genMulDimArr($data['item_list']);
-    $kosong = array();
-    $rows = $this->flatten($t, $data['project']['BUDGET'], $kosong);
+    $project = $this->builtbyprime->get('TBL_PROJECT', Array('id' => $id), TRUE);
+    $data = file_get_contents("./uploads/" . $project['FILE_PLANNING_URL']);
 
-    print_r($rows);
+    force_download($project['FILE_PLANNING_URL'], $data);
+    // $data['item_list']    = $this->builtbyprime->explicit('SELECT LEVEL,TBL_ITEM_TASK.* FROM TBL_ITEM_TASK WHERE ID_PROJECT = '.$id.' START WITH ID_PARENT = 0 CONNECT BY PRIOR ID = ID_PARENT ORDER SIBLINGS BY ID');
+    // $data['project']      = $this->builtbyprime->get('TBL_PROJECT', array('id' => $id), TRUE);
+    // $data['id']           = $id;
+
+    // $t = $this->genMulDimArr($data['item_list']);
+    // $kosong = array();
+    // $rows = $this->flatten($t, $data['project']['BUDGET'], $kosong);
+
+    // print_r($rows);
 
     // $this->load->library('excel');
 
@@ -551,6 +586,7 @@ class Item_task extends CI_Controller {
     // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
     // $objWriter->save('php://output');
     // exit;
+
   }
 
   public function flatten_export($arr, $budget, $outArr){
