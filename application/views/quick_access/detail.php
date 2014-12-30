@@ -393,10 +393,10 @@
           return false;
         }
 
-        if(($("input[name='supervisor-volume']").val()*1 <= $("input[name='realization-before']").val()*1) || ($("input[name='vendor-volume']").val()*1 <= $("input[name='realization-before']").val()*1)){
-          alert('Nilai Realisasi tidak boleh KURANG dari volume yang telah Teralisasi!');
-          return false;
-        }      
+        // if(($("input[name='supervisor-volume']").val()*1 <= $("input[name='realization-before']").val()*1) || ($("input[name='vendor-volume']").val()*1 <= $("input[name='realization-before']").val()*1)){
+        //   alert('Nilai Realisasi tidak boleh KURANG dari volume yang telah Teralisasi!');
+        //   return false;
+        // }      
       },
       success: function(a,b,c,d){
         if(a.status == 'ok'){
@@ -410,6 +410,15 @@
           });
 
           location.reload();
+        } else {
+          jQuery.gritter.add({
+            title: 'Upss..',
+            text: 'Terjadi kesalahan, silahkan refresh browser anda!',
+            class_name: 'growl-danger',
+            image: false,
+            sticky: false,
+            time: ''
+          });
         }
       }
     });

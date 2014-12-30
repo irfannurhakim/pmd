@@ -283,7 +283,7 @@
             $.ajax({
               url: '<?php echo base_url();?>reports/index',
               beforeSend: function(){
-                activateMenu('reports, #weekly');
+                activateMenu('reports, #menu-weekly');
               }
             })
             .done(function(response, textStatus, jqhr){
@@ -300,7 +300,7 @@
             $.ajax({
               url: '<?php echo base_url();?>reports/weekly_report/' + id,
               beforeSend: function(){
-                activateMenu('reports, #weekly');
+                activateMenu('reports, #menu-weekly');
               }
             })
             .done(function(response, textStatus, jqhr){
@@ -317,7 +317,7 @@
             $.ajax({
               url: '<?php echo base_url();?>statistik/index',
               beforeSend: function(){
-                activateMenu('reports, #statistics');
+                activateMenu('reports, #menu-statistics');
               }
             })
             .done(function(response, textStatus, jqhr){
@@ -334,7 +334,7 @@
             $.ajax({
               url: '<?php echo base_url();?>statistik/statistik_detail/' + id,
               beforeSend: function(){
-                activateMenu('reports, #statistics');
+                activateMenu('reports, #menu-statistics');
               }
             })
             .done(function(response, textStatus, jqhr){
