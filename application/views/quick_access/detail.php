@@ -132,8 +132,7 @@
 <!--           <td class="dt-cols-right"><?=(round($item['VOLUME'], 4) == round($item['SUPERVISOR_PROGRESS_VOLUME'], 4)) ? '<span class="label label-success">'.$vol.'</span>' : $vol ;?></td>-->
           <td class="dt-cols-right"><?=$vol;?></td>
           <td class="dt-cols-center">
-                <i class="fa fa-comments"></i>
-                <span class="badge" id="total-comment-<?=$item['ID_ITEM_TASK'];?>"><?=($item['COMMENTS']) ? $item['COMMENTS'] : 0;?></span>
+                <span class="badge" id="total-comment-<?=$item['ID_ITEM_TASK'];?>"><i class="fa fa-comments"></i> <?=($item['COMMENTS']) ? $item['COMMENTS'] : 0;?></span>
           </td>
         </tr>
         <?php $i++; } ?>
@@ -200,7 +199,7 @@
                         </div>
                         <?php } ?>
                         <div class="col-sm-4">
-                          <button class="btn btn-primary" type="submit">Simpan</button>
+                          <button class="btn btn-primary" id="btn-save-realization" type="submit">Simpan</button>
                         </div>
                     </div><!-- form-group -->
 
@@ -242,7 +241,7 @@
                       </div>
                     </div>
                     <div class="col-md-4">
-                      <button class="btn btn-primary pull-right" type="submit">Kirim</button>
+                      <button class="btn btn-primary pull-right" id="btn-send-comment" type="submit">Kirim</button>
                       <button class="btn btn-default pull-right mr5 tooltips" title="Sertakan Foto" data-toggle="tooltip" type="button" id="btn-attach-image"><i class="fa fa-camera"></i></button>
                     </div>
                   </div>
@@ -293,6 +292,7 @@
           var api = this.api(), data;
           var total = 0;
           var totalBobot = 0;
+          var tBobot = 0, tVRencana = 0, tVRealP = 0, tVRealS = 0, tBRencana = 0, tBRencana = 0, tBRealisasi = 0;
           // Remove the formatting to get integer data for summation
           var intVal = function ( i ) {
               return typeof i === 'string' ? i.replace(/[.]/g, '')*1 : typeof i === 'number' ? i : 0;
@@ -393,6 +393,9 @@
           return false;
         }
 
+        $('#btn-save-realization').html("Menyimpan...");
+        $('#btn-save-realization').attr("disable", "disable");
+
         // if(($("input[name='supervisor-volume']").val()*1 <= $("input[name='realization-before']").val()*1) || ($("input[name='vendor-volume']").val()*1 <= $("input[name='realization-before']").val()*1)){
         //   alert('Nilai Realisasi tidak boleh KURANG dari volume yang telah Teralisasi!');
         //   return false;
@@ -420,17 +423,63 @@
             time: ''
           });
         }
+
+        $('#btn-save-realization').html("Simpan");
+        $('#btn-save-realization').removeAttr("disable");
+      },
+      error: function(){
+        jQuery.gritter.add({
+          title: 'Upss..',
+          text: 'Terjadi kesalahan, silahkan refresh browser anda!',
+          class_name: 'growl-danger',
+          image: false,
+          sticky: false,
+          time: ''
+        });
+
+        $('#btn-save-realization').html("Simpan");
+        $('#btn-save-realization').removeAttr("disable");
       }
     });
 
     $('#form-add-comment').ajaxForm({
       clearForm: true,
       dataType: 'json',
+      beforeSubmit: function(){
+        $('#btn-send-comment').html("Mengirim...");
+        $('#btn-send-comment').attr("disable", "disable");
+      },
       success: function(a,b,c,d){
         if(a.status == 'ok'){
           loadComment(a.data.c);
           $('#thumbnail-image').html('');
+          $('#id-image-attachment').val('');
+        } else {
+          jQuery.gritter.add({
+            title: 'Upss..',
+            text: 'Terjadi kesalahan, silahkan refresh browser anda!',
+            class_name: 'growl-danger',
+            image: false,
+            sticky: false,
+            time: ''
+          });
         }
+
+        $('#btn-send-comment').html("Kirim");
+        $('#btn-send-comment').removeAttr("disable");
+      },
+      error: function(){
+        jQuery.gritter.add({
+          title: 'Upss..',
+          text: 'Terjadi kesalahan, silahkan refresh browser anda!',
+          class_name: 'growl-danger',
+          image: false,
+          sticky: false,
+          time: ''
+        });
+        
+        $('#btn-send-comment').html("Kirim");
+        $('#btn-send-comment').removeAttr("disable");
       }
     });
 
@@ -458,7 +507,6 @@
         } else {
           $('#thumbnail-image').append('<img src="<?=base_url();?>uploads/'+a.file_name+'" style="width:32px;height:32px;border:1px #ddd solid;" class="mr5" title="'+a.original_file_name+'" data-toggle="tooltip"/>');
           var val = $('#id-image-attachment').val();
-
           $('#id-image-attachment').val(val + ',' + a.id);
         }
 
@@ -524,7 +572,7 @@
           };
 
           $('.activity-list').html(html);
-          $('#total-comment-' + id ).html(res.data.length);
+          $('#total-comment-' + id ).html('<i class="fa fa-comments"></i> ' + res.data.length);
           jQuery("a[data-rel^='prettyPhoto']").prettyPhoto();
         }
       })

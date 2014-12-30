@@ -213,7 +213,7 @@
           function quickAccess(){
             var idElement = '#quick-access';
             $.ajax({
-              url: '<?php echo base_url();?>/quick_access',
+              url: '<?php echo base_url();?>quick_access',
               beforeSend: function(){
                 activateMenu('quick-access');
               }
