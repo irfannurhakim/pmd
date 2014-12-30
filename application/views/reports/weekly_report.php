@@ -1,9 +1,3 @@
-<?php
-  $btnImport = ''; 
-  if(($this->session->userdata('ID_USER_TYPE') == 1) || ($this->session->userdata('ID_USER_TYPE') == 6)){ 
-    $btnImport = '<button class="btn btn-default btn-sm import-data" type="button" data-toggle="modal" data-target=".modal-import"><i class="fa fa-download mr5"></i> Impor </button>';
-  }
-?>
 <div class="media-options">
   <div class="pull-left">
    <h5><?=$project['NAME'];?></h5>  
@@ -18,6 +12,10 @@
         <button class="btn btn-default btn-sm choose-week" type="button" data-toggle="modal" data-target=".modal-filter-week"><i class="fa fa-clock-o mr5"></i> Pilih Minggu</button>
       </div>
 
+      <div class="btn-group">
+        <a href="<?=base_url();?>reports/weekly_report/<?=$id;?>/<?=$cur_week;?>/1" target="_blank" class="btn btn-default btn-sm export-data"><i class="fa fa-upload mr5"></i> Export </a>
+      </div>
+
     </div>
   </div>
 </div>
@@ -27,30 +25,60 @@
   <?php
     if(!empty($item_list)){
   ?>
-  <table id="table-list-weekly-report" class="table table-hover table-bordered responsive">
-    <tr>
-      <th>No</td>
-      <th>Item Pekerjaan</th>
-      <th>Satuan</th>
-      <th>Minggu Ke-</th>
-      <th>Periode</th>
-      <th>Persentase</th>
-    </tr>
-   <tbody>
-      <?php $no=1;
-            foreach ($item_list as $row) { 
-      ?>
-      <tr>
-          <td><?php echo $no++;?></td>
-          <td><?php echo $row['NAME'];?></td>
-          <td><?php echo $row['UNIT'];?></td>
-          <td><?php echo $row['NO_WEEK'];?></td>
-          <td><?php echo date('d/m/Y',strtotime($row['START_WEEK'])).' - '.date('d/m/Y',strtotime($row['END_WEEK']));?></td>
-          <td><?php echo $row['PERCENTAGE'];?></td>
-      </tr>
-      <?php } ?>
-    </tbody>
-  </table>
+ <table class="table table-bordered table-hover tbl-item-list responsive" id="tbl-realisasi">
+      <thead>
+        <tr>
+          <th width="50px" rowspan="2" class="dt-cols-center">No</th>
+          <th rowspan="2">Uraian Pekerjaan</th>
+          <th rowspan="2" class="dt-cols-center">Satuan</th>
+          <th colspan="4" class="dt-cols-center">Volume</th>
+          <th colspan="3" class="dt-cols-center">Bobot</th>
+        </tr>
+        <tr>
+          <th width="20px" class="dt-cols-center">Kontrak</th>
+          <th width="20px" class="dt-cols-center">Rencana</th>
+          <th width="20px" class="dt-cols-center">Realisasi Pengawas</th>
+          <th width="20px" class="dt-cols-center">Realisasi Kontraktor</th>
+          <th width="20px" class="dt-cols-center">Kontrak</th>
+          <th width="20px" class="dt-cols-center">Rencana</th>
+          <th width="20px" class="dt-cols-center">Realisasi</th>                        
+        </tr>
+      </thead>
+      <tbody class="selectable">
+        <?php
+          $i = 1;
+          foreach ($item_list as $item) {
+            $bobot = round((($item['UNIT_PRICE'] * $item['VOLUME']) / $project['BUDGET'] ) * 100, 4);
+            $vol = ($item['VOLUME'] > 0) ? round((($item['SUPERVISOR_PROGRESS_VOLUME'] / $item['VOLUME']) * $bobot), 4) : 0;
+        ?>
+        <tr object="<?=$item['ID_ITEM_TASK'];?>" planningvolume="<?=round($item['VOLUME'], 4);?>" realizationbefore="<?=round($item['SUPERVISOR_PROGRESS_VOLUME'], 4);?>" bobot="<?=$bobot;?>">
+          <td class="dt-cols-center"><?=$i;?></td>                            
+          <td ><?=$item['NAME'];?></td>
+          <td class="dt-cols-center"><?=$item['UNIT'];?></td>
+          <td class="dt-cols-right"><?=$bobot;?></td>
+          <td class="dt-cols-right"><?=round($item['VOLUME'], 4);?></td>
+          <td class="dt-cols-right"><?=round($item['SUPERVISOR_PROGRESS_VOLUME'], 4);?></td>
+          <td class="dt-cols-right"><?=round($item['VENDOR_PROGRESS_VOLUME'], 4);?></td>
+          <td class="dt-cols-right"></td>
+          <td class="dt-cols-right"><?=round($item['WEIGHT_PLANNING'], 4);?></td>
+          <td class="dt-cols-right"><?=$vol;?></td>
+        </tr>
+        <?php $i++; } ?>
+
+        <tfoot>
+            <tr>
+                <th colspan="3" style="text-align:right">Total</th>
+                <th class="dt-cols-right"></th>
+                <th class="dt-cols-right"></th>
+                <th class="dt-cols-right"></th>
+                <th class="dt-cols-right"></th>
+                <th class="dt-cols-right"></th>
+                <th class="dt-cols-right"></th>
+                <th class="dt-cols-right"></th>
+            </tr>
+        </tfoot>
+      </tbody>
+    </table>    
   <?php
     }else{ echo '<div class="alert alert-info text-center">Belum ada data tersedia.<br />Silahkan pilih minggu pada tombol di atas.</div>'; }
   ?>
@@ -140,7 +168,7 @@
           }
         },  
         legend: {layout: 'vertical',align: 'right',verticalAlign: 'top',x: -10,y: 100,borderWidth: 0},
-        series: [{}]
+        series: [{},{},{},{}]
         
       };      
       $.ajax({
@@ -155,11 +183,25 @@
               {
                   options.xAxis.categories= nilai;
               }
-              if(index=='nilai')
+              if(index=='v_rencana')
               {
-                options.series[0].name='Persentase';
+                options.series[0].name='v_rencana';
                 options.series[0].data= nilai;
-
+              }
+               if(index=='v_realisasi')
+              {
+                options.series[1].name='v_realisasi';
+                options.series[1].data= nilai;
+              }
+               if(index=='b_rencana')
+              {
+                options.series[2].name='b_rencana';
+                options.series[2].data= nilai;
+              }
+               if(index=='b_realisasi')
+              {
+                options.series[3].name='b_realisasi';
+                options.series[3].data= nilai;
               } 
             })  
             chart = new Highcharts.Chart(options);  

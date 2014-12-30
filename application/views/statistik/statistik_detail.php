@@ -11,7 +11,7 @@
   <div class="pull-right">
     <div class="btn-toolbar">
       <div class="btn-group">
-        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/weekly_report';return false;"><i class="fa fa-arrow-left mr5"></i> Kembali</button>     
+        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/statistik';return false;"><i class="fa fa-arrow-left mr5"></i> Kembali</button>     
       </div>  
 
     </div>
@@ -48,7 +48,7 @@
     </tbody>
   </table>
   <?php
-    }else{ echo '<div class="alert alert-info text-center">Belum ada data tersedia.<br />Silahkan pilih minggu pada tombol di atas.</div>'; }
+    }else{ echo '<div class="alert alert-info text-center">Data tidak tersedia.</div>'; }
   ?>
 </div>
 

@@ -202,7 +202,7 @@ class Item_task extends CI_Controller {
             $value = $allTask[$item['ID']][$i];
           }
         }
-        $val   = ($value) ? round($value['WEIGHT_PLANNING'],4) : '';
+        $val   = ($value) ? $value['WEIGHT_PLANNING'] : '';
         $html .= '<td class="dt-cols-center">' . (($isLast) ? '<input type="text" value ="'.$val.'" style="width:45px;text-align:right;" name="'.$item['ID'].'_'.$i.'" class="item-value"  />' : '').'</td>';
       }
 
