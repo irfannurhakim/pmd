@@ -366,7 +366,8 @@
       },
       xaxis: {
         color: '#eee',
-        min: 0
+        min: 0,
+        minTickSize: 1
       }
     });
     

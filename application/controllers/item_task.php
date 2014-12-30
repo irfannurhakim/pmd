@@ -286,7 +286,7 @@ class Item_task extends CI_Controller {
       'd' => $this->session->userdata('USERNAME'),
       'e' => $this->input->post('bobot-item'),
       'f' => $this->input->post('planning-item'),
-      'g' => $this->input->post('realization-before')
+      'g' => $this->input->post('realization-before') 
     );
 
     $return = false;
@@ -522,20 +522,28 @@ class Item_task extends CI_Controller {
       }
     }
 
+    $this->builtbyprime->update('TBL_PROJECT', Array('id' => $data['id_project']), Array('file_planning_url' => $upload_data['file_name']));
+
     echo json_encode(Array('status'=>"ok", "message" => "Jumlah baris sukses diimpor : " . $successInsert ."<br/> Gagal: " . $failedInsert));
   }
 
 
   public function export($id){
-    $data['item_list']    = $this->builtbyprime->explicit('SELECT LEVEL,TBL_ITEM_TASK.* FROM TBL_ITEM_TASK WHERE ID_PROJECT = '.$id.' START WITH ID_PARENT = 0 CONNECT BY PRIOR ID = ID_PARENT ORDER SIBLINGS BY ID');
-    $data['project']      = $this->builtbyprime->get('TBL_PROJECT', array('id' => $id), TRUE);
-    $data['id']           = $id;
+    $this->load->helper('download');
 
-    $t = $this->genMulDimArr($data['item_list']);
-    $kosong = array();
-    $rows = $this->flatten($t, $data['project']['BUDGET'], $kosong);
+    $project = $this->builtbyprime->get('TBL_PROJECT', Array('id' => $id), TRUE);
+    $data = file_get_contents("./uploads/" . $project['FILE_PLANNING_URL']);
 
-    print_r($rows);
+    force_download($project['FILE_PLANNING_URL'], $data);
+    // $data['item_list']    = $this->builtbyprime->explicit('SELECT LEVEL,TBL_ITEM_TASK.* FROM TBL_ITEM_TASK WHERE ID_PROJECT = '.$id.' START WITH ID_PARENT = 0 CONNECT BY PRIOR ID = ID_PARENT ORDER SIBLINGS BY ID');
+    // $data['project']      = $this->builtbyprime->get('TBL_PROJECT', array('id' => $id), TRUE);
+    // $data['id']           = $id;
+
+    // $t = $this->genMulDimArr($data['item_list']);
+    // $kosong = array();
+    // $rows = $this->flatten($t, $data['project']['BUDGET'], $kosong);
+
+    // print_r($rows);
 
     // $this->load->library('excel');
 
@@ -575,6 +583,7 @@ class Item_task extends CI_Controller {
     // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
     // $objWriter->save('php://output');
     // exit;
+
   }
 
   public function flatten_export($arr, $budget, $outArr){

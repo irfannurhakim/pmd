@@ -72,25 +72,25 @@
       
         <div class="panel panel-default">
           <div class="panel-body">
-            <h5>Rencana (<?=$info[0]['TOTAL_PLANNING'];?>%)</h5>
+            <h5>Rencana (<?=round($info[0]['TOTAL_PLANNING'], 3);?>%)</h5>
             <div class="progress">
               <div style="width: <?=$info[0]['TOTAL_PLANNING'];?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="50" role="progressbar" class="progress-bar progress-bar-success">
                   <span class="sr-only"><?=$info[0]['TOTAL_PLANNING'];?>% Complete (success)</span>
               </div>
             </div>
-            <h5>Realisasi (<?=$info[0]['TOTAL_PERCENTAGE'];?>%)</h5>
+            <h5>Realisasi (<?=round($info[0]['TOTAL_PERCENTAGE'], 3);?>%)</h5>
             <div class="progress">
               <div style="width: <?=$info[0]['TOTAL_PERCENTAGE'];?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-success">
                   <span class="sr-only"><?=$info[0]['TOTAL_PERCENTAGE'];?>% Complete (success)</span>
               </div>
             </div>
-            <h5>Sisa Waktu (<?=$remainingDays;?>%)</h5>
+            <h5>Sisa Waktu (<?=round($remainingDays, 3);?>%)</h5>
             <div class="progress">
               <div style="width: <?=$remainingDays;?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="60" role="progressbar" class="progress-bar progress-bar-success">
                   <span class="sr-only"><?=$remainingDays;?>% Complete (success)</span>
               </div>
             </div>
-            <h5>Deviasi (<?=$info[0]['TOTAL_PERCENTAGE']-$info[0]['TOTAL_PLANNING'];?>%)</h5>
+            <h5>Deviasi (<?=round($info[0]['TOTAL_PERCENTAGE']-$info[0]['TOTAL_PLANNING'], 3);?>%)</h5>
             <div class="progress">
             <?php 
               $deviation = $info[0]['TOTAL_PERCENTAGE'] - $info[0]['TOTAL_PLANNING'];
