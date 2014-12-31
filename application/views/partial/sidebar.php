@@ -20,8 +20,8 @@
         <li id="menu-reports" class="parent activable"><a href="#"><i class="fa fa-bar-chart-o"></i> <span>Laporan</span></a>
           <ul class="children">
             <li class="activable" id="menu-weekly"><a href="<?=base_url();?>#/weekly_report"> Laporan Mingguan</a></li>
-            <li class="activable" id="menu-statistics"><a href="<?=base_url();?>#/statistik"> Statistik</a></li>
-          </ul>
+<!--             <li class="activable" id="menu-statistics"><a href="<?=base_url();?>#/statistik"> Statistik</a></li>
+ -->          </ul>
         </li> 
       <?php 
         if($this->session->userdata('ID_USER_TYPE') == 1){ ?>        
