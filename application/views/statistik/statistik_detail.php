@@ -19,7 +19,7 @@
 </div>
 <hr/>
 
-<div class="container-dt" id="tbl" style="height:200px;overflow:auto;">
+<div class="container-dt" id="tbl">
   <?php
     if(!empty($item_list)){
   ?>
@@ -52,8 +52,8 @@
   ?>
 </div>
 
-<div class="container-dt" id="chart" style="margin-top:20px;height:300px;"></div>
-
+<!-- <div class="container-dt" id="chart" style="margin-top:20px;height:300px;"></div>
+ -->
 <input type="hidden" name="id-project" id="id-project" value="<?=$id;?>" />
 <script src="<?= base_url();?>public/js/chart/highcharts.js"></script>
 <script src="<?= base_url();?>public/js/chart/exporting.js"></script>
@@ -106,7 +106,7 @@
 
               } 
             })  
-            chart = new Highcharts.Chart(options);  
+            //chart = new Highcharts.Chart(options);  
           }
         });
 

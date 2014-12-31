@@ -103,12 +103,22 @@
                           </select>
                       </div>
                   </div><!-- form-group -->
+
+                  <div class="form-group">
+                      <label class="col-sm-4 control-label">Terverifikasi</label>
+                      <div class="col-sm-8">
+                          <select id="select-verification-type" data-placeholder="Terverifikasi?" class="width300" name="is-verified">
+                            <option value="1">Ya</option>
+                            <option value="0">Tidak</option>
+                          </select>
+                      </div>
+                  </div><!-- form-group -->
                   <!-- Hidden Field -->
                   <input type="hidden" name="id" value="-1" />
                   <input type="hidden" name="is-edit" value="0" />
                 </div><!-- panel-body -->
                 <div class="panel-footer">
-                    <button class="btn btn-primary mr5" type="submit">Submit</button>
+                    <button class="btn btn-primary mr5" type="submit" id="btn-submit-user">Submit</button>
                     <button type="reset" class="btn btn-default">Reset</button>
                 </div><!-- panel-footer -->
               </div><!-- panel-default -->
@@ -136,7 +146,7 @@
       jQuery(this).find('.table-action-hide a').animate({opacity: 0},100);
     });
 
-    jQuery('#select-id-user-type').select2({
+    jQuery('#select-id-user-type, #select-verification-type').select2({
       minimumResultsForSearch: -1
     });
 
@@ -158,15 +168,57 @@
 
     // Submit add user
     $('#form-add-user').ajaxForm({
+      dataType: 'json',
+      beforeSend: function(){
+        $('#btn-submit-user').html('Menyimpan...');
+        $('#btn-submit-user').attr('disable','disable');
+      },
       success: function(a,b,c,d){
-        $('#modal-add-user').modal('hide');
-        $('.modal-backdrop').hide();
-        users();
+        if(a.status == 'ok'){
+          jQuery.gritter.add({
+            title: 'Info',
+            text: 'Berhasil simpan data',
+            class_name: 'growl-info',
+            image: false,
+            sticky: false,
+            time: ''
+          });
+
+          $('#modal-add-user').modal('hide');
+          $('.modal-backdrop').hide();
+          users();
+        } else {
+          jQuery.gritter.add({
+            title: 'Upss..',
+            text: 'Terjadi kesalahan, silahkan refresh browser',
+            class_name: 'growl-danger',
+            image: false,
+            sticky: false,
+            time: ''
+          });
+        }
+
+        $('#btn-submit-user').html('Submit');
+        $('#btn-submit-user').removeAttr('disable');
+      },
+      error: function(){
+        jQuery.gritter.add({
+          title: 'Upss..',
+          text: 'Terjadi kesalahan, silahkan refresh browser',
+          class_name: 'growl-danger',
+          image: false,
+          sticky: false,
+          time: ''
+        });
+
+          
+        $('#btn-submit-user').html('Submit');
+        $('#btn-submit-user').removeAttr('disable');
       }
     });
 
     // Function when button edit triggered
-    $('.edit-row').click(function(){
+    $('#table-list-users').delegate('.edit-row', 'click', function(){
       var id = $(this).attr('object');
       $.ajax({
         url: '<?=base_url();?>user/view/' + id,
@@ -190,6 +242,7 @@
           $("input[name='affiliation']").val(user.AFFILIATION);
           $("input[name='email']").val(user.EMAIL);
           $("#select-id-user-type").select2("val", user.ID_USER_TYPE);
+          $("#select-verification-type").select2("val", user.IS_VERIFIED);
           $("input[name='is-edit']").val(1);
 
           //show modal
@@ -202,7 +255,7 @@
     });
 
     // Delete row in a table
-    jQuery('.delete-row').click(function(){
+    $('#table-list-users').delegate('.delete-row', 'click', function(){
       var id = $(this).attr('object');
       var c = confirm("Apakah anda yakin untuk menghapus data ini?");
       if(c){

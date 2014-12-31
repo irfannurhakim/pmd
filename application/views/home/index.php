@@ -1,4 +1,4 @@
-<div class="row">
+<!-- <div class="row">
   <div class="col-md-3"></div>
   <div class="col-md-6">
       <form class="form form-search">
@@ -6,7 +6,7 @@
       </form>
   </div>
   <div class="col-md-3"></div>
-</div>
+</div> -->
 <div class="mb30"></div>
 <div class="" id="carousel-graph">
     <?php foreach ($projects as $project) { ?>

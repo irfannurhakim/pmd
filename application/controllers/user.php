@@ -16,7 +16,9 @@ class User extends CI_Controller {
       'password' => md5($this->input->post('password')),
       'email' => $this->input->post('email'),
       'affiliation' => $this->input->post('affiliation'),
-      'id_user_type' => $this->input->post('id-user-type')
+      'id_user_type' => $this->input->post('id-user-type'),
+      'profile_image_url' => 'public/images/photos/profile.png',
+      'is_verified' => $this->input->post('is_verfied')
     );
 
     //update
@@ -28,12 +30,14 @@ class User extends CI_Controller {
       $update = $this->builtbyprime->update('TBL_USER', array('id' => $this->input->post('id')), $data);
 
       if($update){
-        echo json_encode(array('status'=>0, 'data' => $data));
+        echo json_encode(array('status'=> 'ok', 'data' => $data));
       } else {
-        echo json_encode(array('status'=>1));
+        echo json_encode(array('status'=> 'not ok'));
       }
 
       exit();
+    } else {
+      unset($data['is_verfied']);
     }
 
     //cek username
@@ -51,8 +55,11 @@ class User extends CI_Controller {
     }
 
     $res = $this->builtbyprime->insert('TBL_USER', $data);
-
-    echo json_encode($res);
+    if($res){
+      echo json_encode(array('status' => 'ok', 'message' => $res));
+    } else {
+      echo json_encode(array('status' => 'not ok'));
+    }
 	}
 
 	public function view($id){

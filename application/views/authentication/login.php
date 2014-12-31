@@ -46,7 +46,7 @@
                             <div class="pull-left">
                                 <div class="mt10">
                                     <!-- <input type="checkbox" id="rememberMe" value="1"> -->
-                                    <label for="rememberMe"><a href="<?= base_url();?>forgot">Lupa Password?</a></label>
+                                    <label><a href="<?= base_url();?>forgot">Lupa Password?</a> atau <a href="<?= base_url();?>registration">Mendaftar</a></label>
                                 </div>
 <!--                                 <p></p>
  -->                            </div>

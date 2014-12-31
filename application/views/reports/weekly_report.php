@@ -21,7 +21,7 @@
 </div>
 <hr/>
 
-<div class="container-dt" id="tbl" style="height:200px;overflow:auto;">
+<div class="container-dt" id="tbl">
   <?php
     if(!empty($item_list)){
   ?>
@@ -204,7 +204,7 @@
                 options.series[3].data= nilai;
               } 
             })  
-            chart = new Highcharts.Chart(options);  
+            //chart = new Highcharts.Chart(options);  
           }
         });
 
