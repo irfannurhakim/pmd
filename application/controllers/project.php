@@ -10,14 +10,17 @@ class Project extends CI_Controller {
     $now = date('Y/m/d');
     $userCondition = "IS NOT NULL";
     $adpro = '';
+    $vendor = '';
 
     if($this->session->userdata('ID_USER_TYPE') == 3){
       $userCondition = " = '" . $this->session->userdata('ID') . "'";  
     } else if($this->session->userdata('ID_USER_TYPE') == 6){
       $adpro = " AND P.CREATED_BY = '" .$this->session->userdata('USERNAME') . "'";  
+    } else if($this->session->userdata('ID_USER_TYPE') == 4){
+      $vendor = " AND P.ID_VENDOR = '" .$this->session->userdata('ID') . "'";  
     }
 
-    $sql = "SELECT P.ID, P.NAME, P.IS_FINISHED, U.AFFILIATION VENDOR_NAME, (P.START_DATE -  TO_DATE('".$now."', 'yyyy/mm/dd')) FROM_START, (P.FINISH_DATE - TO_DATE('".$now."', 'yyyy/mm/dd')) DUE, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = P.ID GROUP BY ID_PROJECT),0) PROGRESS, 0 AS DEVIATION FROM TBL_PROJECT P, TBL_USER U WHERE P.ID_VENDOR = U.ID AND P.ID IN (SELECT ID_PROJECT FROM TBL_SUPERVISOR_PROJECT WHERE ID_USER ".$userCondition." " .$adpro. ")";
+    $sql = "SELECT P.ID, P.NAME, P.IS_FINISHED, U.AFFILIATION VENDOR_NAME, (P.START_DATE -  TO_DATE('".$now."', 'yyyy/mm/dd')) FROM_START, (P.FINISH_DATE - TO_DATE('".$now."', 'yyyy/mm/dd')) DUE, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = P.ID GROUP BY ID_PROJECT),0) PROGRESS, 0 AS DEVIATION FROM TBL_PROJECT P, TBL_USER U WHERE P.ID_VENDOR = U.ID AND P.ID IN (SELECT ID_PROJECT FROM TBL_SUPERVISOR_PROJECT WHERE ID_USER ".$userCondition." " .$adpro. " ".$vendor.")";
 
     $data['projects'] = $this->builtbyprime->explicit($sql);
     $data['user'] = $this->builtbyprime->get('TBL_USER');

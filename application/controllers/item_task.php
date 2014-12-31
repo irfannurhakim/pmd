@@ -94,9 +94,8 @@ class Item_task extends CI_Controller {
 
   public function remove_all($id){
     $this->builtbyprime->explicit("DELETE FROM TBL_DISCUSSION WHERE ID_ITEM_TASK IN (SELECT ID FROM TBL_ITEM_TASK WHERE ID_PROJECT = '".$id."')");
-    $this->builtbyprime->explicit("DELETE FROM TBL_ITEM_TASK_TIME WHERE ID_ITEM_TASK IN (SELECT ID FROM TBL_ITEM_TASK WHERE ID_PROJECT = '".$id."')");
-    $remove = $this->builtbyprime->delete('TBL_ITEM_TASK', array('id_project' => $id));
-
+    $this->builtbyprime->explicit("DELETE FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$id."'");
+    $remove = $this->builtbyprime->explicit("DELETE FROM TBL_ITEM_TASK WHERE ID_PROJECT = '".$id."'");
 
     if($remove){
       echo json_encode(array('status' => 'ok'));

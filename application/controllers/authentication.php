@@ -40,7 +40,7 @@ class Authentication extends CI_Controller {
 			exit();
 		}
 
-		$user = $this->builtbyprime->get('TBL_USER', array('username' => $username, 'password' => md5($password)), TRUE);
+		$user = $this->builtbyprime->get('TBL_USER', array('username' => $username, 'password' => md5($password), 'is_verified' => 1), TRUE);
 
 		if($user){
 			$user['isLoggedIn'] = TRUE;

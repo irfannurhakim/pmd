@@ -18,7 +18,7 @@ class User extends CI_Controller {
       'affiliation' => $this->input->post('affiliation'),
       'id_user_type' => $this->input->post('id-user-type'),
       'profile_image_url' => 'public/images/photos/profile.png',
-      'is_verified' => $this->input->post('is_verfied')
+      'is_verified' => $this->input->post('is-verified')
     );
 
     //update

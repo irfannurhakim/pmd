@@ -12,15 +12,18 @@ class Quick_access extends CI_Controller {
   public function index(){
     $userCondition = "IS NOT NULL";
     $adpro = '';
+    $vendor = '';
 
     if($this->session->userdata('ID_USER_TYPE') == 3){
       $userCondition = " = '" . $this->session->userdata('ID') . "'";  
     } else if($this->session->userdata('ID_USER_TYPE') == 6){
       $adpro = " AND P.CREATED_BY = '" .$this->session->userdata('USERNAME') . "'";  
+    } else if($this->session->userdata('ID_USER_TYPE') == 4){
+      $vendor = " AND P.ID_VENDOR = '" .$this->session->userdata('ID') . "'";  
     }
 
     //pilih semua projek yang diawasi oleh user, pilih item yang dikerjakan pada minggu ini, pilih perencanaan terakhir dan pilih item, volume untuk realisasi
-    $data['projects'] = $this->builtbyprime->explicit("SELECT P.NAME, P.ID, (SELECT COUNT(ID) FROM TBL_ITEM_TASK WHERE ID_PROJECT = P.ID GROUP BY ID_PROJECT) TOTAL_TASK FROM TBL_PROJECT P WHERE P.ID IN (SELECT ID_PROJECT FROM TBL_SUPERVISOR_PROJECT WHERE ID_USER ".$userCondition." " .$adpro. ") AND P.IS_FINISHED != 1 AND P.START_DATE <= SYSDATE");
+    $data['projects'] = $this->builtbyprime->explicit("SELECT P.NAME, P.ID, (SELECT COUNT(ID) FROM TBL_ITEM_TASK WHERE ID_PROJECT = P.ID GROUP BY ID_PROJECT) TOTAL_TASK FROM TBL_PROJECT P WHERE P.ID IN (SELECT ID_PROJECT FROM TBL_SUPERVISOR_PROJECT WHERE ID_USER ".$userCondition." " .$adpro. " ".$vendor.") AND P.IS_FINISHED != 1 AND P.START_DATE <= SYSDATE");
 
     $this->load->view('quick_access/index', $data);
   }
