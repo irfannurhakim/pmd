@@ -233,17 +233,13 @@
   </div>
 </div>
 
-<script src="<?= base_url();?>public/js/chart/highcharts.js"></script>
-<script src="<?= base_url();?>public/js/chart/exporting.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
-
     jQuery('#week').select2();
 
     $('#submit').click(function(){
       var id   = $('#id-project').val();
       var week = $('#week').val();
-
       $.ajax({
         url: '<?php echo base_url();?>reports/weekly_report/'+id+'/'+week,
         dataType: 'html',
@@ -252,68 +248,7 @@
           $('#weekly-report-detail').html(result);
         }
       });
-
     });
-
-
-    // var chart;
-    // var id   = $('#id-project').val();
-    // var week = $('#week').val();
-    // var options = 
-    //   {
-    //     chart: {renderTo: 'chart',defaultSeriesType: 'line'},
-    //     title: {text: ''},
-    //     subtitle: {text: ''},
-    //     xAxis: {},
-    //     yAxis: {title: {text: 'Progres Minggu ke <?=$cur_week;?>'}},
-    //     plotOptions: {
-    //       series: {
-    //         dataLabels: {
-    //           enabled: true
-    //         }
-    //       }
-    //     },  
-    //     legend: {layout: 'vertical',align: 'right',verticalAlign: 'top',x: -10,y: 100,borderWidth: 0},
-    //     series: [{},{},{},{}]
-        
-    //   };      
-    //   $.ajax({
-    //       type: "POST",
-    //       url: "<?php echo base_url();?>reports/weekly_report_chart/"+id+"/"+week,
-    //       success: function(data)
-    //       {
-    //         var objek_JSON = jQuery.parseJSON(data);
-    //         $.each(objek_JSON,function(index,nilai)
-    //         {
-    //           if(index=='judul')
-    //           {
-    //               options.xAxis.categories= nilai;
-    //           }
-    //           if(index=='v_rencana')
-    //           {
-    //             options.series[0].name='v_rencana';
-    //             options.series[0].data= nilai;
-    //           }
-    //            if(index=='v_realisasi')
-    //           {
-    //             options.series[1].name='v_realisasi';
-    //             options.series[1].data= nilai;
-    //           }
-    //            if(index=='b_rencana')
-    //           {
-    //             options.series[2].name='b_rencana';
-    //             options.series[2].data= nilai;
-    //           }
-    //            if(index=='b_realisasi')
-    //           {
-    //             options.series[3].name='b_realisasi';
-    //             options.series[3].data= nilai;
-    //           } 
-    //         })  
-    //         //chart = new Highcharts.Chart(options);  
-    //       }
-    //     });
-
   });
 </script>
 
