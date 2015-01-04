@@ -109,6 +109,13 @@
             </div>         
           </div>     
         </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <a class="btn btn-primary btn-block" href="<?=base_url();?>#/weekly_report/detail/<?=$project['ID'];?>"><i class="fa fa-bar-chart-o"></i> Laporan Mingguan</a>
+          </div>
+        </div>
+
       </div>
 
       <div class="col-md-8">
