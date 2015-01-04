@@ -12,7 +12,7 @@
   <thead>
     <tr>
       <th width="50px" rowspan="2" class="dt-cols-center">No</th>
-      <th rowspan="2">Uraian Pekerjaan</th>
+      <th rowspan="2">Item Pekerjaan</th>
       <th rowspan="2" class="dt-cols-center">Satuan</th>
       <th colspan="4" class="dt-cols-center">Volume</th>
       <th colspan="3" class="dt-cols-center">Bobot</th>
@@ -50,6 +50,6 @@
   </tbody>
 </table>    
 <?php
-  }else{ echo '<div class="alert alert-info text-center">Belum ada data tersedia.</div>'; }
+  } else { echo '<div class="alert alert-info text-center">Belum ada data tersedia.</div>'; }
 ?>
 

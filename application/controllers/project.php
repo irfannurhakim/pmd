@@ -20,7 +20,7 @@ class Project extends CI_Controller {
       $vendor = " AND P.ID_VENDOR = '" .$this->session->userdata('ID') . "'";  
     }
 
-    $sql = "SELECT P.ID, P.NAME, P.IS_FINISHED, U.AFFILIATION VENDOR_NAME, (P.START_DATE -  TO_DATE('".$now."', 'yyyy/mm/dd')) FROM_START, (P.FINISH_DATE - TO_DATE('".$now."', 'yyyy/mm/dd')) DUE, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = P.ID GROUP BY ID_PROJECT),0) PROGRESS, 0 AS DEVIATION FROM TBL_PROJECT P, TBL_USER U WHERE P.ID_VENDOR = U.ID AND P.ID IN (SELECT ID_PROJECT FROM TBL_SUPERVISOR_PROJECT WHERE ID_USER ".$userCondition." " .$adpro. " ".$vendor.")";
+    $sql = "SELECT P.ID, P.NAME, P.IS_FINISHED, U.AFFILIATION VENDOR_NAME, (P.START_DATE -  TO_DATE('".$now."', 'yyyy/mm/dd')) FROM_START, (P.FINISH_DATE - TO_DATE('".$now."', 'yyyy/mm/dd')) DUE, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = P.ID GROUP BY ID_PROJECT),0) PROGRESS, P.FINISH_DATE - P.IS_FINISHED_DATE DIFF_FINISH FROM TBL_PROJECT P, TBL_USER U WHERE P.ID_VENDOR = U.ID AND P.ID IN (SELECT ID_PROJECT FROM TBL_SUPERVISOR_PROJECT WHERE ID_USER ".$userCondition." " .$adpro. " ".$vendor.")";
 
     $data['projects'] = $this->builtbyprime->explicit($sql);
     $data['user'] = $this->builtbyprime->get('TBL_USER');
@@ -86,7 +86,8 @@ class Project extends CI_Controller {
     $remainingDays = 100 - (($usedDays/$totalDays) * 100);
 
     $isStarted = ($b->gte($a));
-    $isFinished = ($b->gte($c));
+    $isFinished = ($data['project']['IS_FINISHED'] == 1);
+    $isExceeded = ($b->gte($c));
 
     $data['weekNumber'] = ($isStarted) ? ceil(($b->diffInDays($a) + 1)/7) : 0;
     $data['countDown'] = ($isStarted) ? 0 : $b->diffInDays($a);
@@ -94,8 +95,8 @@ class Project extends CI_Controller {
     $data['endWeek'] = $a->copy()->addWeeks($data['weekNumber'])->subDay()->format('d/m/Y');
     $data['isStarted'] = $isStarted;
     $data['isFinished'] = $isFinished;
-    $data['statusLabel'] = ($isStarted) ? (($isFinished) ? (($data['project']['IS_FINISHED'] == 1) ? 'PROYEK SELESAI' : 'TERLAMBAT ' . $b->diffInDays($c) . ' HARI') : 'BERLANGSUNG') : 'BELUM DIMULAI'; 
-    $data['buttonStatusType'] = ($isStarted) ? (($isFinished) ? (($data['project']['IS_FINISHED'] == 1) ? 'btn-success' : 'btn-danger') : 'btn-primary') : 'btn-info'; 
+    $data['statusLabel'] = ($isFinished) ? 'PROYEK SELESAI' : (($isStarted) ? (($isExceeded) ? 'TERLAMBAT ' . $b->diffInDays($c) . ' HARI' : 'BERLANGSUNG') : 'BELUM DIMULAI');
+    $data['buttonStatusType'] = ($isFinished) ? 'btn-success' : (($isStarted) ? (($isExceeded) ? 'btn-danger' : 'btn-info') : 'btn-default');
     $data['remainingDays'] = round($remainingDays,2);
     $data['info'] = $this->builtbyprime->explicit("SELECT nvl((SELECT SUM(WEIGHT_PLANNING) FROM TBL_PROJECT_PLANNING_DETAIL WHERE WEEK_NUMBER <= '".$data['weekNumber']."' AND ID_PROJECT_PLANNING = (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$id."')),0) TOTAL_PLANNING, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$id."' GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE FROM DUAL");
 
@@ -110,7 +111,8 @@ class Project extends CI_Controller {
     $this->builtbyprime->delete('TBL_SUPERVISOR_PROJECT', array('id_project' => $id));
     
     $this->builtbyprime->explicit("DELETE FROM TBL_DISCUSSION WHERE ID_ITEM_TASK IN (SELECT ID FROM TBL_ITEM_TASK WHERE ID_PROJECT = '".$id."')");
-    $this->builtbyprime->explicit("DELETE FROM TBL_ITEM_TASK_TIME WHERE ID_ITEM_TASK IN (SELECT ID FROM TBL_ITEM_TASK WHERE ID_PROJECT = '".$id."')");
+    $this->builtbyprime->explicit("DELETE FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$id."'");
+    $this->builtbyprime->explicit("DELETE FROM TBL_ITEM_TASK_TIME_VENDOR WHERE ID_PROJECT = '".$id."'");
     $this->builtbyprime->delete('TBL_ITEM_TASK', array('id_project' => $id));
 
     $this->builtbyprime->delete('TBL_PROJECT_DOCUMENT', array('id_project' => $id));
@@ -179,9 +181,12 @@ class Project extends CI_Controller {
   }
 
   function set_finish($projectId){
-
-    $res = $this->builtbyprime->update('TBL_PROJECT', Array('id' => $projectId), Array('is_finished' => $this->input->post('is-checked')));
-
+    if($this->input->post('is-checked') == 1){
+      $res = $this->builtbyprime->explicit("UPDATE TBL_PROJECT SET is_finished = '".$this->input->post('is-checked')."', is_finished_date = TO_DATE('".$this->input->post('is-finished-date')."','dd/mm/yyyy'), modified_by = '".$this->session->userdata('USERNAME')."', modified_date = SYSDATE WHERE id = '".$projectId."'");
+    } else {
+      $res = $this->builtbyprime->explicit("UPDATE TBL_PROJECT SET is_finished = '".$this->input->post('is-checked')."', modified_by = '".$this->session->userdata('USERNAME')."', modified_date = SYSDATE WHERE id = '".$projectId."'");
+    }
+      
     if($res){
       echo json_encode(Array('status'=> 'ok', 'data' => $res));
     } else {

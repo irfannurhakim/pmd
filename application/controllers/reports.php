@@ -23,18 +23,44 @@ class Reports extends CI_Controller {
 
   }
 
-  public function weekly_report($id,$week=1,$export=0){ 
-    $data['item_list'] = $this->builtbyprime->explicit("SELECT PPD.ID_PROJECT_PLANNING ID_PROJECT_PLANNING, IT.NAME,  IT.ID_PROJECT, IT.UNIT_PRICE, IT.VOLUME, IT.VENDOR_PROGRESS_VOLUME, IT.SUPERVISOR_PROGRESS_VOLUME, IT.UNIT, SUM(PPD.WEIGHT_PLANNING) WEIGHT_PLANNING, PPD.ID_ITEM_TASK AS ID_ITEM_TASK, C.COMMENTS 
-                                                          FROM TBL_ITEM_TASK IT 
-                                                          JOIN TBL_PROJECT_PLANNING_DETAIL PPD ON IT.ID = PPD.ID_ITEM_TASK 
-                                                          LEFT JOIN (SELECT COUNT(*) COMMENTS, ID_ITEM_TASK FROM TBL_DISCUSSION GROUP BY ID_ITEM_TASK) C ON C.ID_ITEM_TASK = IT.ID
-                                                          WHERE  IT.ID_PROJECT = ". $id ." AND PPD.ID_PROJECT_PLANNING IN (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING GROUP BY ID_PROJECT)
-                                                          GROUP BY PPD.ID_PROJECT_PLANNING, IT.NAME,  IT.ID_PROJECT, IT.UNIT_PRICE, IT.VOLUME, IT.VENDOR_PROGRESS_VOLUME, IT.SUPERVISOR_PROGRESS_VOLUME, IT.UNIT, PPD.ID_ITEM_TASK, C.COMMENTS
-                                                          ORDER BY ID_ITEM_TASK");
+  public function weekly_report($id ,$week=1, $export=0){ 
+    $beforeWeek = ($week - 1 > 0) ? $week - 1 : 0;
 
-    //$data['item_list']    = $this->builtbyprime->explicit('SELECT A.NAME,A.UNIT,B.* FROM TBL_ITEM_TASK A JOIN TBL_ITEM_TASK_TIME B ON A.ID = B.ID_ITEM_TASK WHERE A.ID_PROJECT = '.$id.' AND B.NO_WEEK = '.$week.' ');
+    $data['item_list'] = $this->builtbyprime->explicit("SELECT 
+      PPD.ID_PROJECT_PLANNING ID_PROJECT_PLANNING, 
+      IT.NAME,  
+      IT.ID_PROJECT, 
+      IT.UNIT_PRICE, 
+      IT.VOLUME, 
+      IT.VENDOR_PROGRESS_VOLUME, 
+      IT.SUPERVISOR_PROGRESS_VOLUME, 
+      IT.UNIT, 
+      SUM(PPD.WEIGHT_PLANNING) WEIGHT_PLANNING, 
+      PPD.ID_ITEM_TASK AS ID_ITEM_TASK, 
+      C.COMMENTS,
+      nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = IT.ID_PROJECT AND ID_ITEM_TASK = PPD.ID_ITEM_TASK AND NO_WEEK = '".$beforeWeek."' GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE_BEFORE, 
+      nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME_VENDOR WHERE ID_PROJECT = IT.ID_PROJECT AND ID_ITEM_TASK = PPD.ID_ITEM_TASK AND NO_WEEK = '".$beforeWeek."' GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE_BEFORE_VENDOR, 
+      nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = IT.ID_PROJECT AND ID_ITEM_TASK = PPD.ID_ITEM_TASK AND NO_WEEK = '".$week."' GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE_NOW, 
+      nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME_VENDOR WHERE ID_PROJECT = IT.ID_PROJECT AND ID_ITEM_TASK = PPD.ID_ITEM_TASK AND NO_WEEK = '".$week."' GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE_NOW_VENDOR,
+      nvl((SELECT WEIGHT_PLANNING FROM TBL_PROJECT_PLANNING_DETAIL WHERE ID_ITEM_TASK = PPD.ID_ITEM_TASK AND WEEK_NUMBER = '".$week."' AND ID_PROJECT_PLANNING = PPD.ID_PROJECT_PLANNING), 0) PERCENTAGE_PLAN_CURRENT 
+      FROM TBL_ITEM_TASK IT JOIN TBL_PROJECT_PLANNING_DETAIL PPD ON IT.ID = PPD.ID_ITEM_TASK 
+      LEFT JOIN 
+        (SELECT COUNT(*) COMMENTS, ID_ITEM_TASK FROM TBL_DISCUSSION GROUP BY ID_ITEM_TASK) C ON C.ID_ITEM_TASK = IT.ID
+        WHERE  IT.ID_PROJECT = IT.ID_PROJECT AND PPD.ID_PROJECT_PLANNING IN (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING GROUP BY ID_PROJECT)
+      GROUP BY PPD.ID_PROJECT_PLANNING, IT.NAME,  IT.ID_PROJECT, IT.UNIT_PRICE, IT.VOLUME, IT.VENDOR_PROGRESS_VOLUME, IT.SUPERVISOR_PROGRESS_VOLUME, IT.UNIT, PPD.ID_ITEM_TASK, C.COMMENTS
+      ORDER BY ID_ITEM_TASK"
+    );
     
+    $volTotal = 0;
+    foreach ($data['item_list'] as $row) {
+      $volTotal += $row['VOLUME'];
+    }
+
+    $data['total_kontrak_volume'] = $volTotal;
     $data['project']      = $this->builtbyprime->get('TBL_PROJECT', array('id' => $id), TRUE);
+    $data['supervisor'] = $this->builtbyprime->explicit("SELECT NAME FROM TBL_USER WHERE ID IN (SELECT ID_USER FROM TBL_SUPERVISOR_PROJECT WHERE id_project = '".$id."')");
+    $data['vendor'] = $this->builtbyprime->get('TBL_USER', array('id' => $data['project']['ID_VENDOR']), TRUE);
+
     $data['week']         = $this->builtbyprime->explicit('select NO_WEEK FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '.$id.' GROUP BY NO_WEEK ORDER BY NO_WEEK ASC');
     
     $data['cur_week']     = $week;

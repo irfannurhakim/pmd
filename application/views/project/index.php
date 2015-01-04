@@ -29,11 +29,12 @@
       <?php foreach ($projects as $row) { 
         if($row['FROM_START'] > 0){
           $sisaWaktuSpan = '<span class="label label-default">Belum Mulai</span>';
-          $deviation = '<span class="badge">0 %</span>';
+          //$deviation = '<span class="badge">0 %</span>';
         } else {
+          $diffFinsih = ($row['DIFF_FINISH'] > 0) ? '+' . $row['DIFF_FINISH'] : $row['DIFF_FINISH'];
           $sisaWaktu = ($row['DUE'] > 0) ? ceil($row['DUE']/7) : floor($row['DUE']/7);
-          $sisaWaktuSpan = ($sisaWaktu >= 0) ? (($sisaWaktu < 2) ? '<span class="label label-warning">'.$sisaWaktu.' Minggu</span>' : '<span class="label label-primary">'.$sisaWaktu.' Minggu</span>') : (($row['IS_FINISHED'] == 1) ? '<span class="label label-success">Selesai</span>' : '<span class="label label-danger">'.$sisaWaktu.' Minggu</span>');
-          $deviation = ($row['DEVIATION'] < 20) ? '<span class="badge">'.$row['DEVIATION'] .' %</span>' : '<span class="badge badge-danger">'.$row['DEVIATION'] .' %</span>';
+          $sisaWaktuSpan = ($row['IS_FINISHED'] == 1) ? '<span class="label label-success">Selesai '.$diffFinsih.'</span>' : (($sisaWaktu >= 0) ? (($sisaWaktu < 2) ? '<span class="label label-warning">'.$sisaWaktu.' Minggu</span>' : '<span class="label label-primary">'.$sisaWaktu.' Minggu</span>') : '<span class="label label-danger">'.$sisaWaktu.' Minggu</span>');
+          //$deviation = ($row['DEVIATION'] < 20) ? '<span class="badge">'.$row['DEVIATION'] .' %</span>' : '<span class="badge badge-danger">'.$row['DEVIATION'] .' %</span>';
         }
 
       ?>
@@ -180,7 +181,7 @@
           projects();
         } else {
           jQuery.gritter.add({
-            title: 'Upss..',
+            title: 'Error',
             text: a.error,
             class_name: 'growl-danger',
             image: false,
@@ -193,7 +194,7 @@
       },
       error: function(){
         jQuery.gritter.add({
-          title: 'Upss..',
+          title: 'Error',
           text: 'Terjadi Kesalahan, silahkan refresh browser anda!',
           class_name: 'growl-danger',
           image: false,

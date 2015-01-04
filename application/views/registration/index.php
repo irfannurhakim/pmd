@@ -66,6 +66,13 @@
                       </div>
                   </div><!-- form-group -->
 
+                  <div class="form-group">
+                      <label class="col-sm-4 control-label">No. Telpon</label>
+                      <div class="col-sm-8">
+                          <input type="text" name="telephone-number" class="form-control" title="Kolom Telpon boleh tidak diisi" placeholder="Isi dengan nomor telpon anda" />
+                      </div>
+                  </div><!-- form-group -->
+
                   <!-- Hidden Field -->
                   <input type="hidden" name="id" value="-1" />
                   <input type="hidden" name="is-edit" value="0" />

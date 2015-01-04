@@ -94,6 +94,13 @@
                   </div><!-- form-group -->
 
                   <div class="form-group">
+                      <label class="col-sm-4 control-label">No. Telpon</label>
+                      <div class="col-sm-8">
+                          <input type="text" name="telephone-number" class="form-control" title="Kolom Telpon boleh tidak diisi" />
+                      </div>
+                  </div><!-- form-group -->
+
+                  <div class="form-group">
                       <label class="col-sm-4 control-label">Tipe Pengguna</label>
                       <div class="col-sm-8">
                           <select id="select-id-user-type" data-placeholder="Pilih tipe user" class="width300" name="id-user-type">
@@ -189,7 +196,7 @@
           users();
         } else {
           jQuery.gritter.add({
-            title: 'Upss..',
+            title: 'Error',
             text: 'Terjadi kesalahan, silahkan refresh browser',
             class_name: 'growl-danger',
             image: false,
@@ -203,7 +210,7 @@
       },
       error: function(){
         jQuery.gritter.add({
-          title: 'Upss..',
+          title: 'Error',
           text: 'Terjadi kesalahan, silahkan refresh browser',
           class_name: 'growl-danger',
           image: false,
@@ -240,6 +247,7 @@
           $("input[name='name']").val(user.NAME);
           $("input[name='username']").val(user.USERNAME);
           $("input[name='affiliation']").val(user.AFFILIATION);
+          $("input[name='telephone-number']").val(user.TELEPHONE_NUMBER);
           $("input[name='email']").val(user.EMAIL);
           $("#select-id-user-type").select2("val", user.ID_USER_TYPE);
           $("#select-verification-type").select2("val", user.IS_VERIFIED);

@@ -15,6 +15,7 @@ class User extends CI_Controller {
       'name' => $this->input->post('name'),
       'password' => md5($this->input->post('password')),
       'email' => $this->input->post('email'),
+      'telephone_number' => $this->input->post('telephone-number'),
       'affiliation' => $this->input->post('affiliation'),
       'id_user_type' => $this->input->post('id-user-type'),
       'profile_image_url' => 'public/images/photos/profile.png',

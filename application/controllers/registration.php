@@ -19,6 +19,7 @@ class Registration extends CI_Controller {
       'name' => $this->input->post('name'),
       'password' => md5($this->input->post('password')),
       'email' => $this->input->post('email'),
+      'telephone_number' => $this->input->post('telephone-number'),
       'affiliation' => $this->input->post('affiliation'),
       'id_user_type' => 4,
       'is_verified' => 0,

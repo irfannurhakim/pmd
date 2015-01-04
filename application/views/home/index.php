@@ -262,7 +262,7 @@
           centsSeparator: ',',
           centsLimit: 0
         });
-        $('#total-nilai-proyek').text(formatNumber(projects[0].SUM_TOTAL_BUDGET * 1));
+        $('#total-nilai-proyek').text('Rp ' + formatNumber(projects[0].SUM_TOTAL_BUDGET * 1));
         $('#total-jumlah-proyek').text(projects[0].COUNT_TOTAL_PROJECT);
         $('#total-proyek-belangsung').text(<?=count($projects);?>);
         $('#total-proyek-selesai').text(projects[0].COUNT_TOTAL_PROJECT - <?=count($projects);?> * 1);
@@ -277,16 +277,18 @@
   var ranges = [
     { divider: 1e15 , suffix: ' RT' },
     { divider: 1e12 , suffix: ' T' },
-    { divider: 1e9 , suffix: ' M' }
+    { divider: 1e9 , suffix: ' M' },
+    { divider: 1e6 , suffix: ' J' },
+    //{ divider: 1e3 , suffix: ' R' },    
   ];
 
   function formatNumber(n) {
     for (var i = 0; i < ranges.length; i++) {
       if (n >= ranges[i].divider) {
-        return (n / ranges[i].divider).toFixed(3) + ranges[i].suffix;
+        return (Math.round((n / ranges[i].divider) * 10) / 10)  + ranges[i].suffix;
       }
     }
-    return n.toFixed(3);
+    return Math.round(n * 10) / 10;
   }
 
   function showTooltip(x, y, contents) {

@@ -95,6 +95,7 @@ class Item_task extends CI_Controller {
   public function remove_all($id){
     $this->builtbyprime->explicit("DELETE FROM TBL_DISCUSSION WHERE ID_ITEM_TASK IN (SELECT ID FROM TBL_ITEM_TASK WHERE ID_PROJECT = '".$id."')");
     $this->builtbyprime->explicit("DELETE FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$id."'");
+    $this->builtbyprime->explicit("DELETE FROM TBL_ITEM_TASK_TIME_VENDOR WHERE ID_PROJECT = '".$id."'");
     $remove = $this->builtbyprime->explicit("DELETE FROM TBL_ITEM_TASK WHERE ID_PROJECT = '".$id."'");
 
     if($remove){
@@ -145,7 +146,7 @@ class Item_task extends CI_Controller {
       $html .= '<td>' . (($item['LEVEL'] == 1) ? strtoupper($item['NAME']) : $item['NAME']) . '</td>';
       $html .= '<td>' . (($isLast) ? $item['SPECIFICATION'] : '' ) . '</td>';
       $html .= '<td class="dt-cols-center">' . (($isLast) ? $item['UNIT'] : '' ) . '</td>';
-      $html .= '<td class="dt-cols-right">' . (($isLast) ? round($item['VOLUME'],4) : '') . '</td>';
+      $html .= '<td class="dt-cols-right">' . (($isLast) ? round($item['VOLUME'],3) : '') . '</td>';
       $html .= '<td class="dt-cols-right">' . (($isLast) ? number_format($item['UNIT_PRICE'], 0,',','.') : '' ) . '</td>';
       $html .= '<td class="dt-cols-right">' . (($isLast) ? round((($item['UNIT_PRICE'] * $item['VOLUME']) / $budget ) * 100, 3) : '' ) . '</td>';
       $html .= '<td class="dt-cols-right">' . (($isLast) ? number_format($item['UNIT_PRICE'] * $item['VOLUME'], 0,',','.') : '' ) . '</td>';
@@ -205,7 +206,7 @@ class Item_task extends CI_Controller {
       $html .= '<tr '. $style . '>';
       $html .= '<td>' . $item['NUMBER'] . '</td>';
       $html .= '<td>' . (($item['LEVEL'] == 1) ? strtoupper($item['NAME']) : $item['NAME']) . '</td>';
-      $html .= '<td class="dt-cols-right">' . (($isLast) ? round((($item['UNIT_PRICE'] * $item['VOLUME']) / $budget ) * 100, 4) : '' ) . '</td>';
+      $html .= '<td class="dt-cols-right">' . (($isLast) ? round((($item['UNIT_PRICE'] * $item['VOLUME']) / $budget ) * 100, 3) : '' ) . '</td>';
 
       for($i=1;$i<=$week;$i++){
         $value = null;
@@ -214,7 +215,7 @@ class Item_task extends CI_Controller {
             $value = $allTask[$item['ID']][$i];
           }
         }
-        $val   = ($value) ? $value['WEIGHT_PLANNING'] : '';
+        $val   = ($value) ? round($value['WEIGHT_PLANNING'], 3) : '';
         $html .= '<td class="dt-cols-center">' . (($isLast) ? '<input type="text" value ="'.$val.'" style="width:45px;text-align:right;" name="'.$item['ID'].'_'.$i.'" class="item-value"  />' : '').'</td>';
       }
 
@@ -233,7 +234,7 @@ class Item_task extends CI_Controller {
     $start       = explode(' ',$project['START_DATE']); 
     $finish      = explode(' ',$project['FINISH_DATE']);
     $datediff    = strtotime($finish[0]) - strtotime($start[0]);
-    $week        = floor(($datediff/(60*60*24))/7);
+    $week        = ceil(($datediff/(60*60*24))/7);
 
     $idplanning = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_PROJECT_PLANNING");
     $this->builtbyprime->insert('TBL_PROJECT_PLANNING',array('ID'=>$idplanning[0]['MAX'],'NAME'=>$project['NAME'],'ID_PROJECT'=>$id,'CREATED_BY'=>$this->session->userdata('USERNAME'),'MODIFIED_BY'=>$this->session->userdata('USERNAME')));
@@ -288,7 +289,8 @@ class Item_task extends CI_Controller {
       'd' => $this->session->userdata('USERNAME'),
       'e' => $this->input->post('bobot-item'),
       'f' => $this->input->post('planning-item'),
-      'g' => $this->input->post('realization-before') 
+      'g' => $this->input->post('realization-before'),
+      'h' => $this->input->post('realization-vendor') 
     );
 
     $return = false;
@@ -301,10 +303,16 @@ class Item_task extends CI_Controller {
       $return = $this->builtbyprime->explicit("UPDATE TBL_ITEM_TASK SET SUPERVISOR_PROGRESS_VOLUME = '" . $data['a'] . "', VENDOR_PROGRESS_VOLUME = '" . $data['b'] . "', MODIFIED_BY = '".$data['d']."', MODIFIED_DATE = SYSDATE WHERE ID = " . $data['c']);
     }
 
-    if($data['a']){
+    if($data['a'] && ($this->session->userdata('ID_USER_TYPE') == 3 || $this->session->userdata('ID_USER_TYPE') == 1)){
       $id = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_ITEM_TASK_TIME");
       $percentage = (($data['a'] - $data['g']) / $data['f']) * $data['e'];
-      $resHistoryu = $this->builtbyprime->explicit("INSERT INTO TBL_ITEM_TASK_TIME (id, id_project, id_item_task, percentage, start_week, end_week, no_week, created_by, modified_by) VALUES (".$id[0]['MAX'].",".$this->input->post('id-project').",".$this->input->post('id-item-task').",".round($percentage, 4).", TO_DATE('".$this->input->post('start-week')."','dd/mm/yyyy'), TO_DATE('".$this->input->post('end-week')."','dd/mm/yyyy'), ".$this->input->post('week-number').", '".$this->session->userdata('USERNAME')."', '".$this->session->userdata('USERNAME')."')");
+      $resHistoryu = $this->builtbyprime->explicit("INSERT INTO TBL_ITEM_TASK_TIME (id, id_project, id_item_task, percentage, start_week, end_week, no_week, created_by, modified_by) VALUES (".$id[0]['MAX'].",".$this->input->post('id-project').",".$this->input->post('id-item-task').",".round($percentage, 3).", TO_DATE('".$this->input->post('start-week')."','dd/mm/yyyy'), TO_DATE('".$this->input->post('end-week')."','dd/mm/yyyy'), ".$this->input->post('week-number').", '".$this->session->userdata('USERNAME')."', '".$this->session->userdata('USERNAME')."')");
+    } 
+
+    if($data['b'] && ($this->session->userdata('ID_USER_TYPE') == 4 || $this->session->userdata('ID_USER_TYPE') == 1)){
+      $id = $this->builtbyprime->explicit("SELECT nvl(max(ID),0) + 1 max FROM TBL_ITEM_TASK_TIME_VENDOR");
+      $percentage = (($data['b'] - $data['h']) / $data['f']) * $data['e'];
+      $resHistoryu = $this->builtbyprime->explicit("INSERT INTO TBL_ITEM_TASK_TIME_VENDOR (id, id_project, id_item_task, percentage, start_week, end_week, no_week, created_by, modified_by) VALUES (".$id[0]['MAX'].",".$this->input->post('id-project').",".$this->input->post('id-item-task').",".round($percentage, 3).", TO_DATE('".$this->input->post('start-week')."','dd/mm/yyyy'), TO_DATE('".$this->input->post('end-week')."','dd/mm/yyyy'), ".$this->input->post('week-number').", '".$this->session->userdata('USERNAME')."', '".$this->session->userdata('USERNAME')."')");
     }
 
     echo json_encode(Array('status' => 'ok', 'message' => $return));
@@ -537,83 +545,8 @@ class Item_task extends CI_Controller {
     $data = file_get_contents("./uploads/" . $project['FILE_PLANNING_URL']);
 
     force_download($project['FILE_PLANNING_URL'], $data);
-    // $data['item_list']    = $this->builtbyprime->explicit('SELECT LEVEL,TBL_ITEM_TASK.* FROM TBL_ITEM_TASK WHERE ID_PROJECT = '.$id.' START WITH ID_PARENT = 0 CONNECT BY PRIOR ID = ID_PARENT ORDER SIBLINGS BY ID');
-    // $data['project']      = $this->builtbyprime->get('TBL_PROJECT', array('id' => $id), TRUE);
-    // $data['id']           = $id;
-
-    // $t = $this->genMulDimArr($data['item_list']);
-    // $kosong = array();
-    // $rows = $this->flatten($t, $data['project']['BUDGET'], $kosong);
-
-    // print_r($rows);
-
-    // $this->load->library('excel');
-
-    // $objPHPExcel = new PHPExcel();
-    // // Set document properties
-    // $objPHPExcel->getProperties()->setCreator($this->session->userdata('USERNAME'))
-    //   ->setLastModifiedBy($this->session->userdata('USERNAME'))
-    //   ->setTitle("RAB " . $data['project']['NAME'])
-    //   ->setSubject("RAB " . $data['project']['NAME']);
-
-    // $objPHPExcel->setActiveSheetIndex(0)
-    //   ->setCellValue('A1', 'No')
-    //   ->setCellValue('B1', 'Uraian')
-    //   ->setCellValue('C1', 'Spesifikasi')
-    //   ->setCellValue('D1', 'No Gambar')
-    //   ->setCellValue('E1', 'No RKS')
-    //   ->setCellValue('F1', 'Satuan')
-    //   ->setCellValue('G1', 'Volume')
-    //   ->setCellValue('H1', 'Harga Satuan')
-    //   ->setCellValue('I1', 'Bobot')
-    //   ->setCellValue('J1', 'Jumlah');
-
-
-
-
-    // // Redirect output to a client’s web browser (Excel5)
-    // header('Content-Type: application/vnd.ms-excel');
-    // header('Content-Disposition: attachment;filename="RAB_'.$data['project']['NAME'].'.xls"');
-    // header('Cache-Control: max-age=0');
-    // // If you're serving to IE 9, then the following may be needed
-    // header('Cache-Control: max-age=1');
-    // // If you're serving to IE over SSL, then the following may be needed
-    // header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-    // header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-    // header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-    // header ('Pragma: public'); // HTTP/1.0
-    // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-    // $objWriter->save('php://output');
-    // exit;
-
-  }
-
-  public function flatten_export($arr, $budget, $outArr){
-
-    foreach($arr as $item){ 
-      array_push($outArr, $item);
-      $this->flatten($item['SUB'], $budget, $outArr);
     
-      // $style = ($item['LEVEL'] == 1 || $item['LEVEL'] == 2) ? 'style="font-weight:bold;"' : '';
-      // $html .= '<tr '. $style . '>';
-      // $html .= '<td>' . $item['NUMBER'] . '</td>';
-      // $html .= '<td>' . (($item['LEVEL'] == 1) ? strtoupper($item['NAME']) : $item['NAME']) . '</td>';
-      // $html .= '<td>' . (($isLast) ? $item['SPECIFICATION'] : '' ) . '</td>';
-      // $html .= '<td class="dt-cols-center">' . (($isLast) ? $item['UNIT'] : '' ) . '</td>';
-      // $html .= '<td class="dt-cols-right">' . (($isLast) ? $item['VOLUME'] : '') . '</td>';
-      // $html .= '<td class="dt-cols-right">' . (($isLast) ? number_format($item['UNIT_PRICE'], 0,',','.') : '' ) . '</td>';
-      // $html .= '<td class="dt-cols-right">' . (($isLast) ? round((($item['UNIT_PRICE'] * $item['VOLUME']) / $budget ) * 100, 3) : '' ) . '</td>';
-      // $html .= '<td class="dt-cols-right">' . (($isLast) ? number_format($item['UNIT_PRICE'] * $item['VOLUME'], 0,',','.') : '' ) . '</td>';
-      // $html .= '<td class="dt-cols-center">';
-      // $html .=    '<a data-toggle="tooltip" title="Edit" class="tooltips edit-row" object="'. $item['ID'] .'"><i class="fa fa-pencil"></i></a> &nbsp;&nbsp;';
-      // $html .=    '<a data-toggle="tooltip" title="Hapus" class="tooltips delete-row" object="'. $item['ID'] .'"><i class="fa fa-trash-o"></i></a>';
-      // $html .=  '</td>';
-      // $html .= '</tr>';
-      // $html .= $this->flatten($item['SUB'], $budget);
-    }
 
-    return $outArr;
   }
-
 
 }
