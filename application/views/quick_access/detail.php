@@ -49,7 +49,7 @@
                   </div>
                   <div class="panel-icon"><i class="fa fa-flag-checkered"></i></div>
                   <div class="media-body">
-                      <h5 class="md-title nomargin">progress realisasi</h5>
+                      <h5 class="md-title nomargin">realisasi pengawas</h5>
                       <h1 class="mt5"><span id="total-progress">0</span> %</h1>
                   </div>
                   <hr>
@@ -76,18 +76,18 @@
                   </div>
                   <div class="panel-icon"><i class="fa fa-check-square-o"></i></div>
                   <div class="media-body">
-                      <h5 class="md-title nomargin">Item Pekerjaan Selesai</h5>
-                      <h1 class="mt5"><span id="total-taskdone">0</span></h1>
+                      <h5 class="md-title nomargin">realisasi kontraktor</h5>
+                      <h1 class="mt5"><span id="total-progress-vendor">0</span> %</h1>
                   </div>
                   <hr>
                   <div class="clearfix mt20">
                       <div class="pull-left">
                           <h5 class="md-title nomargin">Minggu Kemarin</h5>
-                          <h4 class="nomargin"><span id="total-taskdone-previous">0</span></h4>
+                          <h4 class="nomargin"><span id="total-previous-week-vendor">0</span> %</h4>
                       </div>
                       <div class="pull-right">
                           <h5 class="md-title nomargin">Minggu ini</h5>
-                          <h4 class="nomargin"><span id="total-taskdone-current">0</span></h4>
+                          <h4 class="nomargin"><span id="total-current-week-vendor">0</span> %</h4>
                       </div>
                   </div>
                   
@@ -96,15 +96,15 @@
       </div>                       
     </div>
 
-    <table class="table table-bordered table-hover tbl-item-list responsive" id="tbl-realisasi">
+    <table class="table table-bordered table-hover table-item-list responsive" id="tbl-realisasi">
       <thead>
         <tr>
-          <th width="50px" rowspan="2" class="dt-cols-center">No</th>
+          <th width="20px" rowspan="2" class="dt-cols-center">No</th>
           <th rowspan="2">Uraian Pekerjaan</th>
           <th rowspan="2" width="20px">Bobot Total</th>
           <th colspan="3" class="dt-cols-center">Volume</th>
-          <th colspan="2" class="dt-cols-center">Bobot</th>
-          <th rowspan="2" class="dt-cols-center" width="80px">Ket.</th>
+          <th colspan="2" class="dt-cols-center">Bobot (%)</th>
+          <th rowspan="2" class="dt-cols-center" width="60px">Ket.</th>
         </tr>
         <tr>
           <th width="20px" class="dt-cols-center">Rencana</th>
@@ -118,22 +118,19 @@
         <?php
           $i = 1;
           foreach ($items as $item) {
-            $bobot = round((($item['UNIT_PRICE'] * $item['VOLUME']) / $project['BUDGET'] ) * 100, 4);
-            $vol = ($item['VOLUME'] > 0) ? round((($item['SUPERVISOR_PROGRESS_VOLUME'] / $item['VOLUME']) * $bobot), 4) : 0;
+            $bobot = round((($item['UNIT_PRICE'] * $item['VOLUME']) / $project['BUDGET'] ) * 100, 3);
+            $vol = ($item['VOLUME'] > 0) ? round((($item['SUPERVISOR_PROGRESS_VOLUME'] / $item['VOLUME']) * $bobot), 3) : 0;
         ?>
-        <tr object="<?=$item['ID_ITEM_TASK'];?>" planningvolume="<?=round($item['VOLUME'], 4);?>" realizationbefore="<?=round($item['SUPERVISOR_PROGRESS_VOLUME'], 4);?>" bobot="<?=$bobot;?>">
-          <td ><?=$i;?></td>                            
-          <td ><?=$item['NAME'];?></td>
+        <tr item-name="<?=$item['NAME'];?>" object="<?=$item['ID_ITEM_TASK'];?>" planningvolume="<?=round($item['VOLUME'], 3);?>" realizationbefore="<?=round($item['SUPERVISOR_PROGRESS_VOLUME'], 3);?>" realizationvendor="<?=round($item['VENDOR_PROGRESS_VOLUME'], 3);?>" bobot="<?=$bobot;?>">
+          <td class="dt-cols-center"><?=(round($item['VOLUME'], 4) == round($item['SUPERVISOR_PROGRESS_VOLUME'], 4)) ? '<span class="label label-success">'.$i.'</span>' : $i ;?></td>          <td ><?=$item['NAME'];?></td>
           <td class="dt-cols-right"><?=$bobot;?></td>
-          <td class="dt-cols-right"><?=round($item['VOLUME'], 4);?></td>
-          <td class="dt-cols-right"><?=round($item['SUPERVISOR_PROGRESS_VOLUME'], 4);?></td>
-          <td class="dt-cols-right"><?=round($item['VENDOR_PROGRESS_VOLUME'], 4);?></td>
-          <td class="dt-cols-right"><?=round($item['WEIGHT_PLANNING'], 4);?></td>
-<!--           <td class="dt-cols-right"><?=(round($item['VOLUME'], 4) == round($item['SUPERVISOR_PROGRESS_VOLUME'], 4)) ? '<span class="label label-success">'.$vol.'</span>' : $vol ;?></td>-->
+          <td class="dt-cols-right"><?=round($item['VOLUME'], 3);?></td>
+          <td class="dt-cols-right"><?=round($item['SUPERVISOR_PROGRESS_VOLUME'], 3);?></td>
+          <td class="dt-cols-right"><?=round($item['VENDOR_PROGRESS_VOLUME'], 3);?></td>
+          <td class="dt-cols-right"><?=round($item['WEIGHT_PLANNING'], 3);?></td>
           <td class="dt-cols-right"><?=$vol;?></td>
           <td class="dt-cols-center">
-                <i class="fa fa-comments"></i>
-                <span class="badge" id="total-comment-<?=$item['ID_ITEM_TASK'];?>"><?=($item['COMMENTS']) ? $item['COMMENTS'] : 0;?></span>
+                <span class="badge" id="total-comment-<?=$item['ID_ITEM_TASK'];?>"><i class="fa fa-comments"></i> <?=($item['COMMENTS']) ? $item['COMMENTS'] : 0;?></span>
           </td>
         </tr>
         <?php $i++; } ?>
@@ -173,6 +170,12 @@
                   <form class="form-horizontal" id="form-add-realization" method="POST" action="<?= base_url();?>item_task/update_realization">
                     <div class="errorForm"></div>
                     <div class="form-group">
+                      <label class="col-sm-3 control-label">Nama Pekerjaan</label>
+                      <div class="col-sm-9">
+                        <input type="text" value="" class="form-control" readonly="readonly" name="item-name" />
+                      </div>
+                    </div>
+                    <div class="form-group">
                       <label class="col-sm-3 control-label">Vol. Perencanaan</label>
                       <div class="col-sm-2">
                         <input type="text" value="0" class="form-control" readonly="readonly" name="planning-volume" />
@@ -184,6 +187,15 @@
                       <label class="col-sm-1 control-label">Sisa</label>
                       <div class="col-sm-2">
                         <input type="text" value="0" class="form-control" readonly="readonly" name="unreal-volume" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label"></label>
+                      <div class="col-sm-5">
+                        <div class="ckbox ckbox-success">
+                          <input type="checkbox" value="1" class="item-finished" name="item-finished" id="item-finished" />
+                          <label for="item-finished">Pekerjaan telah selesai 100%?</label>
+                        </div>
                       </div>
                     </div>
                     <div class="form-group">
@@ -199,8 +211,8 @@
                           <input type="text" name="vendor-volume" class="form-control" required title="Kolom Volume wajib diisi!"  />
                         </div>
                         <?php } ?>
-                        <div class="col-sm-4">
-                          <button class="btn btn-primary" type="submit">Simpan</button>
+                        <div class="col-sm-2">
+                          <button class="btn btn-primary" id="btn-save-realization" type="submit">Simpan</button>
                         </div>
                     </div><!-- form-group -->
 
@@ -212,6 +224,7 @@
                     <input type="hidden" name="bobot-item" value="-1" />
                     <input type="hidden" name="planning-item" value="-1" />
                     <input type="hidden" name="realization-before" value="-1" />
+                    <input type="hidden" name="realization-vendor" value="-1" />
                     <input type="hidden" name="id-project" value="<?=$project['ID'];?>" />
                   </form>
 
@@ -242,7 +255,7 @@
                       </div>
                     </div>
                     <div class="col-md-4">
-                      <button class="btn btn-primary pull-right" type="submit">Kirim</button>
+                      <button class="btn btn-primary pull-right" id="btn-send-comment" type="submit">Kirim</button>
                       <button class="btn btn-default pull-right mr5 tooltips" title="Sertakan Foto" data-toggle="tooltip" type="button" id="btn-attach-image"><i class="fa fa-camera"></i></button>
                     </div>
                   </div>
@@ -275,13 +288,28 @@
       dataType: "json",
       success: function(res){
         if(res.status == 'ok'){
-          $('#total-progress').html(res.data[0].TOTAL_PERCENTAGE * 1);
-          $('#total-current-week').html(res.data[0].TOTAL_PERCENTAGE_NOW * 1);
-          $('#total-previous-week').html(res.data[0].TOTAL_PERCENTAGE_BEFORE * 1);
-          $('#total-taskdone').html(res.data[0].TOTAL_TASK_DONE * 1);
+          $('#total-progress').html(Math.round(res.data[0].TOTAL_PERCENTAGE * 1000) / 1000);
+          $('#total-current-week').html(Math.round(res.data[0].TOTAL_PERCENTAGE_NOW * 1000) / 1000);
+          $('#total-previous-week').html(Math.round(res.data[0].TOTAL_PERCENTAGE_BEFORE * 1000) / 1000);
+          $('#total-progress-vendor').html(Math.round(res.data[0].TOTAL_PERCENTAGE_VENDOR * 1000) / 1000);
+          $('#total-current-week-vendor').html(Math.round(res.data[0].TOTAL_PERCENTAGE_NOW_VENDOR * 1000) / 1000);
+          $('#total-previous-week-vendor').html(Math.round(res.data[0].TOTAL_PERCENTAGE_BEFORE_VENDOR * 1000) / 1000);
         }
       }
-    })  
+    });  
+
+    $('.item-finished').change(function(){
+      var isChecked = $(this).is(':checked');
+      var maxVol = $("input[name='planning-volume']").val();
+
+      if(isChecked){
+        $("input[name='supervisor-volume']").val(maxVol);
+        $("input[name='vendor-volume']").val(maxVol);
+      } else {
+        $("input[name='supervisor-volume']").val('');
+        $("input[name='vendor-volume']").val('');
+      }
+    });
 
     jQuery('.select-week').select2();
 
@@ -293,6 +321,7 @@
           var api = this.api(), data;
           var total = 0;
           var totalBobot = 0;
+          var tBobot = 0, tVRencana = 0, tVRealP = 0, tVRealS = 0, tBRencana = 0, tBRencana = 0, tBRealisasi = 0;
           // Remove the formatting to get integer data for summation
           var intVal = function ( i ) {
               return typeof i === 'string' ? i.replace(/[.]/g, '')*1 : typeof i === 'number' ? i : 0;
@@ -344,42 +373,50 @@
           
           // Update footer
           $( api.column( 2 ).footer() ).html(
-              Math.round(tBobot * 100) / 100
+              Math.round(tBobot * 1000) / 1000
           );
           $( api.column( 3 ).footer() ).html(
-              Math.round(tVRencana * 100) / 100
+              Math.round(tVRencana * 1000) / 1000
           );
           $( api.column( 4 ).footer() ).html(
-              Math.round(tVRealP * 100) / 100
+              Math.round(tVRealP * 1000) / 1000
           );
           $( api.column( 5 ).footer() ).html(
-              Math.round(tVRealS * 100) / 100
+              Math.round(tVRealS * 1000) / 1000
           );
           $( api.column( 6 ).footer() ).html(
-              Math.round(tBRencana * 100) / 100
+              Math.round(tBRencana * 1000) / 1000
           );
           $( api.column( 7 ).footer() ).html(
-              Math.round(tBRealisasi * 100) / 100
+              Math.round(tBRealisasi * 1000) / 1000
           );
       }
     });
 
-    jQuery('.tbl-item-list tbody').on( 'click', 'tr', function () {
+    $('.table-item-list tbody').on( 'click', 'tr', function () {
       $('#modal-add-realisasi').modal('show');
 
       var id = $(this).attr('object');
       var vol = $(this).attr('planningvolume');
       var bi = $(this).attr('bobot');
       var rb = $(this).attr('realizationbefore');
+      var rv = $(this).attr('realizationvendor');
       var unreal = (vol - rb) * 1;
+      var itemName = $(this).attr('item-name');
 
       $("input[name='id-item-task']").val(id);
       $("input[name='planning-volume']").val(vol);
       $("input[name='planning-item']").val(vol);
       $("input[name='bobot-item']").val(bi);
       $("input[name='realization-before']").val(rb);
+      $("input[name='realization-vendor']").val(rv);
       $("input[name='real-volume']").val(rb);
       $("input[name='unreal-volume']").val(unreal);
+      $("input[name='item-name']").val(itemName);
+      $("input[name='supervisor-volume']").val('');
+      $("input[name='vendor-volume']").val('');
+      $('#item-finished').removeAttr('checked');
+
 
       loadComment(id);
     });
@@ -392,11 +429,12 @@
           alert('Nilai Realisasi tidak boleh LEBIH dari Volume Perencanaan!');
           return false;
         }
-
-        if(($("input[name='supervisor-volume']").val()*1 <= $("input[name='realization-before']").val()*1) || ($("input[name='vendor-volume']").val()*1 <= $("input[name='realization-before']").val()*1)){
-          alert('Nilai Realisasi tidak boleh KURANG dari volume yang telah Teralisasi!');
-          return false;
-        }      
+        $('#btn-save-realization').html("Menyimpan...");
+        $('#btn-save-realization').attr("disable", "disable");
+        // if(($("input[name='supervisor-volume']").val()*1 <= $("input[name='realization-before']").val()*1) || ($("input[name='vendor-volume']").val()*1 <= $("input[name='realization-before']").val()*1)){
+        //   alert('Nilai Realisasi tidak boleh KURANG dari volume yang telah Teralisasi!');
+        //   return false;
+        // }      
       },
       success: function(a,b,c,d){
         if(a.status == 'ok'){
@@ -410,18 +448,73 @@
           });
 
           location.reload();
+        } else {
+          jQuery.gritter.add({
+            title: 'Error',
+            text: 'Terjadi kesalahan, silahkan refresh browser anda!',
+            class_name: 'growl-danger',
+            image: false,
+            sticky: false,
+            time: ''
+          });
         }
+
+        $('#btn-save-realization').html("Simpan");
+        $('#btn-save-realization').removeAttr("disable");
+      },
+      error: function(){
+        jQuery.gritter.add({
+          title: 'Error',
+          text: 'Terjadi kesalahan, silahkan refresh browser anda!',
+          class_name: 'growl-danger',
+          image: false,
+          sticky: false,
+          time: ''
+        });
+
+        $('#btn-save-realization').html("Simpan");
+        $('#btn-save-realization').removeAttr("disable");
       }
     });
 
     $('#form-add-comment').ajaxForm({
       clearForm: true,
       dataType: 'json',
+      beforeSubmit: function(){
+        $('#btn-send-comment').html("Mengirim...");
+        $('#btn-send-comment').attr("disable", "disable");
+      },
       success: function(a,b,c,d){
         if(a.status == 'ok'){
           loadComment(a.data.c);
           $('#thumbnail-image').html('');
+          $('#id-image-attachment').val('');
+        } else {
+          jQuery.gritter.add({
+            title: 'Error',
+            text: 'Terjadi kesalahan, silahkan refresh browser anda!',
+            class_name: 'growl-danger',
+            image: false,
+            sticky: false,
+            time: ''
+          });
         }
+
+        $('#btn-send-comment').html("Kirim");
+        $('#btn-send-comment').removeAttr("disable");
+      },
+      error: function(){
+        jQuery.gritter.add({
+          title: 'Error',
+          text: 'Terjadi kesalahan, silahkan refresh browser anda!',
+          class_name: 'growl-danger',
+          image: false,
+          sticky: false,
+          time: ''
+        });
+        
+        $('#btn-send-comment').html("Kirim");
+        $('#btn-send-comment').removeAttr("disable");
       }
     });
 
@@ -439,7 +532,7 @@
       success: function(a,b,c,d){
         if(a.error){
           jQuery.gritter.add({
-            title: 'Upss..',
+            title: 'Error',
             text: a.error,
             class_name: 'growl-danger',
             image: false,
@@ -449,7 +542,6 @@
         } else {
           $('#thumbnail-image').append('<img src="<?=base_url();?>uploads/'+a.file_name+'" style="width:32px;height:32px;border:1px #ddd solid;" class="mr5" title="'+a.original_file_name+'" data-toggle="tooltip"/>');
           var val = $('#id-image-attachment').val();
-
           $('#id-image-attachment').val(val + ',' + a.id);
         }
 
@@ -457,7 +549,7 @@
       },
       error: function(e){
         jQuery.gritter.add({
-          title: 'Upss..',
+          title: 'Error',
           text: e,
           class_name: 'growl-danger',
           image: false,
@@ -515,7 +607,7 @@
           };
 
           $('.activity-list').html(html);
-          $('#total-comment-' + id ).html(res.data.length);
+          $('#total-comment-' + id ).html('<i class="fa fa-comments"></i> ' + res.data.length);
           jQuery("a[data-rel^='prettyPhoto']").prettyPhoto();
         }
       })

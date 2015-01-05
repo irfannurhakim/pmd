@@ -39,7 +39,7 @@
             margin-top: -10px;
           }
           .table-item-list{
-            font-size: 8pt;
+            font-size: 8pt!important;
           }
           div.FixedHeader_Cloned th,
           div.FixedHeader_Cloned td {

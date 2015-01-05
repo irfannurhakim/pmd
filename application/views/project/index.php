@@ -29,11 +29,12 @@
       <?php foreach ($projects as $row) { 
         if($row['FROM_START'] > 0){
           $sisaWaktuSpan = '<span class="label label-default">Belum Mulai</span>';
-          $deviation = '<span class="badge">0 %</span>';
+          //$deviation = '<span class="badge">0 %</span>';
         } else {
+          $diffFinsih = ($row['DIFF_FINISH'] > 0) ? '+' . $row['DIFF_FINISH'] : $row['DIFF_FINISH'];
           $sisaWaktu = ($row['DUE'] > 0) ? ceil($row['DUE']/7) : floor($row['DUE']/7);
-          $sisaWaktuSpan = ($sisaWaktu >= 0) ? (($sisaWaktu < 2) ? '<span class="label label-warning">'.$sisaWaktu.' Minggu</span>' : '<span class="label label-primary">'.$sisaWaktu.' Minggu</span>') : '<span class="label label-success">Selesai</span>';
-          $deviation = ($row['DEVIATION'] < 20) ? '<span class="badge">'.$row['DEVIATION'] .' %</span>' : '<span class="badge badge-danger">'.$row['DEVIATION'] .' %</span>';
+          $sisaWaktuSpan = ($row['IS_FINISHED'] == 1) ? '<span class="label label-success">Selesai '.$diffFinsih.'</span>' : (($sisaWaktu >= 0) ? (($sisaWaktu < 2) ? '<span class="label label-warning">'.$sisaWaktu.' Minggu</span>' : '<span class="label label-primary">'.$sisaWaktu.' Minggu</span>') : '<span class="label label-danger">'.$sisaWaktu.' Minggu</span>');
+          //$deviation = ($row['DEVIATION'] < 20) ? '<span class="badge">'.$row['DEVIATION'] .' %</span>' : '<span class="badge badge-danger">'.$row['DEVIATION'] .' %</span>';
         }
 
       ?>
@@ -79,14 +80,6 @@
                           <input type="text" name="contract-no" class="form-control" required title="Kolom Nomor Kontrak wajib diisi!" />
                       </div>
                   </div><!-- form-group -->
-              
-              
-                 <!--  <div class="form-group">
-                      <label class="col-sm-4 control-label">Deskripsi<span class="asterisk">*</span></label>
-                      <div class="col-sm-8">
-                          <textarea name="description" class="form-control" />
-                      </div>
-                  </div> --><!-- form-group -->
 
                   <div class="form-group">
                       <label class="col-sm-4 control-label">Kontraktor/Pelaksana<span class="asterisk">*</span></label>
@@ -122,6 +115,13 @@
                       <label class="col-sm-2 control-label" >Tgl Selesai</label>
                       <div class="col-sm-3">
                           <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="end-date" name="end-date" value="<?= date('d/m/Y');?>"/>
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      <label class="col-sm-4 control-label">Tanggal SPK<span class="asterisk">*</span></label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="spk-date" name="spk-date" value="<?= date('d/m/Y');?>"/>
                       </div>
                   </div>
 
@@ -164,16 +164,14 @@
       window.location = "<?=base_url();?>#/project/view/" + id;
     });
  
-
-    jQuery('#select-id-contractor, #select-id-supervisor').select2();
-    
-    jQuery('#start-date').datepicker({dateFormat : "dd/mm/yy"});
-    jQuery('#end-date').datepicker({dateFormat : "dd/mm/yy"});
+    jQuery('#select-id-contractor, #select-id-supervisor').select2(); 
+    jQuery('#start-date, #end-date, #spk-date').datepicker({dateFormat : "dd/mm/yy"});
 
     // Submit add project
     $('#form-add-project').ajaxForm({
       dataType: 'json',
       beforeSubmit: function(){
+        $('#btn-save-project').attr('disabled','disabled');
         $('#btn-save-project').html('Menyimpan...');
       },
       success: function(a,b,c,d){
@@ -183,7 +181,7 @@
           projects();
         } else {
           jQuery.gritter.add({
-            title: 'Upss..',
+            title: 'Error',
             text: a.error,
             class_name: 'growl-danger',
             image: false,
@@ -191,7 +189,20 @@
             time: ''
           });
           $('#btn-save-project').html('Simpan');
+          $('#btn-save-project').removeAttr('disabled');
         }
+      },
+      error: function(){
+        jQuery.gritter.add({
+          title: 'Error',
+          text: 'Terjadi Kesalahan, silahkan refresh browser anda!',
+          class_name: 'growl-danger',
+          image: false,
+          sticky: false,
+          time: ''
+        });
+        $('#btn-save-project').html('Simpan');
+        $('#btn-save-project').removeAttr('disabled');
       }
     });
 

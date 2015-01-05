@@ -11,7 +11,7 @@ class Home extends CI_Controller {
 
 	public function index(){ 
 
-    $data['projects'] = $this->builtbyprime->explicit("SELECT P.ID, P.NAME, P.START_DATE, P.FINISH_DATE, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = P.ID GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE FROM TBL_PROJECT P WHERE P.FINISH_DATE >= SYSDATE AND P.START_DATE <= SYSDATE ORDER BY P.ID DESC");
+    $data['projects'] = $this->builtbyprime->explicit("SELECT P.ID, P.NAME, P.START_DATE, P.FINISH_DATE, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = P.ID GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE FROM TBL_PROJECT P WHERE P.IS_FINISHED != 1 AND P.START_DATE <= SYSDATE ORDER BY P.ID DESC");
     
 
     if(count($data['projects']) < 1){
@@ -63,22 +63,6 @@ class Home extends CI_Controller {
 		$this->load->view('home/index', $data);	
 	}
 
-	public function add(){
-
-	}
-
-	public function view(){
-
-	}
-
-	public function remove(){
-
-	}
-
-	public function edit(){
-
-	}
-
   public function topstat($sorting = 0, $year = null){
     //sorting 0 by jumlah nilai proyek, sorting 1 by jumlah poyek 
     $sortby = 'jml_proyek';
@@ -88,11 +72,13 @@ class Home extends CI_Controller {
       $sortby = 'jml_nilai_proyek';
     }
 
-    $contractors = $this->builtbyprime->explicit("SELECT * FROM (SELECT v.affiliation name, v.profile_image_url, p.id_vendor, COUNT(p.id_vendor) jml_proyek, SUM(p.budget) jml_nilai_proyek FROM TBL_PROJECT p, TBL_USER v WHERE v.id = p.id_vendor and EXTRACT(YEAR FROM p.START_DATE) = '".$tahun."' GROUP BY p.id_vendor, v.affiliation, v.profile_image_url ORDER BY ".$sortby." DESC) WHERE ROWNUM <= 7");
-    $supervisors = $this->builtbyprime->explicit("SELECT * FROM (SELECT U.NAME,  U.PROFILE_IMAGE_URL, U.AFFILIATION, S.ID_USER, COUNT(S.ID_USER) JML_PROYEK FROM TBL_SUPERVISOR_PROJECT S, TBL_USER U, TBL_PROJECT P WHERE U.ID = S.ID_USER AND P.ID = S.ID_PROJECT AND EXTRACT(YEAR FROM P.START_DATE) = '".$tahun."' GROUP BY U.NAME,  U.PROFILE_IMAGE_URL, S.ID_USER, U.AFFILIATION ORDER BY JML_PROYEK DESC) WHERE ROWNUM <= 7");
+    $contractors = $this->builtbyprime->explicit("SELECT * FROM (SELECT v.affiliation name, v.profile_image_url, p.id_vendor, COUNT(p.id_vendor) jml_proyek, SUM(p.budget) jml_nilai_proyek FROM TBL_PROJECT p, TBL_USER v WHERE v.id = p.id_vendor and EXTRACT(YEAR FROM p.SPK_DATE) = '".$tahun."' GROUP BY p.id_vendor, v.affiliation, v.profile_image_url ORDER BY ".$sortby." DESC) WHERE ROWNUM <= 7");
+    $supervisors = $this->builtbyprime->explicit("SELECT * FROM (SELECT U.NAME,  U.PROFILE_IMAGE_URL, U.AFFILIATION, S.ID_USER, COUNT(S.ID_USER) JML_PROYEK FROM TBL_SUPERVISOR_PROJECT S, TBL_USER U, TBL_PROJECT P WHERE U.ID = S.ID_USER AND P.ID = S.ID_PROJECT AND EXTRACT(YEAR FROM P.SPK_DATE) = '".$tahun."' GROUP BY U.NAME,  U.PROFILE_IMAGE_URL, S.ID_USER, U.AFFILIATION ORDER BY JML_PROYEK DESC) WHERE ROWNUM <= 7");
 
-    $project = $this->builtbyprime->explicit("SELECT COUNT(ID) COUNT_TOTAL_PROJECT, SUM(BUDGET) SUM_TOTAL_BUDGET FROM TBL_PROJECT WHERE EXTRACT(YEAR FROM START_DATE) = '".$tahun."'");
+    $project = $this->builtbyprime->explicit("SELECT COUNT(ID) COUNT_TOTAL_PROJECT, SUM(BUDGET) SUM_TOTAL_BUDGET FROM TBL_PROJECT WHERE EXTRACT(YEAR FROM SPK_DATE) = '".$tahun."'");
     $others  = $this->builtbyprime->explicit("SELECT (SELECT COUNT(ID) FROM TBL_USER WHERE ID_USER_TYPE = 4) COUNT_CONTRACTOR, (SELECT COUNT(ID) FROM TBL_USER WHERE ID_USER_TYPE = 3) COUNT_SUPERVISOR FROM DUAL");
+
+
     echo json_encode(array('status' => 'ok', 'contractors' => $contractors, 'supervisors' => $supervisors, 'project' => $project, 'others' => $others));
   }
 

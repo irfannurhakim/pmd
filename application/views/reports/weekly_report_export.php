@@ -1,61 +1,44 @@
-<div class="media-options">
-  <div class="pull-left">
-   <h5><?=$project['NAME'];?></h5>  
-  </div>
-  <div class="pull-right">
-    <div class="btn-toolbar">
-      <div class="btn-group">
-        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/project/view/<?=$project['ID'];?>';return false;"><i class="fa fa-arrow-left mr5"></i> Kembali</button>     
-      </div>  
+<?php
+  header("Content-type: application/octet-stream");
+  header("Content-Disposition: attachment; filename=report_project".$id."_minggu".$cur_week.".xls");
+  header("Pragma: no-cache");
+  header("Expires: 0");
 
-      <div class="btn-group">
-        <button class="btn btn-default btn-sm choose-week" type="button" data-toggle="modal" data-target=".modal-filter-week"><i class="fa fa-clock-o mr5"></i> Pilih Minggu</button>
-      </div>
-
-      <div class="btn-group">
-        <a href="<?=base_url();?>reports/weekly_report/<?=$id;?>/<?=$cur_week;?>/1" target="_blank" class="btn btn-default btn-sm export-data"><i class="fa fa-upload mr5"></i> Ekspor</a>
-      </div>
-
-    </div>
-  </div>
-</div>
-<hr/>
-<table border="0" cellpadding="0" cellspacing="5" >
-  <tr>
-    <td width="200px">Proyek/Kegiatan</td>
-    <td>: <strong><?=$project['NAME'];?></strong></td>
-  </tr>
-  <tr>
-    <td>Nomor Kontrak</td>
-    <td>: <strong><?=$project['CONTRACT_NO'];?></strong></td>
-  </tr>
-  <tr>
-    <td>Nilai Kontrak</td>
-    <td>: <strong><?=$project['BUDGET'];?></strong></td>
-  </tr>
-  <tr>
-    <td>Kontraktor/Pelaksana</td>
-    <td>: <strong><?=$vendor['AFFILIATION'];?></strong></td>
-  </tr>
-  <tr valign="top">
-    <td>Pengawas</td>
-    <td>
-      <ul style="padding-left:20px">
-      <strong>
-      <?php
-        foreach ($supervisor as $s) {
-          echo '<li>' . $s['NAME'] . '</li>';
-        }
-      ;?>
-      </strong></ul>
-    </td>
-  </tr>
-</table>
-<div class="mb10"></div>
-  <?php
-    if(!empty($item_list)){
+  if(!empty($item_list)){
   ?>
- <table class="table table-bordered table-hover table-item-list responsive" id="tbl-realisasi">
+  <table border="0" cellpadding="0" cellspacing="5" >
+    <tr>
+      <td width="200px">Proyek/Kegiatan</td>
+      <td>: <strong><?=$project['NAME'];?></strong></td>
+    </tr>
+    <tr>
+      <td>Nomor Kontrak</td>
+      <td>: <strong><?=$project['CONTRACT_NO'];?></strong></td>
+    </tr>
+    <tr>
+      <td>Nilai Kontrak</td>
+      <td>: <strong><?=$project['BUDGET'];?></strong></td>
+    </tr>
+    <tr>
+      <td>Kontraktor/Pelaksana</td>
+      <td>: <strong><?=$vendor['AFFILIATION'];?></strong></td>
+    </tr>
+    <tr valign="top">
+      <td>Pengawas</td>
+      <td>
+        <ul style="padding-left:20px">
+        <strong>
+        <?php
+          foreach ($supervisor as $s) {
+            echo '<li>' . $s['NAME'] . '</li>';
+          }
+        ;?>
+        </strong></ul>
+      </td>
+    </tr>
+  </table>
+  <div class="mb10"></div>
+  <table class="table table-bordered table-hover table-item-list responsive" id="tbl-realisasi">
       <thead style="text-align:center">
         <tr class="dt-cols-center">
           <td rowspan="4">No</td>
@@ -190,66 +173,4 @@
   <?php
     }else{ echo '<div class="alert alert-info text-center">Belum ada data tersedia.<br />Silahkan pilih minggu pada tombol di atas.</div>'; }
   ?>
-
-<!-- <div class="container-dt" id="chart" style="margin-top:20px;height:300px;"></div>
- -->
-
-<div class="modal fade modal-filter-week" tabindex="-1" role="dialog" id="modal-filter-week" >
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
-          <h4 class="modal-title">Pilih Minggu</h4>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-md-12">
-              <div class="panel panel-default">
-                <div class="panel-body">
-                  <div class="errorForm"></div>
-                  <div class="form-group">
-                    <label class="col-sm-4 control-label">Minggu Ke-</label>
-                    <div class="col-sm-5">
-                      <select id="week" style="width:100px;">
-                        <?php 
-                            foreach ($week as $row) { 
-                              $selected = ($cur_week==$row["NO_WEEK"])? 'selected' : '';
-                              echo '<option value="'.$row["NO_WEEK"].'" '. $selected.'>'.$row["NO_WEEK"].'</option>';
-                            } 
-                        ?>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <input type="hidden" name="id-project" id="id-project" value="<?=$id;?>" />
-                <div class="panel-footer">
-                    <button class="btn btn-primary mr5" id="submit">Submit</button>
-                </div><!-- panel-footer -->
-              </div><!-- panel-default -->
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script type="text/javascript">
-  $(document).ready(function(){
-    jQuery('#week').select2();
-
-    $('#submit').click(function(){
-      var id   = $('#id-project').val();
-      var week = $('#week').val();
-      $.ajax({
-        url: '<?php echo base_url();?>reports/weekly_report/'+id+'/'+week,
-        dataType: 'html',
-        success:function(result){
-          $('.modal-backdrop').remove();
-          $('#weekly-report-detail').html(result);
-        }
-      });
-    });
-  });
-</script>
-
 

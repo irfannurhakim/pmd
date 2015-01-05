@@ -11,7 +11,7 @@
   <div class="pull-right">
     <div class="btn-toolbar">
       <div class="btn-group">
-        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/weekly_report';return false;"><i class="fa fa-arrow-left mr5"></i> Kembali</button>     
+        <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/statistik';return false;"><i class="fa fa-arrow-left mr5"></i> Kembali</button>     
       </div>  
 
     </div>
@@ -19,7 +19,7 @@
 </div>
 <hr/>
 
-<div class="container-dt" id="tbl" style="height:200px;overflow:auto;">
+<div class="container-dt" id="tbl">
   <?php
     if(!empty($item_list)){
   ?>
@@ -48,12 +48,12 @@
     </tbody>
   </table>
   <?php
-    }else{ echo '<div class="alert alert-info text-center">Belum ada data tersedia.<br />Silahkan pilih minggu pada tombol di atas.</div>'; }
+    }else{ echo '<div class="alert alert-info text-center">Data tidak tersedia.</div>'; }
   ?>
 </div>
 
-<div class="container-dt" id="chart" style="margin-top:20px;height:300px;"></div>
-
+<!-- <div class="container-dt" id="chart" style="margin-top:20px;height:300px;"></div>
+ -->
 <input type="hidden" name="id-project" id="id-project" value="<?=$id;?>" />
 <script src="<?= base_url();?>public/js/chart/highcharts.js"></script>
 <script src="<?= base_url();?>public/js/chart/exporting.js"></script>
@@ -106,7 +106,7 @@
 
               } 
             })  
-            chart = new Highcharts.Chart(options);  
+            //chart = new Highcharts.Chart(options);  
           }
         });
 
