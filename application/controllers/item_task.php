@@ -140,7 +140,7 @@ class Item_task extends CI_Controller {
         $isLast = true;
       } 
 
-      $style = ($item['LEVEL'] == 1 || $item['LEVEL'] == 2) ? 'style="font-weight:bold;"' : '';
+      $style = '';
       $html .= '<tr '. $style . '>';
       $html .= '<td>' . $item['NUMBER'] . '</td>';
       $html .= '<td>' . (($item['LEVEL'] == 1) ? strtoupper($item['NAME']) : $item['NAME']) . '</td>';
@@ -202,7 +202,7 @@ class Item_task extends CI_Controller {
         $isLast = true;
       } 
 
-      $style = ($item['LEVEL'] == 1 || $item['LEVEL'] == 2) ? 'style="font-weight:bold;"' : '';
+      $style = '';
       $html .= '<tr '. $style . '>';
       $html .= '<td>' . $item['NUMBER'] . '</td>';
       $html .= '<td>' . (($item['LEVEL'] == 1) ? strtoupper($item['NAME']) : $item['NAME']) . '</td>';
@@ -513,7 +513,7 @@ class Item_task extends CI_Controller {
               'id' => $maxDtlId,
               'id_item_task' => $maxId,
               'week_number' => $i - 8,
-              'weight_planning' => current($value),
+              'weight_planning' => current(round($value,3)),
               'id_project_planning' => $maxPlanId
             );
             $this->builtbyprime->insert('TBL_PROJECT_PLANNING_DETAIL', $planningItem);

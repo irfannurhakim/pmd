@@ -7,6 +7,12 @@
   </div>
   <div class="col-md-3"></div>
 </div> -->
+<style type="text/css">
+  g text{
+    display: none;
+  }  
+</style>
+
 <div class="mb30"></div>
 <div class="" id="carousel-graph">
     <?php foreach ($projects as $project) { ?>
@@ -23,7 +29,12 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div>
+                        <center>
                         <div id="gauge_<?=$project['ID'];?>"></div>
+                        <div>
+                            Deviasi : <strong><?=round($project['TOTAL_PERCENTAGE'] - $project['TOTAL_PLANNING'], 3);?></strong>
+                        </div>
+                        </center>
                       </div><!-- tinystat -->
                     </div><!-- col-md-7 -->
                     <div class="col-md-6">
