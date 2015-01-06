@@ -476,15 +476,26 @@ class Item_task extends CI_Controller {
       exit();
     }
 
-    /* iterasi untuk setiap row dan dimasukan ke database */
+   /* iterasi untuk setiap row dan dimasukan ke database */
     foreach ($sheetData as $key => $value) {
       if($key != 1){
         if($value['A'] == 'eof') break;
 
+        //set id pada array arrIdParents dengan id maks dari database
         $id = (string) $value['A'];
-        $arrIdParents[$id] = $maxId; 
 
+        //pecah jadi array nomor pada kolom A excel
         $arrIds = explode(".", $id);
+
+        // php fraction exception handler
+        if(count($arrIds) == 2 && strlen($arrIds[1]) > 5){
+          $arrIds[1] = (int) round($arrIds[1] * 0.00000000000001);
+          $tempId = (string) implode(".", $arrIds);
+        } else {
+          $tempId = $id;
+        }
+
+        $arrIdParents[$tempId] = $maxId; 
 
         if(count($arrIds) > 1){
           $parent = array_slice($arrIds, 0, count($arrIds) - 1);
@@ -513,7 +524,7 @@ class Item_task extends CI_Controller {
               'id' => $maxDtlId,
               'id_item_task' => $maxId,
               'week_number' => $i - 8,
-              'weight_planning' => current(round($value,3)),
+              'weight_planning' => round(current($value), 3),
               'id_project_planning' => $maxPlanId
             );
             $this->builtbyprime->insert('TBL_PROJECT_PLANNING_DETAIL', $planningItem);
@@ -545,8 +556,10 @@ class Item_task extends CI_Controller {
     $data = file_get_contents("./uploads/" . $project['FILE_PLANNING_URL']);
 
     force_download($project['FILE_PLANNING_URL'], $data);
-    
+  }
 
+  public function test(){
+    echo round(8.199999999, 1);
   }
 
 }
