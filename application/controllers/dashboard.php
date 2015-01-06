@@ -17,7 +17,7 @@ class Dashboard extends CI_Controller {
       $data['initRoute'] = '/home';
     } else if($this->session->userdata('ID_USER_TYPE') == 2){
       $data['initRoute'] = '/home';
-    } else if($this->session->userdata('ID_USER_TYPE') == 3 || $this->session->userdata('ID_USER_TYPE') == 4 || $this->session->userdata('ID_USER_TYPE') == 6){
+    } else if($this->session->userdata('ID_USER_TYPE') == 3 || $this->session->userdata('ID_USER_TYPE') == 4 || $this->session->userdata('ID_USER_TYPE') == 6 || $this->session->userdata('ID_USER_TYPE') == 5){
       $data['initRoute'] = '/projects';
     }
 
