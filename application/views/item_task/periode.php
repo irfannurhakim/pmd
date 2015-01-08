@@ -80,8 +80,9 @@
     <thead>
       <tr>
         <th rowspan="2" width="50px">No.</th>
-        <th rowspan="2"><div style="width:150px;">&nbsp;</div>Uraian Pekerjaan</th>
-        <th rowspan="2" width="80px" class="dt-cols-center">Bobot</th>
+        <th rowspan="2"><div style="min-width:150px;">&nbsp;</div>Uraian Pekerjaan</th>
+        <th rowspan="2" width="60px" class="dt-cols-center">Bobot</th>
+        <th rowspan="2" width="60px" class="dt-cols-center">Selisih  Bobot</th>
         <th class="text-center" colspan="<?=$week;?>">Minggu</th>
       </tr>
       <tr>
@@ -99,19 +100,22 @@
 <script type="text/javascript">
 
   $(document).ready(function(){
-    /*
-    $('.item-value').change(function(){
-      var id   = $(this).attr('id'),
-          week = $(this).attr('week'),
-          v    = $(this).val();
     
-      $.ajax({
-        url: '<?php echo base_url();?>item_task/update_value',
-        data: "id="+id+"&week="+week+"&v="+v,
-        dataType: 'json'
+    $('.item-value').keyup(function(){
+      var selector = $(this).attr('object'),
+        totalBobot = $(this).attr('totalBobot'),
+        totalPlan = 0,
+        diff = 0;
+
+      $('.' + selector).each(function(idx){
+        totalPlan += $(this).val() * 1;
       });
+
+      diff = ((totalPlan - totalBobot) * 1000) / 1000;
+      $('.clone-' + selector).text(diff.toFixed(3));
     });
-    */
+    
+
 
     $('#submit-form').click(function(){
       if(confirm('Apakah anda yakin akan menyimpan jadwal master perencanaan ini?')==true)
@@ -121,6 +125,10 @@
     });
 
     $('#form-periode').ajaxForm({
+      beforeSend: function(){
+        $('#submit-form').html('<i class="fa fa-save"></i> Menyimpan...');
+        $('#submit-form').attr('disabled','disabled');
+      },
       success: function(){
         location.reload();
       }
@@ -136,7 +144,7 @@
     });
 
     new $.fn.dataTable.FixedColumns( tbl, {
-      leftColumns: 3
+      leftColumns: 4
     });
   });
 
