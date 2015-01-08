@@ -10,15 +10,24 @@ class Home extends CI_Controller {
 	}
 
 	public function index(){ 
+    $userCondition = "IS NOT NULL";
+    $adpro = '';
+    $vendor = '';
 
-    $data['projects'] = $this->builtbyprime->explicit("SELECT P.ID, P.NAME, P.START_DATE, P.FINISH_DATE, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = P.ID GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE FROM TBL_PROJECT P WHERE P.IS_FINISHED != 1 AND P.START_DATE <= SYSDATE ORDER BY P.ID DESC");
+    if($this->session->userdata('ID_USER_TYPE') == 3){
+      $userCondition = " = '" . $this->session->userdata('ID') . "'";  
+    } else if($this->session->userdata('ID_USER_TYPE') == 6){
+      $adpro = " AND P.CREATED_BY = '" .$this->session->userdata('USERNAME') . "'";  
+    } else if($this->session->userdata('ID_USER_TYPE') == 4){
+      $vendor = " AND P.ID_VENDOR = '" .$this->session->userdata('ID') . "'";  
+    }
+
+    $data['projects'] = $this->builtbyprime->explicit("SELECT P.ID, P.NAME, P.START_DATE, P.FINISH_DATE, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = P.ID GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE FROM TBL_PROJECT P WHERE P.IS_FINISHED != 1 AND P.START_DATE <= SYSDATE ".$adrpo." ORDER BY P.ID DESC");
     
-
     if(count($data['projects']) < 1){
       $this->load->view('home/no_project');
       exit();
     }
-
 
     $Carbon = new Carbon\Carbon;
 
@@ -87,10 +96,14 @@ class Home extends CI_Controller {
     $projArray = Array();
 
     foreach ($projects as $project) {
+      $start       = explode(' ',$project['START_DATE']); 
+      $finish      = explode(' ',$project['FINISH_DATE']);
+      $datediff    = strtotime($finish[0]) - strtotime($start[0]);
+      $jumlahMinggu        = ceil(($datediff/(60*60*24))/7);
       
-      $dataPlaning = $this->builtbyprime->explicit("SELECT PPD.WEEK_NUMBER, SUM(PPD.WEIGHT_PLANNING) TOTAL FROM TBL_PROJECT_PLANNING_DETAIL PPD WHERE PPD.ID_PROJECT_PLANNING IN (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$project['ID']."') GROUP BY PPD.WEEK_NUMBER ORDER BY PPD.WEEK_NUMBER");
+      $dataPlaning = $this->builtbyprime->explicit("SELECT PPD.WEEK_NUMBER, SUM(PPD.WEIGHT_PLANNING) TOTAL FROM TBL_PROJECT_PLANNING_DETAIL PPD WHERE PPD.ID_PROJECT_PLANNING IN (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$project['ID']."') AND PPD.WEEK_NUMBER <= ".$jumlahMinggu." GROUP BY PPD.WEEK_NUMBER ORDER BY PPD.WEEK_NUMBER");
       
-      $dataRealization = $this->builtbyprime->explicit("SELECT NO_WEEK WEEK_NUMBER, SUM(PERCENTAGE) TOTAL FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$project['ID']."' GROUP BY NO_WEEK ORDER BY NO_WEEK");
+      $dataRealization = $this->builtbyprime->explicit("SELECT NO_WEEK WEEK_NUMBER, SUM(PERCENTAGE) TOTAL FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$project['ID']."' AND WEEK_NUMBER <= ".$jumlahMinggu." GROUP BY NO_WEEK ORDER BY NO_WEEK");
 
 
       $arrPlan = Array([0,0]);
