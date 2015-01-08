@@ -22,7 +22,7 @@ class Home extends CI_Controller {
       $vendor = " AND P.ID_VENDOR = '" .$this->session->userdata('ID') . "'";  
     }
 
-    $data['projects'] = $this->builtbyprime->explicit("SELECT P.ID, P.NAME, P.START_DATE, P.FINISH_DATE, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = P.ID GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE FROM TBL_PROJECT P WHERE P.IS_FINISHED != 1 AND P.START_DATE <= SYSDATE ".$adrpo." ORDER BY P.ID DESC");
+    $data['projects'] = $this->builtbyprime->explicit("SELECT P.ID, P.NAME, P.START_DATE, P.FINISH_DATE, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = P.ID GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE FROM TBL_PROJECT P WHERE P.IS_FINISHED != 1 AND P.START_DATE <= SYSDATE ".$adpro." ORDER BY P.ID DESC");
     
     if(count($data['projects']) < 1){
       $this->load->view('home/no_project');
