@@ -1,4 +1,1 @@
-<div class="alert alert-info">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <strong>Heads up!</strong> This <a href="#" class="alert-link">alert needs your attention</a>, but it's not super important.
-</div>
+<div class="alert alert-info">Belum ada proyek yang sedang berlangsung. Untuk membuat proyek, silahkan menuju <a href="<?=base_url();?>#/projects">kesini.</a></div>

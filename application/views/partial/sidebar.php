@@ -12,7 +12,7 @@
     <h5 class="leftpanel-title"></h5>
     <ul class="nav nav-pills nav-stacked">
       <?php 
-        if($this->session->userdata('ID_USER_TYPE') == 1 || $this->session->userdata('ID_USER_TYPE') == 2){ ?>
+        if($this->session->userdata('ID_USER_TYPE') == 1 || $this->session->userdata('ID_USER_TYPE') == 2 || $this->session->userdata('ID_USER_TYPE') == 6){ ?>
         <li id="menu-home" class="activable"><a href="#/home"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
       <?php } ?>
         <li id="menu-quick-access" class="activable"><a href="#/quick_access"><i class="fa fa-magic"></i> <span>Akses Cepat</span></a></li>
