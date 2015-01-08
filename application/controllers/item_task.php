@@ -196,17 +196,31 @@ class Item_task extends CI_Controller {
   public function flatten_periode($arr, $week, $allTask, $budget){
     $html = '';
     $isLast = false;
+    $rowIterator = 0;
 
     foreach($arr as $item){
       if($item['SUB'] == null) {
         $isLast = true;
       } 
 
-      $style = '';
+      $currPlan = 0;
+      for($i=1;$i<=$week;$i++){
+        $value = null;
+        if(array_key_exists((integer) $item['ID'], $allTask)){
+          if(array_key_exists((integer) $i, $allTask[$item['ID']])){
+            $value = $allTask[$item['ID']][$i];
+          }
+        }
+        $currPlan = $currPlan + (($value) ? round($value['WEIGHT_PLANNING'], 3) : 0);
+      }
+
+      $bobot = (($isLast) ? round((($item['UNIT_PRICE'] * $item['VOLUME']) / $budget ) * 100, 3) : 0);
+      $style = '';  
       $html .= '<tr '. $style . '>';
       $html .= '<td>' . $item['NUMBER'] . '</td>';
       $html .= '<td>' . (($item['LEVEL'] == 1) ? strtoupper($item['NAME']) : $item['NAME']) . '</td>';
-      $html .= '<td class="dt-cols-right">' . (($isLast) ? round((($item['UNIT_PRICE'] * $item['VOLUME']) / $budget ) * 100, 3) : '' ) . '</td>';
+      $html .= '<td class="dt-cols-right">' . (($isLast) ? $bobot : '' ) . '</td>';
+      $html .= '<td class="dt-cols-right">'.(($isLast) ? '<span class="clone-row-'.$item['ID'].'-'.$rowIterator.'">'.round($currPlan-$bobot, 3 ).'</span>' : '').'</td>';
 
       for($i=1;$i<=$week;$i++){
         $value = null;
@@ -216,10 +230,11 @@ class Item_task extends CI_Controller {
           }
         }
         $val   = ($value) ? round($value['WEIGHT_PLANNING'], 3) : '';
-        $html .= '<td class="dt-cols-center">' . (($isLast) ? '<input type="text" value ="'.$val.'" style="width:45px;text-align:right;" name="'.$item['ID'].'_'.$i.'" class="item-value"  />' : '').'</td>';
+        $html .= '<td class="dt-cols-center">' . (($isLast) ? '<input type="text" value ="'.$val.'" style="width:45px;text-align:right;" name="'.$item['ID'].'_'.$i.'" class="item-value row-'.$item['ID'].'-'.$rowIterator.'" totalBobot='.$bobot.' object="row-'.$item['ID'].'-'.$rowIterator.'" />' : '').'</td>';
       }
 
       $html .= '</tr>';
+      $rowIterator++;
       $html .= $this->flatten_periode($item['SUB'], $week, $allTask, $budget);
     }
 
