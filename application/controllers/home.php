@@ -87,10 +87,14 @@ class Home extends CI_Controller {
     $projArray = Array();
 
     foreach ($projects as $project) {
+      $start       = explode(' ',$project['START_DATE']); 
+      $finish      = explode(' ',$project['FINISH_DATE']);
+      $datediff    = strtotime($finish[0]) - strtotime($start[0]);
+      $jumlahMinggu        = ceil(($datediff/(60*60*24))/7);
       
-      $dataPlaning = $this->builtbyprime->explicit("SELECT PPD.WEEK_NUMBER, SUM(PPD.WEIGHT_PLANNING) TOTAL FROM TBL_PROJECT_PLANNING_DETAIL PPD WHERE PPD.ID_PROJECT_PLANNING IN (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$project['ID']."') GROUP BY PPD.WEEK_NUMBER ORDER BY PPD.WEEK_NUMBER");
+      $dataPlaning = $this->builtbyprime->explicit("SELECT PPD.WEEK_NUMBER, SUM(PPD.WEIGHT_PLANNING) TOTAL FROM TBL_PROJECT_PLANNING_DETAIL PPD WHERE PPD.ID_PROJECT_PLANNING IN (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$project['ID']."') AND PPD.WEEK_NUMBER <= ".$jumlahMinggu." GROUP BY PPD.WEEK_NUMBER ORDER BY PPD.WEEK_NUMBER");
       
-      $dataRealization = $this->builtbyprime->explicit("SELECT NO_WEEK WEEK_NUMBER, SUM(PERCENTAGE) TOTAL FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$project['ID']."' GROUP BY NO_WEEK ORDER BY NO_WEEK");
+      $dataRealization = $this->builtbyprime->explicit("SELECT NO_WEEK WEEK_NUMBER, SUM(PERCENTAGE) TOTAL FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$project['ID']."' AND WEEK_NUMBER <= ".$jumlahMinggu." GROUP BY NO_WEEK ORDER BY NO_WEEK");
 
 
       $arrPlan = Array([0,0]);
