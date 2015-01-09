@@ -17,7 +17,7 @@
     </tr>
     <tr>
       <td>Nilai Kontrak</td>
-      <td>: <strong><?=$project['BUDGET'];?></strong></td>
+      <td>:  <strong>Rp <?= number_format($project['BUDGET'],0,",",".");?></strong></td>
     </tr>
     <tr>
       <td>Kontraktor/Pelaksana</td>
@@ -122,10 +122,10 @@
           <td ><?=$item['NAME'];?></td>
           <td class="dt-cols-center"><?=$item['UNIT'];?></td>
           <td class="dt-cols-right"><?=round($item['VOLUME'], 3);?></td>
-          <td class="dt-cols-right"><?=round($item['PERCENTAGE_PLAN_CURRENT'] / 100 * $total_kontrak_volume, 3);?></td>
+          <td class="dt-cols-right"><?=round(($item['PERCENTAGE_PLAN_CURRENT']/$item['WEIGHT_PLANNING']) * $item['VOLUME'], 3);?></td>
           <td class="dt-cols-right"></td>
-          <td class="dt-cols-right"><?=round(($bobotWeekBefore/100) * $total_kontrak_volume, 3);?></td>          
-          <td class="dt-cols-right"><?=round(($bobotNow/100) * $total_kontrak_volume, 3);?></td>
+          <td class="dt-cols-right"><?=round(($bobotWeekBefore/$item['WEIGHT_PLANNING']) * $item['VOLUME'], 3);?></td>          
+          <td class="dt-cols-right"><?=round(($bobotNow/$item['WEIGHT_PLANNING']) * $item['VOLUME'], 3);?></td>
           <td class="dt-cols-right"><?=round($realCumulative, 3);?></td>
           <td class="dt-cols-right"><?=round($item['WEIGHT_PLANNING'], 3);?></td>
           <td class="dt-cols-right"><?=round($item['PERCENTAGE_PLAN_CURRENT'], 3);?></td>
