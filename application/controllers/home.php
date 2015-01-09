@@ -43,8 +43,13 @@ class Home extends CI_Controller {
       $weekNumber = ceil(($b->diffInDays($a) + 1)/7);
 
       $data['projects'][$i]['REMAINING_DAYS'] = round($remainingDays, 4);
+
       $arrPlan = $this->builtbyprime->explicit("SELECT nvl((SELECT SUM(WEIGHT_PLANNING) FROM TBL_PROJECT_PLANNING_DETAIL WHERE WEEK_NUMBER <= ".$weekNumber." AND ID_PROJECT_PLANNING = (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$data['projects'][$i]['ID']."')),0) TOTAL_PLANNING FROM DUAL");
+
+      $arrPlanGauge = $this->builtbyprime->explicit("SELECT nvl((SELECT SUM(WEIGHT_PLANNING) FROM TBL_PROJECT_PLANNING_DETAIL WHERE WEEK_NUMBER <= ".($weekNumber - 1)." AND ID_PROJECT_PLANNING = (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$data['projects'][$i]['ID']."')),0) TOTAL_PLANNING FROM DUAL");
+
       $data['projects'][$i]['TOTAL_PLANNING'] = $arrPlan[0]['TOTAL_PLANNING'];
+      $data['projects'][$i]['TOTAL_PLANNING_GAUGE'] = $arrPlanGauge[0]['TOTAL_PLANNING'];
 
       $dataPlaning = $this->builtbyprime->explicit("SELECT PPD.WEEK_NUMBER, SUM(PPD.WEIGHT_PLANNING) TOTAL FROM TBL_PROJECT_PLANNING_DETAIL PPD WHERE PPD.ID_PROJECT_PLANNING IN (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$data['projects'][$i]['ID']."') GROUP BY PPD.WEEK_NUMBER ORDER BY PPD.WEEK_NUMBER");
       

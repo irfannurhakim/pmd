@@ -66,10 +66,12 @@
       </div>  
       <div class="btn-group">
         <button class="btn btn-default btn-sm" type="button" onclick="javascript:window.location = '<?=base_url();?>#/item/project/<?=$project['ID'];?>'; return false;"><i class="fa fa-list-ul mr5"></i> Item Pekerjaan</button>
-      </div>  
+      </div>
+      <?php if($this->session->userdata('ID_USER_TYPE') != 4){?>  
       <div class="btn-group">
         <button class="btn btn-primary btn-sm" type="button" id="submit-form"><i class="fa fa-save"></i> Simpan</button>
-      </div>  
+      </div>
+      <?php }?>  
     </div>
   </div>
 </div>
@@ -79,10 +81,10 @@
   <table class="table table-bordered table-hover table-item-list" id="table-list-periode" cellspacing="0" width="100%">
     <thead>
       <tr>
-        <th rowspan="2" width="50px">No.</th>
-        <th rowspan="2"><div style="min-width:150px;">&nbsp;</div>Uraian Pekerjaan</th>
-        <th rowspan="2" width="60px" class="dt-cols-center">Bobot</th>
-        <th rowspan="2" width="60px" class="dt-cols-center">Selisih  Bobot</th>
+        <th rowspan="2" width="20px">No.</th>
+        <th rowspan="2"><div style="min-width:50px;">&nbsp;</div>Uraian Pekerjaan</th>
+        <th rowspan="2" width="10px" class="dt-cols-center">Bobot</th>
+        <th rowspan="2" width="10px" class="dt-cols-center">+/-</th>
         <th class="text-center" colspan="<?=$week;?>">Minggu</th>
       </tr>
       <tr>
@@ -114,8 +116,6 @@
       diff = ((totalPlan - totalBobot) * 1000) / 1000;
       $('.clone-' + selector).text(diff.toFixed(3));
     });
-    
-
 
     $('#submit-form').click(function(){
       if(confirm('Apakah anda yakin akan menyimpan jadwal master perencanaan ini?')==true)
