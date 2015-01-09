@@ -32,7 +32,7 @@
                         <center>
                         <div id="gauge_<?=$project['ID'];?>"></div>
                         <div>
-                            Deviasi : <strong><?=round($project['TOTAL_PERCENTAGE'] - $project['TOTAL_PLANNING'], 3);?></strong>
+                            Deviasi : <strong><?=round($project['TOTAL_PERCENTAGE'] - $project['TOTAL_PLANNING_GAUGE'], 3);?></strong>
                         </div>
                         </center>
                       </div><!-- tinystat -->
@@ -175,8 +175,12 @@
                       <label class="col-sm-6 control-label">Berdasarkan Tahun</label>
                       <div class="col-sm-6">
                         <select id="select-sorting-year" data-placeholder="Pilih tipe user"  class="col-sm-6" name="sort-pengawas">
-                            <option value="2014">2014</option>
-                            <option value="2015">2015</option>
+                          <?php 
+                          $initYear = 2014;
+                          $nextYear = date('Y') + 1;
+                          for($initYear;$initYear<=$nextYear;$initYear++){ ?>
+                          <option value="<?=$initYear;?>"><?=$initYear;?></option>
+                          <?php } ;?>
                         </select>
                       </div>
                   </div><!-- form-group -->

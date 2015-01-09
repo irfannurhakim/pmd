@@ -151,7 +151,7 @@ class Item_task extends CI_Controller {
       $html .= '<td class="dt-cols-right">' . (($isLast) ? round((($item['UNIT_PRICE'] * $item['VOLUME']) / $budget ) * 100, 3) : '' ) . '</td>';
       $html .= '<td class="dt-cols-right">' . (($isLast) ? number_format($item['UNIT_PRICE'] * $item['VOLUME'], 0,',','.') : '' ) . '</td>';
       $html .= '<td class="dt-cols-center">';
-      $html .=    '<a data-toggle="tooltip" title="Edit" class="tooltips edit-row" object="'. $item['ID'] .'"><i class="fa fa-pencil"></i></a> &nbsp;&nbsp;';
+      $html .=   ($this->session->userdata('ID_USER_TYPE') != 4) ? '<a data-toggle="tooltip" title="Edit" class="tooltips edit-row" object="'. $item['ID'] .'"><i class="fa fa-pencil"></i></a> &nbsp;&nbsp;' : '';
       $html .=    (($this->session->userdata('ID_USER_TYPE') == 1) || ($this->session->userdata('ID_USER_TYPE') == 6)) ? '<a data-toggle="tooltip" title="Hapus" class="tooltips delete-row" object="'. $item['ID'] .'"><i class="fa fa-trash-o"></i></a>' : '';
       $html .=  '</td>';
       $html .= '</tr>';
@@ -218,9 +218,9 @@ class Item_task extends CI_Controller {
       $style = '';  
       $html .= '<tr '. $style . '>';
       $html .= '<td>' . $item['NUMBER'] . '</td>';
-      $html .= '<td>' . (($item['LEVEL'] == 1) ? strtoupper($item['NAME']) : $item['NAME']) . '</td>';
-      $html .= '<td class="dt-cols-right">' . (($isLast) ? $bobot : '' ) . '</td>';
-      $html .= '<td class="dt-cols-right">'.(($isLast) ? '<span class="clone-row-'.$item['ID'].'-'.$rowIterator.'">'.round($currPlan-$bobot, 3 ).'</span>' : '').'</td>';
+      $html .= '<td width="100px">' . (($item['LEVEL'] == 1) ? strtoupper($item['NAME']) : $item['NAME']) . '</td>';
+      $html .= '<td class="dt-cols-right" width="30">' . (($isLast) ? $bobot : '' ) . '</td>';
+      $html .= '<td class="dt-cols-right" width="30">'.(($isLast) ? '<span class="clone-row-'.$item['ID'].'-'.$rowIterator.'">'.round($currPlan-$bobot, 3 ).'</span>' : '').'</td>';
 
       for($i=1;$i<=$week;$i++){
         $value = null;
