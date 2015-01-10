@@ -327,7 +327,7 @@
      
     var data_<?=$project['ID'];?> = google.visualization.arrayToDataTable([
       ['Label', 'Value'],
-      ['Deviasi', <?=$project['TOTAL_PLANNING'] - $project['TOTAL_PERCENTAGE'];?>]
+      ['Deviasi', <?=$project['TOTAL_PLANNING_GAUGE'] - $project['TOTAL_PERCENTAGE'];?>]
     ]);
 
     var chart_<?=$project['ID'];?> = new google.visualization.Gauge(document.getElementById("gauge_<?=$project['ID'];?>"));
