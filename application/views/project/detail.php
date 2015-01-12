@@ -100,11 +100,11 @@
             <h5>Deviasi (<?=round($info[0]['TOTAL_PERCENTAGE']-$info[0]['TOTAL_PLANNING'], 3);?>%)</h5>
             <div class="progress">
             <?php 
-              $deviation = $info[0]['TOTAL_PERCENTAGE'] - $info[0]['TOTAL_PLANNING'];
+              $deviation = $info[0]['TOTAL_PERCENTAGE'] - $info_extended[0]['TOTAL_PLANNING'];
               $progressBarColor = ($deviation < -10) ? 'progress-bar-danger' : (($deviation > 0 ) ? 'progress-bar-success' : 'progress-bar-warning');
             ?>
-              <div style="width: <?=abs($info[0]['TOTAL_PLANNING']-$info[0]['TOTAL_PERCENTAGE']);?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="10" role="progressbar" class="progress-bar <?=$progressBarColor;?>">
-                  <span class="sr-only"><?=$info[0]['TOTAL_PLANNING']-$info[0]['TOTAL_PERCENTAGE'];?>% Complete (success)</span>
+              <div style="width: <?=abs($info_extended[0]['TOTAL_PLANNING']-$info[0]['TOTAL_PERCENTAGE']);?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="10" role="progressbar" class="progress-bar <?=$progressBarColor;?>">
+                  <span class="sr-only"><?=$info_extended[0]['TOTAL_PLANNING']-$info[0]['TOTAL_PERCENTAGE'];?>% Complete (success)</span>
               </div>
             </div>         
           </div>     

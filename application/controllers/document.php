@@ -5,7 +5,6 @@ class Document extends CI_Controller {
   public function __construct(){
     parent::__construct();
   }
-
   public function add(){
 
     $config['upload_path'] = './uploads/';

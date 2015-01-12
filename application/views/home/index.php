@@ -22,6 +22,13 @@
                   <div class="title-section">
                     <h5 class="md-title mt0 mb10"><a href="<?=base_url();?>#/project/view/<?=$project['ID'];?>"><?= $project['NAME'];?></a></h5>
                   </div>
+                  <div style="font-size:11px;">
+                    <div>Minggu ke-<strong><?=$project['weekNumber'];?></strong></div>
+                    <div>oleh <strong><?=$project['AFFILIATION'];?></strong></div>
+                    <div>Nilai Proyek (Tanpa PPN) <strong>Rp. <?=number_format($project['BUDGET'],0,",",".");?></strong></div>
+                    <div>Keterlambatan <strong><?=$project['overday'];?> Hari</strong></div>
+                  </div>
+                  <div class="mt10"></div>
                   <div id="legend-curvas-<?=$project['ID'];?>" class="flotLegend"></div>
                   <div id="curvas-<?=$project['ID'];?>" class="flotChart"></div>
               </div><!-- panel-body -->

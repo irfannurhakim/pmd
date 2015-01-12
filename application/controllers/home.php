@@ -22,7 +22,7 @@ class Home extends CI_Controller {
       $vendor = " AND P.ID_VENDOR = '" .$this->session->userdata('ID') . "'";  
     }
 
-    $data['projects'] = $this->builtbyprime->explicit("SELECT P.ID, P.NAME, P.START_DATE, P.FINISH_DATE, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = P.ID GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE FROM TBL_PROJECT P WHERE P.IS_FINISHED != 1 AND P.START_DATE <= SYSDATE ".$adpro." ORDER BY P.ID DESC");
+    $data['projects'] = $this->builtbyprime->explicit("SELECT P.ID, P.NAME, P.START_DATE, P.FINISH_DATE, P.BUDGET, U.AFFILIATION ,nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = P.ID GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE FROM TBL_PROJECT P, TBL_USER U WHERE U.ID = P.ID_VENDOR AND P.IS_FINISHED != 1 AND P.START_DATE <= SYSDATE ".$adpro." ORDER BY P.ID DESC");
     
     if(count($data['projects']) < 1){
       $this->load->view('home/no_project');
@@ -70,6 +70,8 @@ class Home extends CI_Controller {
         array_push($arrReal, [intval($week['WEEK_NUMBER']), $totReal]);     
       }      
 
+      $data['projects'][$i]['overday'] = ((($totalDays - $usedDays) >= 0) ? 0 : $usedDays - $totalDays);
+      $data['projects'][$i]['weekNumber'] = $weekNumber;
       $data['projects'][$i]['PLAN'] = json_encode($arrPlan);
       $data['projects'][$i]['REAL'] = json_encode($arrReal);
     }

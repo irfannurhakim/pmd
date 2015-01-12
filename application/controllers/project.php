@@ -100,6 +100,7 @@ class Project extends CI_Controller {
     $data['remainingDays'] = round($remainingDays,2);
     $data['info'] = $this->builtbyprime->explicit("SELECT nvl((SELECT SUM(WEIGHT_PLANNING) FROM TBL_PROJECT_PLANNING_DETAIL WHERE WEEK_NUMBER <= '".$data['weekNumber']."' AND ID_PROJECT_PLANNING = (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$id."')),0) TOTAL_PLANNING, nvl((SELECT SUM(PERCENTAGE) FROM TBL_ITEM_TASK_TIME WHERE ID_PROJECT = '".$id."' GROUP BY ID_PROJECT),0) TOTAL_PERCENTAGE FROM DUAL");
 
+    $data['info_extended'] = $this->builtbyprime->explicit("SELECT nvl((SELECT SUM(WEIGHT_PLANNING) FROM TBL_PROJECT_PLANNING_DETAIL WHERE WEEK_NUMBER <= '".($data['weekNumber'] - 1)."' AND ID_PROJECT_PLANNING = (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$id."')),0) TOTAL_PLANNING FROM DUAL");
 
     $this->load->view('project/detail', $data);
 	}
