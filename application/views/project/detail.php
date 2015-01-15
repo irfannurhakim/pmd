@@ -97,7 +97,7 @@
                   <span class="sr-only"><?=$remainingDays;?>% Complete (success)</span>
               </div>
             </div>
-            <h5>Deviasi (<?=round($info[0]['TOTAL_PERCENTAGE']-$info[0]['TOTAL_PLANNING'], 3);?>%)</h5>
+            <h5>Deviasi (<?=round($info[0]['TOTAL_PERCENTAGE'] - $info_extended[0]['TOTAL_PLANNING'], 3);?>%)</h5>
             <div class="progress">
             <?php 
               $deviation = $info[0]['TOTAL_PERCENTAGE'] - $info_extended[0]['TOTAL_PLANNING'];
@@ -509,7 +509,7 @@
         for(var i=0;i<res.data.length;i++){
           html += '<div class="media">'
                     + '<a class="pull-left" href="#">'
-                    +   '<img class="media-object img-circle" src="<?=base_url();?>public/images/photos/user1.png" alt="" />'
+                    +   '<img class="media-object img-circle" src="<?=base_url();?>'+res.data[i].PROFILE_IMAGE_URL+'" alt="" />'
                     + '</a>'
                     + '<div class="media-body">'
                     +   '<strong>'+res.data[i].USERNAME+'</strong> <br />'+ decodeHtml(res.data[i].DESCRIPTION) + '<br />'

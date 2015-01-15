@@ -176,7 +176,7 @@ class Project extends CI_Controller {
   }
 
   function load_log($id){
-    $res = $this->builtbyprime->explicit("SELECT ID, USERNAME, DESCRIPTION, TO_CHAR(CAST(CREATED_DATE AS DATE), 'DD/MM/YYYY HH:MI:SS') CREATED FROM TBL_LOG_PROJECT WHERE OBJECT_ID = '".$id."' ORDER BY ID DESC");
+    $res = $this->builtbyprime->explicit("SELECT L.ID, L.USERNAME, U.PROFILE_IMAGE_URL, L.DESCRIPTION, TO_CHAR(CAST(L.CREATED_DATE AS DATE), 'DD/MM/YYYY HH:MI:SS') CREATED FROM TBL_LOG_PROJECT L, TBL_USER U WHERE U.USERNAME = L.USERNAME AND L.OBJECT_ID = '".$id."' ORDER BY L.ID DESC");
 
     echo json_encode(Array('status' => 'ok', 'data' => $res));
   }

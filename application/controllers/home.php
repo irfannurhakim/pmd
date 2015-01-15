@@ -31,10 +31,9 @@ class Home extends CI_Controller {
 
     $Carbon = new Carbon\Carbon;
 
-    $b = $Carbon::now();
-
     for ($i=0; $i < count($data['projects']); $i++) {   
       $a = $Carbon::createFromFormat('d-M-y', $data['projects'][$i]['START_DATE']);  
+      $b = $Carbon::now();
       $c = $Carbon::createFromFormat('d-M-y', $data['projects'][$i]['FINISH_DATE']); 
     
       $totalDays = $c->diffInDays($a);
@@ -42,7 +41,9 @@ class Home extends CI_Controller {
       $remainingDays = 100 - (($usedDays/$totalDays) * 100);
       $weekNumber = ceil(($b->diffInDays($a) + 1)/7);
 
-      $data['projects'][$i]['REMAINING_DAYS'] = round($remainingDays, 4);
+      $data['projects'][$i]['overday'] = ((($totalDays - $usedDays) >= 0) ? 0 : $usedDays - $totalDays);
+      $data['projects'][$i]['weekNumber'] = $weekNumber;
+      $data['projects'][$i]['REMAINING_DAYS'] = round($remainingDays, 3);
 
       $arrPlan = $this->builtbyprime->explicit("SELECT nvl((SELECT SUM(WEIGHT_PLANNING) FROM TBL_PROJECT_PLANNING_DETAIL WHERE WEEK_NUMBER <= ".$weekNumber." AND ID_PROJECT_PLANNING = (SELECT MAX(ID) FROM TBL_PROJECT_PLANNING WHERE ID_PROJECT = '".$data['projects'][$i]['ID']."')),0) TOTAL_PLANNING FROM DUAL");
 
@@ -70,8 +71,6 @@ class Home extends CI_Controller {
         array_push($arrReal, [intval($week['WEEK_NUMBER']), $totReal]);     
       }      
 
-      $data['projects'][$i]['overday'] = ((($totalDays - $usedDays) >= 0) ? 0 : $usedDays - $totalDays);
-      $data['projects'][$i]['weekNumber'] = $weekNumber;
       $data['projects'][$i]['PLAN'] = json_encode($arrPlan);
       $data['projects'][$i]['REAL'] = json_encode($arrReal);
     }
