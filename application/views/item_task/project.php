@@ -49,10 +49,20 @@
 
     <tfoot>
         <tr>
-            <th colspan="6" style="text-align:right">Total:</th>
-            <th class=" dt-cols-right"></th>
-            <th class="col-total dt-cols-right"></th>
-            <th></th>
+          <th colspan="6" style="text-align:right">Total</th>
+          <th class=" dt-cols-right"></th>
+          <th class="col-total dt-cols-right"></th>
+          <th></th>
+        </tr>
+        <tr>
+          <th colspan="7" style="text-align:right">Nilai Kontrak</th>
+          <th class="dt-cols-right"><?=number_format($project['BUDGET'],0,",",".");?></th>
+          <th></th>      
+        </tr>
+        <tr>
+          <th colspan="7" style="text-align:right">Selisih</th>
+          <th class="dt-cols-right"><span id="selisih-nilai-kontrak"></span></th>
+          <th></th>      
         </tr>
     </tfoot>
 
@@ -227,6 +237,10 @@
             $( api.column( 6 ).footer() ).html(
                 totalBobot.toPrecision(3)
             );
+
+            var selisih = <?=$project['BUDGET'];?> - total * 1;
+
+            $('#selisih-nilai-kontrak').text((selisih).toLocaleString("id-ID"));
         }
     });
     //new $.fn.dataTable.FixedHeader( table );
@@ -336,7 +350,7 @@
           setTimeout(function(){location.reload()}, 2000);
         } else {
           jQuery.gritter.add({
-            title: 'Upss..',
+            title: 'Error',
             text: a.message,
             class_name: 'growl-danger',
             image: false,
@@ -350,7 +364,7 @@
       },
       error: function(e){
         jQuery.gritter.add({
-          title: 'Upss..',
+          title: 'Error',
           text: 'Terjadi Kesalahan!<br/>Pastikan format file excel sudah benar.',
           class_name: 'growl-danger',
           image: false,
